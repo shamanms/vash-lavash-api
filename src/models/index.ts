@@ -8,7 +8,32 @@ const firestore = new Firestore({
   keyFilename: GCP_CREDENTIALS_FILE
 });
 
+class Model {
+  private collection: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>;
+
+  constructor(private collectionName: string) {
+    this.collection = firestore.collection(collectionName);
+  }
+
+  public insert(data) {
+    return this.collection.add(data);
+  }
+
+  public async findMany() {
+    const documentReferences = await this.collection.listDocuments();
+    const documents = [];
+
+    for (const documentReference of documentReferences) {
+      const data = await documentReference.get();
+      documents.push({ id: data.id, ...data.data() });
+    }
+
+    return documents;
+  }
+
+}
+
 export default {
-  orders: firestore.collection('orders'),
-  products: firestore.collection('products'),
+  orders: new Model('orders'),
+  products: new Model('products'),
 }
