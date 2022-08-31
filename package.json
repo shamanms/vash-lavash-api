@@ -9,7 +9,7 @@
     "watch": "tsc --watch",
     "start": "npm run build && npx @google-cloud/functions-framework --target=api",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "gcloud functions deploy api --entry-point api --allow-unauthenticated --trigger-http --runtime nodejs16"
+    "deploy:api": "gcloud functions deploy api --entry-point api --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2"
   },
   "author": "",
   "license": "ISC",
