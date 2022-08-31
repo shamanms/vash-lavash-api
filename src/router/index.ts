@@ -1,23 +1,37 @@
 import { Router } from 'express';
-import { getProducts, addOrder } from "../services";
+import { getProducts, addOrder, addProducts } from "../services";
+import { Order, Product, TypedRequestBody } from "../types";
 
 const router = Router();
 
+//TODO: add Validation and error handler
 router.get('/products', async (req, res, next) => {
   try {
     const products = await getProducts();
 
-    await res.json(products);
+    res.json(products);
   } catch(e) {
     next(e);
   }
 });
 
-router.post('/orders', async (req, res, next) => {
+//TODO ADD AUTHORISATION for this POST /products
+
+// router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
+//   try {
+//     await addProducts(req.body);
+//
+//     res.json({ status: "OK" });
+//   } catch(e) {
+//     next(e);
+//   }
+// });
+
+router.post('/orders', async (req: TypedRequestBody<Omit<Order, 'timestamp'>>, res, next) => {
   try {
     const orderId = await addOrder(req.body);
 
-    await res.json({ orderId });
+    res.json({ orderId });
   } catch(e) {
     next(e);
   }

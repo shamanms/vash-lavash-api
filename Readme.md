@@ -8,7 +8,10 @@ Before deploying, need to authorize with `gcloud` and select the project:
 gcloud auth login
 gcloud config set project PROJECTNAME
 
-gcloud auth application-default login
+gcloud compute project-info add-metadata \
+    --metadata google-compute-default-region=europe-central2,google-compute-default-zone=europe-central2-b
+
+gcloud auth application-default login // to save auth creds for the app
 ```
 
 Setup env vars:
@@ -20,5 +23,5 @@ export GCP_CREDENTIALS_FILE=$HOME/.config/gcloud/application_default_credentials
 Then you can deploy with:
 
 ```sh
-npm run deploy
+npm run build && npm run deploy
 ```

@@ -1,4 +1,5 @@
-import { Firestore } from '@google-cloud/firestore';
+import { CollectionReference, DocumentData, Firestore } from '@google-cloud/firestore';
+import { Order, Product } from "../types";
 
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
 
@@ -8,15 +9,22 @@ const firestore = new Firestore({
   keyFilename: GCP_CREDENTIALS_FILE
 });
 
-class Model {// todo: add logging for each method
-  private collection: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>;
+class Model<T = DocumentData> {// todo: add logging for each method
+  private readonly collection: CollectionReference<T>;
 
-  constructor(private collectionName: string) {
-    this.collection = firestore.collection(collectionName);
+  constructor(collectionName: string, private firestore: Firestore) {
+    this.collection = firestore.collection(collectionName) as CollectionReference<T>;
   }
 
-  public insert(data) {
+  public insertOne(data: T) {
     return this.collection.add(data);
+  }
+
+  public async insertMany(items: T[]) {
+    const batch = this.firestore.batch();
+    items.forEach((item) => batch.set(this.collection.doc(), item));
+
+    return batch.commit();
   }
 
   public async findMany() {
@@ -25,7 +33,7 @@ class Model {// todo: add logging for each method
 
     for (const documentReference of documentReferences) {
       const data = await documentReference.get();
-      documents.push({ id: data.id, ...data.data() });
+      documents.push({ id: data.id, ...data.data() as T });
     }
 
     return documents;
@@ -34,6 +42,6 @@ class Model {// todo: add logging for each method
 }
 
 export default {
-  orders: new Model('orders'),
-  products: new Model('products'),
+  orders: new Model<Order>('orders', firestore),
+  products: new Model<Product>('products', firestore),
 }
