@@ -8,7 +8,7 @@ const firestore = new Firestore({
   keyFilename: GCP_CREDENTIALS_FILE
 });
 
-class Model {
+class Model {// todo: add logging for each method
   private collection: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>;
 
   constructor(private collectionName: string) {

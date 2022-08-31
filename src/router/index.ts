@@ -15,7 +15,7 @@ router.get('/products', async (req, res, next) => {
 
 router.post('/orders', async (req, res, next) => {
   try {
-    const orderId = await addOrder({});
+    const orderId = await addOrder(req.body);
 
     await res.json({ orderId });
   } catch(e) {

@@ -1,6 +1,6 @@
 import db from '../models';
 
-export const getProducts = async () =>  db.products.findMany();
+export const getProducts = async () => db.products.findMany();
 
 export const addOrder = async (data): Promise<string> => {
   const timestamp = new Date().getTime();
