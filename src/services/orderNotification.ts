@@ -17,37 +17,39 @@ export const orderNotification = (event: Event, context: CloudFunctionsContext) 
   console.log(`Function triggered by event ${context.eventType?.split('/').at(-1)} on: ${context.resource}`);
 
   const documentId = event.value.name.split('/').at(-1);
+  const { TELEGRAM_TOKEN, GROUP_ID } = process.env;
 
-  if (documentId) {
+  if (documentId && TELEGRAM_TOKEN && GROUP_ID) {
     db.orders.collection.doc(documentId).get().then((snapshot) => {
       const data = snapshot.data();
-      sendNotification(data);
+      if (!data) {
+        return new Error(`Unable to get data for ${documentId}`);
+      }
+      const tg = new Telegram(TELEGRAM_TOKEN);
+
+      new OrderNotification(data, tg, GROUP_ID).send();
     });
   }
 };
 
-const sendNotification = (data:  OrderModel | undefined) => {
-  const { TELEGRAM_TOKEN, GROUP_ID } = process.env;
+class OrderNotification {
+  constructor(private order: OrderModel, private messenger: Telegram, private groupId: string) {}
 
-  if (!TELEGRAM_TOKEN) {
-    throw new Error('Incorrect TELEGRAM_TOKEN');
+  private composeMessage() {
+    const { phone, totalPrice, items } = this.order;
+
+    return `
+      <b>НОВЕ ЗАМОВЛЕННЯ!</b>
+Tелефон: <a href="tel:+38${phone.replace("[^0-9]", '')}">${phone}</a>
+Сума: ${totalPrice}UAH
+Товари:
+${items.map(item => `${item.name}: ${item.count}шт;`).join('\n')}`;
   }
 
-  if (!GROUP_ID) {
-    throw new Error('Incorrect GROUP_ID');
+  public send() {
+    const message = this.composeMessage();
+    this.messenger.sendMessage(this.groupId, message, { parse_mode: "HTML" })
+      .then(() => console.log(`Message Send for the order: ${this.order.id}`))
+      .catch((e) => console.error(`Unable to send message for the order: ${this.order.id}`, e))
   }
-
-  const tg = new Telegram(TELEGRAM_TOKEN);
-  // const message = createTelegramMessage(build);
-  // const duration = humanizeDuration(new Date(build.finishTime) - new Date(build.startTime));
-  // const msgText = `<br><br>Build ${build.id} finished with status ${build.status}, in ${duration}.`;
-  // let msgHtml = `${msgText}<br><a href="${build.logUrl}">Build logs</a>`;
-  // if (build.images) {
-  //   const images = build.images.join(',');
-  //   msgHtml += `Images: ${images}`;
-  // }
-
-  tg.sendMessage(GROUP_ID, 'Test', { parse_mode: "HTML" })
-    .then(() => console.log('Message Send'))
-    .catch((e) => console.error(e))
-};
+}

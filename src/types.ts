@@ -14,6 +14,7 @@ export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
 }
 
 export interface OrderModel {
+  id?: string;
   phone: string;
   totalPrice: number;
   isConfirmed: boolean;
