@@ -1,3 +1,4 @@
+import { WhereFilterOp } from "@google-cloud/firestore";
 //TODO: move to shared package
 export interface Product {
   id: string;
@@ -25,3 +26,5 @@ export interface TypedRequestBody<T> extends Express.Request {
 export interface TypedRequestQuery<T> extends Express.Request {
   query: T
 }
+
+export type dbQuery = [string, WhereFilterOp, string | number | boolean];

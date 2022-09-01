@@ -1,13 +1,18 @@
 import { Router } from 'express';
 import { getProducts, addOrder, addProducts } from "../services";
-import { Order, Product, TypedRequestBody } from "../types";
+import { Order, Product, TypedRequestBody, TypedRequestQuery } from "../types";
 
 const router = Router();
 
 //TODO: add Validation and error handler
-router.get('/products', async (req, res, next) => {
+router.get('/products', async (req: TypedRequestQuery<{ isAvailable: 'true' | 'false'} >, res, next) => {
   try {
-    const products = await getProducts();
+    // Proceed without filtering if flag not passed
+    const { isAvailable } = req.query;
+    if (('isAvailable' in req.query) && !['true', 'false'].includes(isAvailable)) {
+      return res.status(400).send();
+    }
+    const products = await getProducts({ isAvailable: isAvailable ? isAvailable === 'true' : isAvailable });
 
     res.json(products);
   } catch(e) {

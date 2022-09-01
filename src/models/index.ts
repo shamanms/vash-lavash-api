@@ -1,5 +1,5 @@
 import { CollectionReference, DocumentData, Firestore } from '@google-cloud/firestore';
-import { Order, Product } from "../types";
+import { dbQuery, Order, Product } from "../types";
 
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
 
@@ -12,7 +12,7 @@ const firestore = new Firestore({
 class Model<T = DocumentData> {// todo: add logging for each method
   private readonly collection: CollectionReference<T>;
 
-  constructor(collectionName: string, private firestore: Firestore) {
+  constructor(public readonly collectionName: string, private firestore: Firestore) {
     this.collection = firestore.collection(collectionName) as CollectionReference<T>;
   }
 
@@ -27,14 +27,12 @@ class Model<T = DocumentData> {// todo: add logging for each method
     return batch.commit();
   }
 
-  public async findMany() {
-    const documentReferences = await this.collection.listDocuments();
-    const documents = [];
+  public async findMany(query?: dbQuery) {
+    const documents: ({ id: string; } & T)[] = [];
+    // get the whole collection if query not passed
+    const snapshot = Array.isArray(query) ? await this.collection.where(...query).get() : await this.collection.get();
 
-    for (const documentReference of documentReferences) {
-      const data = await documentReference.get();
-      documents.push({ id: data.id, ...data.data() as T });
-    }
+    snapshot.forEach((doc) => documents.push({ id: doc.id, ...doc.data() as T }))
 
     return documents;
   }
