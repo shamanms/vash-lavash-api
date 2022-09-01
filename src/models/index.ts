@@ -1,5 +1,6 @@
 import { CollectionReference, DocumentData, Firestore } from '@google-cloud/firestore';
-import { dbQuery, Order, Product } from "../types";
+import { dbQuery, Product } from "../types";
+import { OrderModel } from "../types";
 
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
 
@@ -9,7 +10,7 @@ const firestore = new Firestore({
   keyFilename: GCP_CREDENTIALS_FILE
 });
 
-class Model<T = DocumentData> {// todo: add logging for each method
+export class Model<T = DocumentData> {// todo: add logging for each method
   private readonly collection: CollectionReference<T>;
 
   constructor(public readonly collectionName: string, private firestore: Firestore) {
@@ -37,9 +38,14 @@ class Model<T = DocumentData> {// todo: add logging for each method
     return documents;
   }
 
+  public async findOne(key: string) {
+    const snapshot = await this.collection.doc(key).get()
+
+    return { id: snapshot.id, ...snapshot.data() as T };
+  }
 }
 
 export default {
-  orders: new Model<Order>('orders', firestore),
+  orders: new Model<OrderModel>('orders', firestore),
   products: new Model<Product>('products', firestore),
 }

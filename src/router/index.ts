@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getProducts, addOrder, addProducts } from "../services";
-import { Order, Product, TypedRequestBody, TypedRequestQuery } from "../types";
+import services, { getProducts, addProducts } from "../services";
+import { OrderRequest, Product, TypedRequestBody, TypedRequestQuery } from "../types";
 
 const router = Router();
 
@@ -32,9 +32,10 @@ router.get('/products', async (req: TypedRequestQuery<{ isAvailable: 'true' | 'f
 //   }
 // });
 
-router.post('/orders', async (req: TypedRequestBody<Omit<Order, 'timestamp'>>, res, next) => {
+router.post('/orders', async (req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>, res, next) => {
   try {
-    const orderId = await addOrder(req.body);
+    const service = services.order(req.body);
+    const orderId = await service.addOrder();
 
     res.json({ orderId });
   } catch(e) {

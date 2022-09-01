@@ -1,5 +1,6 @@
 import db from '../models';
-import { dbQuery, Order, Product } from "../types";
+import { dbQuery, OrderRequest, Product } from "../types";
+import { OrderService } from "./order";
 
 export const getProducts = async ({ isAvailable }: { isAvailable?: boolean }) => {
   let query;
@@ -13,13 +14,6 @@ export const getProducts = async ({ isAvailable }: { isAvailable?: boolean }) =>
 
 export const addProducts = async (products: Product[]) => db.products.insertMany(products);
 
-export const addOrder = async (data: Omit<Order, 'timestamp'>): Promise<string> => {
-  const timestamp = new Date().getTime();
-
-  const order = await db.orders.insertOne({
-    ...data,
-    timestamp,
-  });
-
-  return order.id;
+export default {
+  order: (orderRequest: Omit<OrderRequest, 'timestamp'>) => new OrderService(db.orders, db.products, orderRequest),
 };

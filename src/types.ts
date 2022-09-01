@@ -9,11 +9,24 @@ export interface Product {
   type: string;
 }
 
+export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
+  count: number;
+}
+
+export interface OrderModel {
+  phone: string;
+  totalPrice: number;
+  isConfirmed: boolean;
+  isCompleted: boolean;
+  items: OrderedProduct[];
+  timestamp: number;
+}
+
 export interface OrderItems {
   [key: number]: number;
 }
 
-export interface Order {
+export interface OrderRequest {
   items: OrderItems;
   phone: string;
   timestamp: number
