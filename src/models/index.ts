@@ -11,7 +11,7 @@ const firestore = new Firestore({
 });
 
 export class Model<T = DocumentData> {// todo: add logging for each method
-  private readonly collection: CollectionReference<T>;
+  public readonly collection: CollectionReference<T>;
 
   constructor(public readonly collectionName: string, private firestore: Firestore) {
     this.collection = firestore.collection(collectionName) as CollectionReference<T>;

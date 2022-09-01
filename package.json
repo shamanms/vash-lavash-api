@@ -7,9 +7,10 @@
     "gcp-build": "npm run build",
     "build": "tsc",
     "watch": "tsc --watch",
-    "start": "npm run build && npx @google-cloud/functions-framework --target=api",
+    "start:api": "npm run build && npx @google-cloud/functions-framework --target=api",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy:api": "gcloud functions deploy api --entry-point api --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2"
+    "deploy:api": "gcloud functions deploy api --entry-point api --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2",
+    "deploy:notification": "gcloud functions deploy order-notification-t --entry-point orderNotification --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "@google-cloud/firestore": "^6.0.0",
     "@google-cloud/functions-framework": "^1.9.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "telegraf": "^4.9.1"
   }
 }
