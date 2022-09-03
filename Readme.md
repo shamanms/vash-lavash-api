@@ -37,3 +37,8 @@ gcloud functions deploy order-notification-t \
   --region "europe-central2" \
   --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID"  
 ```
+
+
+
+
+
