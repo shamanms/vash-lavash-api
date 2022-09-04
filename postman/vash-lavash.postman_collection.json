@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "2050db9c-c84e-4dfd-bdad-c34ac83e7fca",
+		"name": "vash-lavash",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products?isAvailable=true",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "isAvailable",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": {\n        \"0fNni89debIQtGIVQB2g\": 2,\n        \"1L2N8ljWfz6znV2lPVgH\": 1\n    },\n    \"phone\": \"(055) 555-55-55\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/orders",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  { \"name\": \"test\", \"price\": 1, \"description\": \"\", \"img\": \"\", \"type\": \"Випічка дріжджова\", \"isAvailable\": true }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/products",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Telegram bot info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.telegram.org/bot5610663885:AAH418fsCy2C2oKZVD-zOuEwmv9nK9_o7Q8/getUpdates",
+					"protocol": "https",
+					"host": [
+						"api",
+						"telegram",
+						"org"
+					],
+					"path": [
+						"bot5610663885:AAH418fsCy2C2oKZVD-zOuEwmv9nK9_o7Q8",
+						"getUpdates"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

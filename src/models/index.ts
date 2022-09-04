@@ -1,6 +1,10 @@
-import { CollectionReference, DocumentData, Firestore } from '@google-cloud/firestore';
-import { dbQuery, Product } from "../types";
-import { OrderModel } from "../types";
+import {
+  CollectionReference,
+  DocumentData,
+  Firestore
+} from '@google-cloud/firestore';
+import { dbQuery, Product } from '../types';
+import { OrderModel } from '../types';
 
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
 
@@ -10,11 +14,17 @@ const firestore = new Firestore({
   keyFilename: GCP_CREDENTIALS_FILE
 });
 
-export class Model<T = DocumentData> {// todo: add logging for each method
+export class Model<T = DocumentData> {
+  // todo: add logging for each method
   public readonly collection: CollectionReference<T>;
 
-  constructor(public readonly collectionName: string, private firestore: Firestore) {
-    this.collection = firestore.collection(collectionName) as CollectionReference<T>;
+  constructor(
+    public readonly collectionName: string,
+    private firestore: Firestore
+  ) {
+    this.collection = firestore.collection(
+      collectionName
+    ) as CollectionReference<T>;
   }
 
   public insertOne(data: T) {
@@ -29,23 +39,27 @@ export class Model<T = DocumentData> {// todo: add logging for each method
   }
 
   public async findMany(query?: dbQuery) {
-    const documents: ({ id: string; } & T)[] = [];
+    const documents: ({ id: string } & T)[] = [];
     // get the whole collection if query not passed
-    const snapshot = Array.isArray(query) ? await this.collection.where(...query).get() : await this.collection.get();
+    const snapshot = Array.isArray(query)
+      ? await this.collection.where(...query).get()
+      : await this.collection.get();
 
-    snapshot.forEach((doc) => documents.push({ id: doc.id, ...doc.data() as T }))
+    snapshot.forEach((doc) =>
+      documents.push({ id: doc.id, ...(doc.data() as T) })
+    );
 
     return documents;
   }
 
   public async findOne(key: string) {
-    const snapshot = await this.collection.doc(key).get()
+    const snapshot = await this.collection.doc(key).get();
 
-    return { id: snapshot.id, ...snapshot.data() as T };
+    return { id: snapshot.id, ...(snapshot.data() as T) };
   }
 }
 
 export default {
   orders: new Model<OrderModel>('orders', firestore),
-  products: new Model<Product>('products', firestore),
-}
+  products: new Model<Product>('products', firestore)
+};

@@ -1,4 +1,6 @@
-import { WhereFilterOp } from "@google-cloud/firestore";
+import { WhereFilterOp } from '@google-cloud/firestore';
+import { Express } from 'express';
+
 //TODO: move to shared package
 export interface Product {
   id: string;
@@ -30,15 +32,15 @@ export interface OrderItems {
 export interface OrderRequest {
   items: OrderItems;
   phone: string;
-  timestamp: number
+  timestamp: number;
 }
 
 export interface TypedRequestBody<T> extends Express.Request {
-  body: T
+  body: T;
 }
 
 export interface TypedRequestQuery<T> extends Express.Request {
-  query: T
+  query: T;
 }
 
 export type dbQuery = [string, WhereFilterOp, string | number | boolean];
