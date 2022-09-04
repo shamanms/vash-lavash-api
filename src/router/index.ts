@@ -1,7 +1,9 @@
 import { Router } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import services, { getProducts, addProducts } from '../services';
 import {
   OrderRequest,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Product,
   TypedRequestBody,
   TypedRequestQuery

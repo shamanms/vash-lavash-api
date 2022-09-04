@@ -1,0 +1,28 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "prettier/standard"
+  ],
+  "env": {
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "rules": {
+    "max-len": ["error", { "code": 140 }],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error"
+  }
+}
+
+//"eslint-config-airbnb-base": "14.2.0",
+//"eslint-config-prettier": "6.11.0",
+//"eslint-config-standard": "14.1.1",
+//"eslint-plugin-import": "2.22.0",
+//"eslint-plugin-node": "11.1.0",
+//"eslint-plugin-prettier": "3.1.4",
+//"eslint-plugin-promise": "4.2.1",
+//"eslint-plugin-standard": "4.0.1",

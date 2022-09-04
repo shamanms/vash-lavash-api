@@ -12,7 +12,8 @@
     "deploy:api": "gcloud functions deploy api --entry-point api --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2",
     "deploy:notification": "gcloud functions deploy order-notification-t --entry-point orderNotification --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2",
     "style:check": "npx prettier --check .",
-    "style:fix": "npx prettier --write ."
+    "style:fix": "npx prettier --write .",
+    "lint": "eslint --ext .ts src/"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,15 @@
     "@types/node": "^18.7.14",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb-base": "14.2.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
     "prettier": "2.7.1",
     "typescript": "^4.8.2"
   },

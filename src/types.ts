@@ -1,4 +1,6 @@
 import { WhereFilterOp } from '@google-cloud/firestore';
+import { Express } from 'express';
+
 //TODO: move to shared package
 export interface Product {
   id: string;
