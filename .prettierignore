@@ -1,4 +1,4 @@
-ts-build
-coverage
-node_modules
-postman
+/ts-build
+/coverage
+/node_modules
+/postman
