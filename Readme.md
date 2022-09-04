@@ -1,5 +1,3 @@
-Tiny sample demonstrating Google Cloud Functions with TypeScript.
-
 ## Deploying
 
 Before deploying, need to authorize with `gcloud` and select the project:
@@ -15,6 +13,7 @@ gcloud auth application-default login // to save auth creds for the app
 ```
 
 Setup env vars:
+
 ```sh
 export PROJECT_ID=vash-lavash
 export GCP_CREDENTIALS_FILE=$HOME/.config/gcloud/application_default_credentials.json
@@ -35,10 +34,5 @@ gcloud functions deploy order-notification-t \
   --trigger-event "providers/cloud.firestore/eventTypes/document.create" \
   --trigger-resource "projects/vash-lavash/databases/(default)/documents/orders/{order}" \
   --region "europe-central2" \
-  --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID"  
+  --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID"
 ```
-
-
-
-
-

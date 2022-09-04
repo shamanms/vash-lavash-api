@@ -1,10 +1,12 @@
-import { Model } from "../models";
-import { Product, OrderModel, OrderRequest } from "../types";
+import { Model } from '../models';
+import { Product, OrderModel, OrderRequest } from '../types';
 
 export class OrderService {
-  constructor(private readonly orderModel: Model<OrderModel>,
-              private readonly productModel: Model<Product>,
-              private readonly orderRequest: Omit<OrderRequest, 'timestamp'>) {}
+  constructor(
+    private readonly orderModel: Model<OrderModel>,
+    private readonly productModel: Model<Product>,
+    private readonly orderRequest: Omit<OrderRequest, 'timestamp'>
+  ) {}
 
   buildOrder() {
     return {
@@ -13,8 +15,8 @@ export class OrderService {
       isConfirmed: false,
       isCompleted: false,
       items: [],
-      timestamp: new Date().getTime(),
-    }
+      timestamp: new Date().getTime()
+    };
   }
 
   private async composeOrderItems(order: OrderModel) {
@@ -36,13 +38,13 @@ export class OrderService {
 
   private countOrderPrice(order: OrderModel) {
     order.totalPrice = order.items.reduce(
-      (sum, { price, count }) => sum + (price * count),
+      (sum, { price, count }) => sum + price * count,
       order.totalPrice
     );
   }
 
   public async addOrder(): Promise<string> {
-    const order = this.buildOrder()
+    const order = this.buildOrder();
     await this.composeOrderItems(order);
     this.countOrderPrice(order);
 
