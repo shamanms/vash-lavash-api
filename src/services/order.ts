@@ -8,7 +8,7 @@ export class OrderService {
     private readonly orderRequest: Omit<OrderRequest, 'timestamp'>
   ) {}
 
-  buildOrder() {
+  public buildOrder() {
     return {
       phone: this.orderRequest.phone,
       totalPrice: 0,
