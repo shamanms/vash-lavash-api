@@ -42,7 +42,7 @@ export const orderNotification = (
   }
 };
 
-class OrderNotification {
+export class OrderNotification {
   constructor(
     private order: OrderModel,
     private messenger: Telegram,
@@ -62,7 +62,7 @@ ${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}`;
 
   public send() {
     const message = this.composeMessage();
-    this.messenger
+    return this.messenger
       .sendMessage(this.groupId, message, { parse_mode: 'HTML' })
       .then(() => console.log(`Message Send for the order: ${this.order.id}`))
       .catch((e) =>
