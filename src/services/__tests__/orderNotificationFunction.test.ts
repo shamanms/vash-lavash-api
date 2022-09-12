@@ -49,12 +49,12 @@ describe('function orderNotification', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  
+
   test('should send message', async () => {
     snapshotData.mockImplementation(() => modifiedDocument);
 
     process.env = {
-      ... process.env,
+      ...process.env,
       TELEGRAM_TOKEN: 'chat',
       GROUP_ID: 'lavash'
     };
@@ -82,7 +82,9 @@ describe('function orderNotification', () => {
       await orderNotification(event, context);
     } catch (e: any) {
       expect(e?.message).toMatch('Unable to get data for asya');
-      expect(console.error).toHaveBeenCalledWith(`Parameter "documentId" is invalid`)
+      expect(console.error).toHaveBeenCalledWith(
+        `Parameter "documentId" is invalid`
+      );
     }
   });
 
@@ -97,9 +99,11 @@ describe('function orderNotification', () => {
 
     await orderNotification(event, context);
 
-    expect(console.error).toHaveBeenCalledWith(`Parameter "TELEGRAM_TOKEN" is invalid`)
+    expect(console.error).toHaveBeenCalledWith(
+      `Parameter "TELEGRAM_TOKEN" is invalid`
+    );
   });
-  
+
   test('should console error if GROUP_ID empty', async () => {
     snapshotData.mockImplementation(() => modifiedDocument);
     jest.spyOn(console, 'error').mockImplementation();
@@ -111,8 +115,10 @@ describe('function orderNotification', () => {
 
     await orderNotification(event, context);
 
-    expect(console.error).toHaveBeenCalledWith(`Parameter "GROUP_ID" is invalid`)
-  }); 
+    expect(console.error).toHaveBeenCalledWith(
+      `Parameter "GROUP_ID" is invalid`
+    );
+  });
 
   test('should console error if documentId, TELEGRAM_TOKEN, GROUP_ID empty', async () => {
     jest.spyOn(console, 'error').mockImplementation();
@@ -123,17 +129,23 @@ describe('function orderNotification', () => {
     };
     const wrongEvent = {
       ...event,
-      value:{
+      value: {
         ...event.value,
         name: ''
       }
-    }
+    };
 
     await orderNotification(wrongEvent, context);
 
     expect(console.error).toHaveBeenCalledTimes(3);
-    expect(console.error).toHaveBeenCalledWith(`Parameter "documentId" is invalid`);
-    expect(console.error).toHaveBeenCalledWith(`Parameter "TELEGRAM_TOKEN" is invalid`);
-    expect(console.error).toHaveBeenCalledWith(`Parameter "GROUP_ID" is invalid`)
-  }); 
+    expect(console.error).toHaveBeenCalledWith(
+      `Parameter "documentId" is invalid`
+    );
+    expect(console.error).toHaveBeenCalledWith(
+      `Parameter "TELEGRAM_TOKEN" is invalid`
+    );
+    expect(console.error).toHaveBeenCalledWith(
+      `Parameter "GROUP_ID" is invalid`
+    );
+  });
 });
