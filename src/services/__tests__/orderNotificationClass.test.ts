@@ -33,25 +33,25 @@ describe('Class orderNotification', () => {
   });
   afterAll(() => {
     jest.restoreAllMocks();
-  })
+  });
   test('orderNotification should send message', async () => {
-    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'log').mockImplementation();
     messenger.sendMessage.mockImplementation(() => Promise.resolve('Ok'));
     // TODO FIX MESSENGER TYPE
     // @ts-ignore for test purposes
     await new OrderNotification(order, messenger, groupId).send();
 
     expect(messenger.sendMessage).toHaveBeenCalledWith(groupId, message, mode);
-    expect(console.log).toHaveBeenCalled()
+    expect(console.log).toHaveBeenCalled();
   });
   test('orderNotification should log error', async () => {
-    jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation();
     messenger.sendMessage.mockImplementation(() => Promise.reject('error'));
     // TODO FIX MESSENGER TYPE
     // @ts-ignore for test purposes
     await new OrderNotification(order, messenger, groupId).send();
 
     expect(messenger.sendMessage).toHaveBeenCalledWith(groupId, message, mode);
-    expect(console.error).toHaveBeenCalled()
+    expect(console.error).toHaveBeenCalled();
   });
 });

@@ -62,15 +62,15 @@ describe('Class OrderService', () => {
       price: 20
     };
     db.products.findOne
+      // @ts-ignore for test purposes
+      .mockImplementationOnce(() => product1)
+      .mockImplementationOnce(() => product2);
+    const id = { id: '33' };
     // @ts-ignore for test purposes
-      .mockImplementationOnce(() => (product1))
-      .mockImplementationOnce(() => (product2));
-    const id = { id: '33'}
-    // @ts-ignore for test purposes
-    db.orders.insertOne.mockImplementation(() => (id));
+    db.orders.insertOne.mockImplementation(() => id);
     const service = new OrderService(db.orders, db.products, orderRequest);
 
-    const expectedResult = id.id
+    const expectedResult = id.id;
     const result = await service.addOrder();
 
     expect(result).toEqual(expectedResult);
@@ -98,14 +98,14 @@ describe('Class OrderService', () => {
       phone: 'abc'
     };
     db.products.findOne
-    // @ts-ignore for test purposes
-      .mockImplementationOnce(() => (undefined))
-      .mockImplementationOnce(() => (false));
+      // @ts-ignore for test purposes
+      .mockImplementationOnce(() => undefined)
+      .mockImplementationOnce(() => false);
     const service = new OrderService(db.orders, db.products, orderRequest);
     try {
       await service.addOrder();
-    } catch (e:any) {
+    } catch (e: any) {
       expect(e?.message).toMatch(`Product with id: 123 not found`);
     }
-  })
+  });
 });
