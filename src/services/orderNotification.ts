@@ -42,10 +42,7 @@ export const orderNotification = (
 
         const tg = new Telegram(TELEGRAM_TOKEN);
 
-        new OrderNotification(data, tg, GROUP_ID)
-          .send()
-          .then(() => console.log(`Message sent for ${documentId}`))
-          .catch((e) => console.error(`Message not sent for ${documentId}`, e));
+        new OrderNotification(data, tg, GROUP_ID).send();
       });
   } else {
     Object.entries({
