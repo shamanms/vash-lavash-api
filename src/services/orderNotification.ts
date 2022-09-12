@@ -35,12 +35,27 @@ export const orderNotification = (
       .get()
       .then((snapshot) => {
         const data = snapshot.data();
+
         if (!data) {
           return new Error(`Unable to get data for ${documentId}`);
         }
+
         const tg = new Telegram(TELEGRAM_TOKEN);
 
-        new OrderNotification(data, tg, GROUP_ID).send();
+        new OrderNotification(data, tg, GROUP_ID)
+          .send()
+          .then(() => console.log(`Message sent for ${documentId}`))
+          .catch((e) => console.error(`Message not sent for ${documentId}`, e));
       });
+  } else {
+    Object.entries({
+      documentId,
+      TELEGRAM_TOKEN,
+      GROUP_ID
+    }).forEach(([key, value]) => {
+      if (!value) {
+        console.error(`Parameter "${key}" is invalid`);
+      }
+    });
   }
 };

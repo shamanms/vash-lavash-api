@@ -1,3 +1,5 @@
+import { Telegram } from 'telegraf';
+
 import db from '../../models';
 import { orderNotification } from '../orderNotification';
 import { OrderNotification } from '../orderNotificationClass';
@@ -40,6 +42,9 @@ describe('function orderNotification', () => {
     eventType: 'kk/kk',
     resource: 'zakaz'
   };
+  const modifiedDocument = {
+    name: 'aza'
+  };
   process.env = Object.assign(process.env, {
     TELEGRAM_TOKEN: 'chat',
     GROUP_ID: 'lavash'
@@ -49,24 +54,30 @@ describe('function orderNotification', () => {
     jest.resetModules();
   });
   test('should send message', async () => {
-    snapshotData.mockImplementation(() => ({
-      name: 'aza'
-    }));
+    snapshotData.mockImplementation(() => modifiedDocument);
+
     await orderNotification(event, context);
+
     expect(db.orders.collection.doc).toHaveBeenCalledWith('asya');
-    expect(snapshotData).toHaveBeenCalledWith('aza');
-    expect(OrderNotification).toHaveBeenCalledWith('aza', 'chat', 'lavash');
+    expect(snapshotData).toHaveBeenCalled();
+    expect(Telegram).toHaveBeenCalledWith(process.env.TELEGRAM_TOKEN as string);
+
+    // @ts-ignore for test purposes
+    const lastServiceCall = OrderNotification.mock;
+    expect(lastServiceCall.calls[0][0]).toEqual(modifiedDocument);
+    expect(lastServiceCall.calls[0][1]).toBeInstanceOf(Telegram);
+    expect(lastServiceCall.calls[0][2]).toEqual(process.env.GROUP_ID);
+
     expect(sendMethod).toHaveBeenCalled();
   });
 
   test('should return error if data empty', async () => {
-    await orderNotification(event, context);
     snapshotData.mockImplementation(() => undefined);
-    expect(snapshotData).toHaveBeenCalledWith(undefined);
+
     try {
-      await snapshotData();
+      await orderNotification(event, context);
     } catch (e: any) {
-      expect(e?.message).toMatch(`Unable to get data for asya`);
+      expect(e?.message).toMatch('Unable to get data for asya');
     }
   });
 });
