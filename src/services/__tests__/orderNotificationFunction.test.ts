@@ -45,16 +45,19 @@ describe('function orderNotification', () => {
   const modifiedDocument = {
     name: 'aza'
   };
-  process.env = Object.assign(process.env, {
-    TELEGRAM_TOKEN: 'chat',
-    GROUP_ID: 'lavash'
-  });
 
   beforeEach(() => {
     jest.resetModules();
   });
+  
   test('should send message', async () => {
     snapshotData.mockImplementation(() => modifiedDocument);
+
+    process.env = {
+      ... process.env,
+      TELEGRAM_TOKEN: 'chat',
+      GROUP_ID: 'lavash'
+    };
 
     await orderNotification(event, context);
 
@@ -73,11 +76,64 @@ describe('function orderNotification', () => {
 
   test('should return error if data empty', async () => {
     snapshotData.mockImplementation(() => undefined);
+    jest.spyOn(console, 'error').mockImplementation();
 
     try {
       await orderNotification(event, context);
     } catch (e: any) {
       expect(e?.message).toMatch('Unable to get data for asya');
+      expect(console.error).toHaveBeenCalledWith(`Parameter "documentId" is invalid`)
     }
   });
+
+  test('should console error if TELEGRAM_TOKEN empty', async () => {
+    snapshotData.mockImplementation(() => modifiedDocument);
+    jest.spyOn(console, 'error').mockImplementation();
+    process.env = {
+      ...process.env,
+      TELEGRAM_TOKEN: undefined,
+      GROUP_ID: 'lavash'
+    };
+
+    await orderNotification(event, context);
+
+    expect(console.error).toHaveBeenCalledWith(`Parameter "TELEGRAM_TOKEN" is invalid`)
+  });
+  
+  test('should console error if GROUP_ID empty', async () => {
+    snapshotData.mockImplementation(() => modifiedDocument);
+    jest.spyOn(console, 'error').mockImplementation();
+    process.env = {
+      ...process.env,
+      TELEGRAM_TOKEN: 'chat',
+      GROUP_ID: undefined
+    };
+
+    await orderNotification(event, context);
+
+    expect(console.error).toHaveBeenCalledWith(`Parameter "GROUP_ID" is invalid`)
+  }); 
+
+  test('should console error if documentId, TELEGRAM_TOKEN, GROUP_ID empty', async () => {
+    jest.spyOn(console, 'error').mockImplementation();
+    process.env = {
+      ...process.env,
+      TELEGRAM_TOKEN: undefined,
+      GROUP_ID: undefined
+    };
+    const wrongEvent = {
+      ...event,
+      value:{
+        ...event.value,
+        name: ''
+      }
+    }
+
+    await orderNotification(wrongEvent, context);
+
+    expect(console.error).toHaveBeenCalledTimes(3);
+    expect(console.error).toHaveBeenCalledWith(`Parameter "documentId" is invalid`);
+    expect(console.error).toHaveBeenCalledWith(`Parameter "TELEGRAM_TOKEN" is invalid`);
+    expect(console.error).toHaveBeenCalledWith(`Parameter "GROUP_ID" is invalid`)
+  }); 
 });
