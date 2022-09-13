@@ -28,7 +28,7 @@ npm run build && npm run deploy
 ```
 
 ```sh
-gcloud functions deploy order-notification-t \
+gcloud functions deploy order-notification \
   --entry-point orderNotification \
   --runtime nodejs16 \
   --trigger-event "providers/cloud.firestore/eventTypes/document.create" \
