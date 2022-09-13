@@ -15,12 +15,12 @@ jest.mock('../../models', () => ({
     findOne: jest.fn()
   }
 }));
-const dateNow = 1;
+const dateNow = Date.now();
 
 describe('Class OrderService', () => {
   beforeEach(() => {
     jest.resetModules();
-    global.Date.now = jest.fn(() => 1);
+    global.Date.now = jest.fn(() => dateNow);
   });
 
   test('OrderService buildOrder() should return default', () => {

@@ -19,7 +19,7 @@ const order = {
       count: 2
     }
   ],
-  timestamp: 12121122112112
+  timestamp: Date.now()
 };
 const message = `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
