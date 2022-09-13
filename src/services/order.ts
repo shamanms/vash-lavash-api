@@ -15,7 +15,7 @@ export class OrderService {
       isConfirmed: false,
       isCompleted: false,
       items: [],
-      timestamp: new Date().getTime()
+      timestamp: Date.now()
     };
   }
 
