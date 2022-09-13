@@ -1,5 +1,4 @@
 import { Telegram } from 'telegraf';
-
 import db from '../../models';
 import { orderNotification } from '../orderNotification';
 import { OrderNotification } from '../orderNotificationClass';
@@ -28,6 +27,7 @@ jest.mock('../../models', () => ({
     }
   }
 }));
+jest.spyOn(console, 'log').mockImplementation();
 
 describe('function orderNotification', () => {
   const event = {

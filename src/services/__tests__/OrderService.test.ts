@@ -1,9 +1,7 @@
-import { Model } from '../../models';
-import { OrderModel, Product } from '../../types';
+import db from '../../models';
 import { OrderService } from '../order';
 
-// @ts-ignore for test purposes
-const db = {
+jest.mock('../../models', () => ({
   orders: {
     insertOne: jest.fn(),
     insertMany: jest.fn(),
@@ -16,13 +14,13 @@ const db = {
     findMany: jest.fn(),
     findOne: jest.fn()
   }
-} as { orders: Model<OrderModel>; products: Model<Product> };
-const dateNow = 1530518207007;
+}));
+const dateNow = 1;
 
 describe('Class OrderService', () => {
   beforeEach(() => {
     jest.resetModules();
-    global.Date.now = jest.fn(() => 1530518207007);
+    global.Date.now = jest.fn(() => 1);
   });
 
   test('OrderService buildOrder() should return default', () => {
@@ -53,18 +51,18 @@ describe('Class OrderService', () => {
       },
       phone: 'abc'
     };
-    const product1 = {
+    const insertedDocument1 = {
       name: 'abc',
       price: 10
     };
-    const product2 = {
+    const insertedDocument2 = {
       name: 'zxc',
       price: 20
     };
     db.products.findOne
       // @ts-ignore for test purposes
-      .mockImplementationOnce(() => product1)
-      .mockImplementationOnce(() => product2);
+      .mockImplementationOnce(() => insertedDocument1)
+      .mockImplementationOnce(() => insertedDocument2);
     const id = { id: '33' };
     // @ts-ignore for test purposes
     db.orders.insertOne.mockImplementation(() => id);
@@ -99,8 +97,7 @@ describe('Class OrderService', () => {
     };
     db.products.findOne
       // @ts-ignore for test purposes
-      .mockImplementationOnce(() => undefined)
-      .mockImplementationOnce(() => false);
+      .mockImplementation(() => undefined);
     const service = new OrderService(db.orders, db.products, orderRequest);
     try {
       await service.addOrder();

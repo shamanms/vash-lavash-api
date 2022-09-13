@@ -27,6 +27,7 @@ const message = `
   Сума: ${order.totalPrice}UAH
   Товари:
   ${order.items[0].name}: ${order.items[0].count}шт;`;
+
 describe('Class orderNotification', () => {
   beforeEach(() => {
     jest.resetModules();
@@ -42,7 +43,9 @@ describe('Class orderNotification', () => {
     await new OrderNotification(order, messenger, groupId).send();
 
     expect(messenger.sendMessage).toHaveBeenCalledWith(groupId, message, mode);
-    expect(console.log).toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith(
+      `Message Send for the order: ${order.id}`
+    );
   });
   test('orderNotification should log error', async () => {
     jest.spyOn(console, 'error').mockImplementation();
@@ -52,6 +55,9 @@ describe('Class orderNotification', () => {
     await new OrderNotification(order, messenger, groupId).send();
 
     expect(messenger.sendMessage).toHaveBeenCalledWith(groupId, message, mode);
-    expect(console.error).toHaveBeenCalled();
+    expect(console.error).toHaveBeenCalledWith(
+      `Unable to send message for the order: ${order.id}`,
+      'error'
+    );
   });
 });
