@@ -13,10 +13,10 @@ export class OrderNotification {
 
     return `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
-  Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
-  Сума: ${totalPrice}UAH
-  Товари:
-  ${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}`;
+Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
+Сума: ${totalPrice}UAH
+Товари:
+${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}`;
   }
 
   public send() {

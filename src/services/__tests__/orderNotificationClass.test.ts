@@ -23,10 +23,10 @@ const order = {
 };
 const message = `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
-  Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
-  Сума: ${order.totalPrice}UAH
-  Товари:
-  ${order.items[0].name}: ${order.items[0].count}шт;`;
+Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
+Сума: ${order.totalPrice}UAH
+Товари:
+${order.items[0].name}: ${order.items[0].count}шт;`;
 
 describe('Class orderNotification', () => {
   beforeEach(() => {
