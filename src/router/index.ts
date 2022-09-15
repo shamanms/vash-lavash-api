@@ -40,7 +40,7 @@ router.get(
 );
 
 const verifyBody = function(req: any) {
-  if (req !== [{}]) return req.status(400).send()
+  if (req !== typeof Array ) return req.status(400).send()
 }
 //TODO ADD AUTHORISATION for this POST /products
 
