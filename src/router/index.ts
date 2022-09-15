@@ -39,6 +39,9 @@ router.get(
   }
 );
 
+const verifyBody = function(req: any) {
+  if (req !== [{}]) return req.status(400).send()
+}
 //TODO ADD AUTHORISATION for this POST /products
 
 // router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
@@ -53,9 +56,10 @@ router.get(
 
 router.put('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
   try {
+    verifyBody(req)
     const result = await updateProducts(req.body);
 
-    res.json({ result })
+    res.json({ res })
     } catch(e) {
       next(e)
     }
