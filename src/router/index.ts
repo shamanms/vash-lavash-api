@@ -53,9 +53,9 @@ router.get(
 
 router.put('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
   try {
-    await updateProducts(req.body);
+    const result = await updateProducts(req.body);
 
-    res.json({ status: "OK" })
+    res.json({ result })
     } catch(e) {
       next(e)
     }

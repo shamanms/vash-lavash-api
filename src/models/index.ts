@@ -10,9 +10,9 @@ import { OrderModel } from '../types';
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
 
 const firestore = new Firestore({
-  projectId: 'vash-lavash',
+  projectId: PROJECT_ID,
   timestampsInSnapshots: true,
-  keyFilename: 'C:/Users/Денис/.config/gcloud/application_default_credentials.json'
+  keyFilename: GCP_CREDENTIALS_FILE
 });
 
 export class Model<T = DocumentData> {
