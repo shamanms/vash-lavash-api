@@ -21,7 +21,7 @@ export const addProducts = async (products: Product[]) =>
 
 export const updateProducts = async (products: Product[]) => {
   // db.products.updateOne(products[0].id, products[0]);
-  for(let product in db.products) {
+  for(let product in products) {
     let newProduct = db.products.updateOne(products[product].id, products[product])
     return newProduct
   }
