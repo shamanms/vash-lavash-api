@@ -19,6 +19,14 @@ export const getProducts = async ({
 export const addProducts = async (products: Product[]) =>
   db.products.insertMany(products);
 
+export const updateProducts = async (products: Product[]) => {
+  // db.products.updateOne(products[0].id, products[0]);
+  for(let product in db.products) {
+    product.update(products[0].id, products[0])
+  }
+} 
+  
+  
 export default {
   order: (orderRequest: Omit<OrderRequest, 'timestamp'>) =>
     new OrderService(db.orders, db.products, orderRequest)

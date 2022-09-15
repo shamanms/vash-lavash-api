@@ -1,6 +1,6 @@
 import { Router } from 'express';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import services, { getProducts, addProducts } from '../services';
+import services, { getProducts, addProducts, updateProducts } from '../services';
 import {
   OrderRequest,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,12 +44,22 @@ router.get(
 // router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
 //   try {
 //     await addProducts(req.body);
-//
+
 //     res.json({ status: "OK" });
 //   } catch(e) {
 //     next(e);
 //   }
 // });
+
+router.put('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
+  try {
+    await updateProducts(req.body);
+
+    res.json({ status: "OK" })
+    } catch(e) {
+      next(e)
+    }
+})
 
 router.post(
   '/orders',

@@ -1,7 +1,8 @@
 import {
   CollectionReference,
   DocumentData,
-  Firestore
+  Firestore,
+  UpdateData
 } from '@google-cloud/firestore';
 import { dbQuery, Product } from '../types';
 import { OrderModel } from '../types';
@@ -9,9 +10,9 @@ import { OrderModel } from '../types';
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
 
 const firestore = new Firestore({
-  projectId: PROJECT_ID,
+  projectId: 'vash-lavash',
   timestampsInSnapshots: true,
-  keyFilename: GCP_CREDENTIALS_FILE
+  keyFilename: 'C:/Users/Денис/.config/gcloud/application_default_credentials.json'
 });
 
 export class Model<T = DocumentData> {
@@ -56,6 +57,12 @@ export class Model<T = DocumentData> {
     const snapshot = await this.collection.doc(key).get();
 
     return { id: snapshot.id, ...(snapshot.data() as T) };
+  }
+
+  public async updateOne(key: string, data: Partial<T>) {
+    const snapshot = await this.collection.doc(key).update(data as UpdateData<T>);
+    
+    return key
   }
 }
 
