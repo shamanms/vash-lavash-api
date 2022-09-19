@@ -12,7 +12,7 @@ import {
   TypedRequestBody,
   TypedRequestQuery
 } from '../types';
-import { validateProductsPut } from './validation';
+import { validateProductsGet, validateProductsPut } from './validation';
 
 const router = Router();
 
@@ -25,6 +25,7 @@ router.get(
     next
   ) => {
     try {
+      validateProductsGet(req, res);
       // Proceed without filtering if flag not passed
       const { isAvailable } = req.query;
       const products = await getProducts({
