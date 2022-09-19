@@ -10,7 +10,7 @@ describe('validateProductsPut', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test('when products !== [] should return invalid request', () => {
+  test('when req havent body should return invalid request', () => {
     const req = {};
     // @ts-ignore for test purposes
     validateProductsPut(req, res);
