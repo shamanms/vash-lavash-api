@@ -6,6 +6,7 @@ export const validateProductsPut = function (
 ) {
   const products = req.body;
   if (!Array.isArray(products)) return res.status(400).send('Invalid request');
+  if (products.length < 1) return res.status(400).send('Products not passed');
   const isProductsValid = products.every((product) => {
     return (
       typeof product === 'object' &&

@@ -10,23 +10,32 @@ describe('validateProductsPut', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test('when req havent body should return invalid request', () => {
+  test("when req haven't body should return 'Invalid request'", () => {
     const req = {};
     // @ts-ignore for test purposes
     validateProductsPut(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(sendMessage).toHaveBeenCalledWith('Invalid request');
   });
-  test('when product !== object should return invalid product', () => {
+  test('when products array is empty should return "Products not passed"', () => {
     const req = {
-      body: [{}]
+      body: []
+    };
+    // @ts-ignore for test purposes
+    validateProductsPut(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(sendMessage).toHaveBeenCalledWith('Products not passed');
+  });
+  test('when any product !== object should return invalid product', () => {
+    const req = {
+      body: [{ id: 'testId' }, 12345]
     };
     // @ts-ignore for test purposes
     validateProductsPut(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(sendMessage).toHaveBeenCalledWith('Invalid product');
   });
-  test('when product === null should return invalid product', () => {
+  test('when product === null should return "Invalid product"', () => {
     const req = {
       body: [null]
     };
@@ -35,9 +44,9 @@ describe('validateProductsPut', () => {
     expect(res.status).toHaveBeenCalledWith(400);
     expect(sendMessage).toHaveBeenCalledWith('Invalid product');
   });
-  test('when product !== [] should return invalid product', () => {
+  test('when product is array should return "Invalid product"', () => {
     const req = {
-      body: [[]]
+      body: [[], []]
     };
     // @ts-ignore for test purposes
     validateProductsPut(req, res);
@@ -56,5 +65,18 @@ describe('validateProductsPut', () => {
     validateProductsPut(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(sendMessage).toHaveBeenCalledWith('Invalid product');
+  });
+  test('when request is valid should return nothing', () => {
+    const req = {
+      body: [
+        {
+          id: '123'
+        }
+      ]
+    };
+    // @ts-ignore for test purposes
+    validateProductsPut(req, res);
+    expect(res.status).not.toHaveBeenCalled();
+    expect(sendMessage).not.toHaveBeenCalled();
   });
 });
