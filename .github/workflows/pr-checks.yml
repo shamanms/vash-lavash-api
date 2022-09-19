@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         node-version: ['14.x', '16.x']
-        checks: ['build', 'test', 'style:check', 'lint']
+        checks: ['build', 'test:coverage', 'style:check', 'lint']
 
     steps:
       - uses: actions/checkout@v3
