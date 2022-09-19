@@ -20,11 +20,12 @@ export const addProducts = async (products: Product[]) =>
   db.products.insertMany(products);
 
 export const updateProducts = async (products: Product[]) => {
-  let updatedProducts = products.map(product => db.products.updateOne(product.id, product));
-  return Promise.allSettled(updatedProducts)
-} 
-  
-  
+  let updatedProducts = products.map((product) =>
+    db.products.updateOne(product.id, product)
+  );
+  return Promise.allSettled(updatedProducts);
+};
+
 export default {
   order: (orderRequest: Omit<OrderRequest, 'timestamp'>) =>
     new OrderService(db.orders, db.products, orderRequest)

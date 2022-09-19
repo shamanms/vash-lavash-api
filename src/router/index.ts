@@ -1,6 +1,10 @@
 import { Router } from 'express';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import services, { getProducts, addProducts, updateProducts } from '../services';
+import services, {
+  getProducts,
+  addProducts,
+  updateProducts
+} from '../services';
 import {
   OrderRequest,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -8,6 +12,7 @@ import {
   TypedRequestBody,
   TypedRequestQuery
 } from '../types';
+import { validateProductsPut } from './validation';
 
 const router = Router();
 
@@ -22,12 +27,6 @@ router.get(
     try {
       // Proceed without filtering if flag not passed
       const { isAvailable } = req.query;
-      if (
-        'isAvailable' in req.query &&
-        !['true', 'false'].includes(isAvailable)
-      ) {
-        return res.status(400).send();
-      }
       const products = await getProducts({
         isAvailable: isAvailable ? isAvailable === 'true' : isAvailable
       });
@@ -39,9 +38,6 @@ router.get(
   }
 );
 
-const verifyBody = function(req: any,res: any) {
-  if (req !== typeof Array && typeof Object in Array ) return res.status(400).send()
-}
 //TODO ADD AUTHORISATION for this POST /products
 
 // router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
@@ -56,14 +52,14 @@ const verifyBody = function(req: any,res: any) {
 
 router.put('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
   try {
-    verifyBody(req,res)
+    validateProductsPut(req, res);
     const result = await updateProducts(req.body);
 
-    res.json({ res })
-    } catch(e) {
-      next(e)
-    }
-})
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+});
 
 router.post(
   '/orders',

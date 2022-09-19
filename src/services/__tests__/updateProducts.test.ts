@@ -7,7 +7,7 @@ jest.mock('../../models', () => ({
   }
 }));
 
-describe( 'updateProducts function', () => {
+describe('updateProducts function', () => {
   beforeEach(() => {
     jest.resetModules();
   });
@@ -24,11 +24,11 @@ describe( 'updateProducts function', () => {
       }
     ];
     const product = db.products.updateOne;
-    const updatedProducts = products[0]
+    const updatedProducts = products[0];
 
-    await updateProducts(products)
-  
+    await updateProducts(products);
+
     expect(product).toHaveBeenCalledWith(products[0].id, products[0]);
-    expect(Promise.allSettled).toHaveBeenCalledWith(updatedProducts)
-  })
-})
+    expect(Promise.allSettled).toHaveBeenCalledWith(updatedProducts);
+  });
+});
