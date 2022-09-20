@@ -23,7 +23,23 @@ export const updateProducts = async (products: Product[]) => {
   let updatedProducts = products.map((product) =>
     db.products.updateOne(product.id, product)
   );
-  return Promise.allSettled(updatedProducts);
+  const updatingResult = await Promise.allSettled(updatedProducts);
+
+  return products.reduce((acc, { id }) => {
+    const dbResult = updatingResult.find(
+      (updateResult) =>
+        updateResult.status === 'fulfilled' && updateResult.value === id
+    );
+
+    if (!dbResult) {
+      console.error(`Unable to update ${id}`);
+    }
+
+    return {
+      ...acc,
+      [id]: typeof dbResult === 'object'
+    };
+  }, {});
 };
 
 export default {
