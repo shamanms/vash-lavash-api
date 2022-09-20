@@ -12,12 +12,18 @@ import {
   TypedRequestBody,
   TypedRequestQuery
 } from '../types';
+import {
+  validateOrdersPost,
+  validateProductsGet,
+  validateProductsPut
+} from './validation';
 
 const router = Router();
 
-//TODO: add Validation and error handler
+//TODO: and error handler(https://expressjs.com/en/guide/using-middleware.html)
 router.get(
   '/products',
+  validateProductsGet,
   async (
     req: TypedRequestQuery<{ isAvailable: 'true' | 'false' }>,
     res,
@@ -49,18 +55,23 @@ router.get(
 //   }
 // });
 
-router.put('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
-  try {
-    const result = await updateProducts(req.body);
+router.put(
+  '/products',
+  validateProductsPut,
+  async (req: TypedRequestBody<Product[]>, res, next) => {
+    try {
+      const result = await updateProducts(req.body);
 
-    res.json(result);
-  } catch (e) {
-    next(e);
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
 router.post(
   '/orders',
+  validateOrdersPost,
   async (req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>, res, next) => {
     try {
       const service = services.order(req.body);
