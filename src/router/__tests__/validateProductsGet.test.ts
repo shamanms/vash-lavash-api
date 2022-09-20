@@ -6,6 +6,7 @@ const res = {
     send: sendMessage
   }))
 };
+const next = jest.fn();
 
 describe('validateProductsGet', () => {
   beforeEach(() => {
@@ -19,9 +20,10 @@ describe('validateProductsGet', () => {
       }
     };
     // @ts-ignore for test purposes
-    validateProductsGet(req, res);
+    validateProductsGet(req, res, next);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(sendMessage).toHaveBeenCalledWith('Invalid parameter');
+    expect(next).not.toHaveBeenCalled();
   });
 
   test('when query is "true" should return "Invalid parameter"', () => {
@@ -31,9 +33,10 @@ describe('validateProductsGet', () => {
       }
     };
     // @ts-ignore for test purposes
-    validateProductsGet(req, res);
+    validateProductsGet(req, res, next);
     expect(res.status).not.toHaveBeenCalled();
     expect(sendMessage).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
   });
 
   test('when query is "false" should return "Invalid parameter"', () => {
@@ -43,16 +46,18 @@ describe('validateProductsGet', () => {
       }
     };
     // @ts-ignore for test purposes
-    validateProductsGet(req, res);
+    validateProductsGet(req, res, next);
     expect(res.status).not.toHaveBeenCalled();
     expect(sendMessage).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
   });
 
-  test('when isAvailable parameter not passed should return nothing', () => {
+  test('when isAvailable parameter not passed should go next', () => {
     const req = { query: {} };
     // @ts-ignore for test purposes
-    validateProductsGet(req, res);
+    validateProductsGet(req, res, next);
     expect(res.status).not.toHaveBeenCalled();
     expect(sendMessage).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
   });
 });

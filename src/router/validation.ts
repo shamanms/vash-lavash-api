@@ -29,7 +29,7 @@ export const validateProductsGet = function (
 ) {
   const { isAvailable } = req.query;
   if ('isAvailable' in req.query && !['true', 'false'].includes(isAvailable)) {
-    res.status(400).send('Invalid parameter');
+    return res.status(400).send('Invalid parameter');
   }
 
   next();
