@@ -24,17 +24,12 @@ export const updateProducts = async (products: Product[]) => {
     db.products.updateOne(product.id, product)
   );
   const updatingResult = await Promise.allSettled(updatedProducts);
-
   return products.reduce((acc, { id }) => {
     const dbResult = updatingResult.find(
       (updateResult) =>
         updateResult.status === 'fulfilled' && updateResult.value === id
     );
-
-    if (!dbResult) {
-      console.error(`Unable to update ${id}`);
-    }
-
+    console.log(updatingResult);
     return {
       ...acc,
       [id]: typeof dbResult === 'object'

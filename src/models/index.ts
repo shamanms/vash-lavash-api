@@ -59,10 +59,10 @@ export class Model<T = DocumentData> {
     return { id: snapshot.id, ...(snapshot.data() as T) };
   }
 
-  public async updateOne(key: string, data: Partial<T>) {
-    await this.collection.doc(key).update(data as UpdateData<T>);
+  public async updateOne(id: string, data: Partial<T>) {
+    await this.collection.doc(id).update(data as UpdateData<T>);
 
-    return key;
+    return id;
   }
 }
 
