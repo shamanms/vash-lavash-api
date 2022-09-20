@@ -12,7 +12,6 @@ import {
   TypedRequestBody,
   TypedRequestQuery
 } from '../types';
-import { validateProductsGet, validateProductsPut } from './validation';
 
 const router = Router();
 
@@ -25,7 +24,6 @@ router.get(
     next
   ) => {
     try {
-      validateProductsGet(req, res);
       // Proceed without filtering if flag not passed
       const { isAvailable } = req.query;
       const products = await getProducts({
@@ -53,7 +51,6 @@ router.get(
 
 router.put('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
   try {
-    validateProductsPut(req, res);
     const result = await updateProducts(req.body);
 
     res.json(result);

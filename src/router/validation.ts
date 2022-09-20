@@ -1,8 +1,10 @@
+import { NextFunction } from 'express';
 import { Product, TypedRequestBody, TypedRequestQuery } from '../types';
 
 export const validateProductsPut = function (
   req: TypedRequestBody<Product[]>,
-  res: any
+  res: any,
+  next: NextFunction
 ) {
   const products = req.body;
   if (!Array.isArray(products)) return res.status(400).send('Invalid request');
@@ -16,14 +18,19 @@ export const validateProductsPut = function (
     );
   });
   if (!isProductsValid) return res.status(400).send('Invalid product');
+
+  next();
 };
 
 export const validateProductsGet = function (
   req: TypedRequestQuery<{ isAvailable: 'true' | 'false' }>,
-  res: any
+  res: any,
+  next: NextFunction
 ) {
   const { isAvailable } = req.query;
   if ('isAvailable' in req.query && !['true', 'false'].includes(isAvailable)) {
-    return res.status(400).send('Invalid parameter');
+    res.status(400).send('Invalid parameter');
   }
+
+  next();
 };
