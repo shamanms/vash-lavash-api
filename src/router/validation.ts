@@ -5,6 +5,7 @@ import {
   TypedRequestBody,
   TypedRequestQuery
 } from '../types';
+import { ValidationError } from '../models/errors';
 
 export const validateProductsPut = function (
   req: TypedRequestBody<Product[]>,
@@ -12,9 +13,9 @@ export const validateProductsPut = function (
   next: NextFunction
 ) {
   const products = req.body;
-  if (!Array.isArray(products)) return res.status(400).send('Invalid request');
+  if (!Array.isArray(products)) throw new ValidationError('Invalid request');
 
-  if (products.length < 1) return res.status(400).send('Products not passed');
+  if (products.length < 1) throw new ValidationError('Products not passed');
 
   const isProductsValid = products.every((product) => {
     return (
@@ -25,7 +26,7 @@ export const validateProductsPut = function (
     );
   });
 
-  if (!isProductsValid) return res.status(400).send('Invalid product');
+  if (!isProductsValid) throw new ValidationError('Invalid product');
 
   next();
 };
@@ -38,7 +39,7 @@ export const validateProductsGet = function (
   const { isAvailable } = req.query;
 
   if ('isAvailable' in req.query && !['true', 'false'].includes(isAvailable)) {
-    return res.status(400).send('Invalid parameter');
+    throw new ValidationError('Invalid parameter');
   }
 
   next();
@@ -51,7 +52,7 @@ export const validateOrdersPost = function (
 ) {
   const order = req.body;
   if (Object.keys(order).length < 1) {
-    return res.status(400).send('Order is empty');
+    throw new ValidationError('Order is empty');
   }
 
   if (
@@ -59,7 +60,7 @@ export const validateOrdersPost = function (
     order.items === null ||
     Array.isArray(order.items)
   ) {
-    return res.status(400).send('Invalid order');
+    throw new ValidationError('Invalid order');
   }
 
   const orderValues = Object.values(order.items);
@@ -68,13 +69,13 @@ export const validateOrdersPost = function (
   );
 
   if (orderValues.length < 1 || !isOrderValuesValid) {
-    return res.status(400).send('Invalid order item');
+    throw new ValidationError('Invalid order item');
   }
 
   const phoneRegex = /^((\(0\d{2}\)))[ ]\d{3}[-]\d{2}[-]\d{2}$/;
 
   if (!(typeof order.phone === 'string' && phoneRegex.test(order.phone))) {
-    return res.status(400).send('Invalid phone number');
+    throw new ValidationError('Invalid phone number');
   }
 
   next();
