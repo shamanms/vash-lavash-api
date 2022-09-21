@@ -1,12 +1,7 @@
 import { validateProductsPut } from '../validation';
 import { ValidationError } from '../../models/errors';
 
-const sendMessage = jest.fn();
-const res = {
-  status: jest.fn().mockImplementation(() => ({
-    send: sendMessage
-  }))
-};
+const res = {};
 const next = jest.fn();
 describe('validateProductsPut', () => {
   beforeEach(() => {

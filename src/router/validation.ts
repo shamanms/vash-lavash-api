@@ -51,6 +51,9 @@ export const validateOrdersPost = function (
   next: NextFunction
 ) {
   const order = req.body;
+  if (Array.isArray(order)) {
+    throw new ValidationError('Invalid body');
+  }
   if (Object.keys(order).length < 1) {
     throw new ValidationError('Order is empty');
   }
