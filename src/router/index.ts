@@ -1,10 +1,5 @@
 import { Router } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import services, {
-  getProducts,
-  addProducts,
-  updateProducts
-} from '../services';
+import services from '../services';
 import {
   OrderRequest,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,7 +15,6 @@ import {
 
 const router = Router();
 
-//TODO: and error handler(https://expressjs.com/en/guide/using-middleware.html)
 router.get(
   '/products',
   validateProductsGet,
@@ -32,7 +26,7 @@ router.get(
     try {
       // Proceed without filtering if flag not passed
       const { isAvailable } = req.query;
-      const products = await getProducts({
+      const products = await services.products.getProducts({
         isAvailable: isAvailable ? isAvailable === 'true' : isAvailable
       });
 
@@ -47,7 +41,7 @@ router.get(
 
 // router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
 //   try {
-//     await addProducts(req.body);
+//     await services.products.addProducts(req.body);
 
 //     res.json({ status: "OK" });
 //   } catch(e) {
@@ -60,7 +54,7 @@ router.put(
   validateProductsPut,
   async (req: TypedRequestBody<Product[]>, res, next) => {
     try {
-      const result = await updateProducts(req.body);
+      const result = await services.products.updateProducts(req.body);
 
       res.json(result);
     } catch (e) {
