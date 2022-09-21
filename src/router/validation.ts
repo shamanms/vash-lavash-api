@@ -6,6 +6,8 @@ import {
   TypedRequestQuery
 } from '../types';
 import { ValidationError } from '../models/errors';
+import db from '../models';
+import { FieldPath } from '@google-cloud/firestore';
 
 export const validateProductsPut = function (
   req: TypedRequestBody<Product[]>,
@@ -45,7 +47,7 @@ export const validateProductsGet = function (
   next();
 };
 // TODO check product id in database
-export const validateOrdersPost = function (
+export const validateOrdersPost = async function (
   req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>,
   res: Response,
   next: NextFunction
@@ -56,6 +58,23 @@ export const validateOrdersPost = function (
   }
   if (Object.keys(order).length < 1) {
     throw new ValidationError('Order is empty');
+  }
+
+  const products = await db.products.findMany([
+    FieldPath.documentId(),
+    'in',
+    Object.keys(order.items)
+  ]);
+  const productInStock = products
+    .filter((product) => {
+      if (product.isAvailable) return product;
+    })
+    .map(({ id }) => id);
+  const isProductsValid = Object.keys(order.items).every((id) => {
+    return productInStock.includes(id);
+  });
+  if (!isProductsValid) {
+    throw new ValidationError('Products not found');
   }
 
   if (
