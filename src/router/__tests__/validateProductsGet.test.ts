@@ -1,4 +1,5 @@
 import { validateProductsGet } from '../validation';
+import { ValidationError } from '../../models/errors';
 
 const sendMessage = jest.fn();
 const res = {
@@ -19,14 +20,17 @@ describe('validateProductsGet', () => {
         isAvailable
       }
     };
-    // @ts-ignore for test purposes
-    validateProductsGet(req, res, next);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(sendMessage).toHaveBeenCalledWith('Invalid parameter');
-    expect(next).not.toHaveBeenCalled();
+    try {
+      // @ts-ignore for test purposes
+      validateProductsGet(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid parameter');
+      expect(next).not.toHaveBeenCalled();
+    }
   });
 
-  test('when query is "true" should return "Invalid parameter"', () => {
+  test('when query is "true" should return should go next', () => {
     const req = {
       query: {
         isAvailable: 'true'
@@ -34,12 +38,10 @@ describe('validateProductsGet', () => {
     };
     // @ts-ignore for test purposes
     validateProductsGet(req, res, next);
-    expect(res.status).not.toHaveBeenCalled();
-    expect(sendMessage).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
 
-  test('when query is "false" should return "Invalid parameter"', () => {
+  test('when query is "false" should return should go next', () => {
     const req = {
       query: {
         isAvailable: 'false'
@@ -47,8 +49,6 @@ describe('validateProductsGet', () => {
     };
     // @ts-ignore for test purposes
     validateProductsGet(req, res, next);
-    expect(res.status).not.toHaveBeenCalled();
-    expect(sendMessage).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
 
@@ -56,8 +56,6 @@ describe('validateProductsGet', () => {
     const req = { query: {} };
     // @ts-ignore for test purposes
     validateProductsGet(req, res, next);
-    expect(res.status).not.toHaveBeenCalled();
-    expect(sendMessage).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
 });
