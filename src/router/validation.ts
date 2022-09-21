@@ -59,24 +59,6 @@ export const validateOrdersPost = async function (
   if (Object.keys(order).length < 1) {
     throw new ValidationError('Order is empty');
   }
-
-  const products = await db.products.findMany([
-    FieldPath.documentId(),
-    'in',
-    Object.keys(order.items)
-  ]);
-  const productInStock = products
-    .filter((product) => {
-      if (product.isAvailable) return product;
-    })
-    .map(({ id }) => id);
-  const isProductsValid = Object.keys(order.items).every((id) => {
-    return productInStock.includes(id);
-  });
-  if (!isProductsValid) {
-    throw new ValidationError('Products not found');
-  }
-
   if (
     typeof order.items !== 'object' ||
     order.items === null ||
@@ -98,6 +80,23 @@ export const validateOrdersPost = async function (
 
   if (!(typeof order.phone === 'string' && phoneRegex.test(order.phone))) {
     throw new ValidationError('Invalid phone number');
+  }
+
+  const products = await db.products.findMany([
+    FieldPath.documentId(),
+    'in',
+    Object.keys(order.items)
+  ]);
+  const productInStock = products
+    .filter((product) => {
+      if (product.isAvailable) return product;
+    })
+    .map(({ id }) => id);
+  const isProductsValid = Object.keys(order.items).every((id) => {
+    return productInStock.includes(id);
+  });
+  if (!isProductsValid) {
+    throw new ValidationError('Products not found');
   }
 
   next();
