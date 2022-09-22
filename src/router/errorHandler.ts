@@ -10,7 +10,7 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof ValidationError) {
-    return res.status(err.code).send(err.message);
+    return res.status(err.code).send({ error: err.message });
   }
 
   console.error(err.stack);
