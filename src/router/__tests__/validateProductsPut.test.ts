@@ -55,7 +55,7 @@ describe('validateProductsPut', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when req.key not object should return "Incorrect products"', () => {
+  test('when req.id not object should return "Incorrect products"', () => {
     const req = {
       body: {
         id: 123
@@ -70,7 +70,7 @@ describe('validateProductsPut', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when req.key should return "Incorrect products"', () => {
+  test('when req.id is null should return "Incorrect products"', () => {
     const req = {
       body: {
         id: null
