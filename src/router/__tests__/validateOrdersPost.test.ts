@@ -47,7 +47,7 @@ describe('validateOrdersPost', () => {
     await validateOrdersPost(req, res, next);
     expect(next).toHaveBeenCalled();
   });
-  test('when body array should return "Invalid body"', async () => {
+  test('when body is array should return "Invalid body"', async () => {
     const req = {
       body: []
     };
@@ -59,7 +59,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Invalid body');
     }
   });
-  test('when body empty object should return "Order is empty"', async () => {
+  test('when body is empty object should return "Order is empty"', async () => {
     const req = {
       body: {}
     };
@@ -71,7 +71,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Order is empty');
     }
   });
-  test('when items not object should return "Invalid order"', async () => {
+  test('when items is not a object should return "Invalid order"', async () => {
     const req = {
       body: {
         items: 123
@@ -99,7 +99,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Invalid order');
     }
   });
-  test('when items is [] should return "Invalid order"', async () => {
+  test('when items is a empty array should return "Invalid order"', async () => {
     const req = {
       body: {
         items: []
@@ -113,7 +113,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Invalid order');
     }
   });
-  test('when items value not number should return "Invalid order item"', async () => {
+  test('when items value is not a number should return "Invalid order item"', async () => {
     const req = {
       body: {
         items: {
@@ -130,7 +130,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Invalid order item');
     }
   });
-  test('when items is empty object should return "Invalid order item"', async () => {
+  test('when items is a empty object should return "Invalid order item"', async () => {
     const req = {
       body: {
         items: {}
@@ -144,7 +144,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Invalid order item');
     }
   });
-  test('when phone not string should return "Invalid phone number', async () => {
+  test('when phone is not a string should return "Invalid phone number', async () => {
     const req = {
       body: {
         items: {
@@ -162,7 +162,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Invalid phone number');
     }
   });
-  test('when phone not correct should return "Invalid phone number', async () => {
+  test('when phone is not correct should return "Invalid phone number', async () => {
     const req = {
       body: {
         items: {
@@ -180,7 +180,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Invalid phone number');
     }
   });
-  test('when productId is not exists in data should return "Products not found"', async () => {
+  test('when productId is not exists in db should return "Products not found"', async () => {
     const req = {
       body: {
         items: {
@@ -198,7 +198,7 @@ describe('validateOrdersPost', () => {
       expect(e?.message).toMatch('Products not found');
     }
   });
-  test('when product is not available in data should return "Products not found"', async () => {
+  test('when product is not available in db should return "Products not found"', async () => {
     products = [
       {
         id: '13',
