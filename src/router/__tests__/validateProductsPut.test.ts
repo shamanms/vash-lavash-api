@@ -18,9 +18,33 @@ describe('validateProductsPut', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when products array is empty should return "Products not passed"', () => {
+  test('when req is array should return "Invalid request"', () => {
+    const req: unknown[] = [];
+    try {
+      // @ts-ignore for test purposes
+      validateProductsPut(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid request');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
+  test('when req is null should return "Invalid request"', () => {
     const req = {
-      body: []
+      body: null
+    };
+    try {
+      // @ts-ignore for test purposes
+      validateProductsPut(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid request');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
+  test('when req.id is empty obj should return "Products not passed"', () => {
+    const req = {
+      body: {}
     };
     try {
       // @ts-ignore for test purposes
@@ -31,69 +55,59 @@ describe('validateProductsPut', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when any product !== object should return invalid product', () => {
+  test('when req.key not object should return "Incorrect products"', () => {
     const req = {
-      body: [{ id: 'testId' }, 12345]
+      body: {
+        id: 123
+      }
     };
     try {
       // @ts-ignore for test purposes
       validateProductsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid product');
+      expect(e?.message).toMatch('Incorrect products');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when product === null should return "Invalid product"', () => {
+  test('when req.key should return "Incorrect products"', () => {
     const req = {
-      body: [null]
+      body: {
+        id: null
+      }
     };
     try {
       // @ts-ignore for test purposes
       validateProductsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid product');
+      expect(e?.message).toMatch('Incorrect products');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when product is array should return "Invalid product"', () => {
+  test('when req.id is array should return "Incorrect products"', () => {
     const req = {
-      body: [[], []]
+      body: {
+        id: [123, 123]
+      }
     };
     try {
       // @ts-ignore for test purposes
       validateProductsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid product');
-      expect(next).not.toHaveBeenCalled();
-    }
-  });
-  test('when product.id !== string should return invalid product', () => {
-    const req = {
-      body: [
-        {
-          id: 123
-        }
-      ]
-    };
-    try {
-      // @ts-ignore for test purposes
-      validateProductsPut(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid product');
+      expect(e?.message).toMatch('Incorrect products');
       expect(next).not.toHaveBeenCalled();
     }
   });
   test('when request is valid should go next', () => {
     const req = {
-      body: [
-        {
-          id: '123'
+      body: {
+        id: {
+          count: 12,
+          name: 'bulka'
         }
-      ]
+      }
     };
     // @ts-ignore for test purposes
     validateProductsPut(req, res, next);

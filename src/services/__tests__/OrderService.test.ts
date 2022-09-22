@@ -1,5 +1,6 @@
 import db from '../../models';
 import { OrderService } from '../order';
+import services from '../index';
 
 jest.mock('../../models', () => ({
   orders: {
@@ -104,5 +105,10 @@ describe('Class OrderService', () => {
     } catch (e: any) {
       expect(e?.message).toMatch(`Product with id: 123 not found`);
     }
+  });
+  test('OrderService getOrder() should called', async () => {
+    const service = new OrderService(db.orders, db.products);
+    await service.getOrder();
+    expect(db.orders.findMany).toHaveBeenCalled();
   });
 });
