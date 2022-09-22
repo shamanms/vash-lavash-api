@@ -54,7 +54,7 @@ export const validateProductsGet = function (
 
   next();
 };
-// TODO check product id in database
+
 export const validateOrdersPost = async function (
   req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>,
   res: Response,
