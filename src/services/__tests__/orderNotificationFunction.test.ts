@@ -38,7 +38,7 @@ describe('function orderNotification', () => {
       updateTime: '32432423423'
     }
   };
-  const context = {
+  let context = {
     eventType: 'kk/kk',
     resource: 'zakaz'
   };
@@ -146,6 +146,16 @@ describe('function orderNotification', () => {
     );
     expect(console.error).toHaveBeenCalledWith(
       `Parameter "GROUP_ID" is invalid`
+    );
+  });
+  test('console.log test when eventType is not should return "Function triggered by event undefined on: zakaz"', async () => {
+    // @ts-ignore for test purposes
+    context = {
+      resource: 'zakaz'
+    };
+    await orderNotification(event, context);
+    expect(console.log).toHaveBeenCalledWith(
+      'Function triggered by event undefined on: zakaz'
     );
   });
 });

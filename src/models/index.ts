@@ -1,7 +1,8 @@
 import {
   CollectionReference,
   DocumentData,
-  Firestore
+  Firestore,
+  UpdateData
 } from '@google-cloud/firestore';
 import { dbQuery, Product } from '../types';
 import { OrderModel } from '../types';
@@ -56,6 +57,12 @@ export class Model<T = DocumentData> {
     const snapshot = await this.collection.doc(key).get();
 
     return { id: snapshot.id, ...(snapshot.data() as T) };
+  }
+
+  public async updateOne(id: string, data: Partial<T>) {
+    await this.collection.doc(id).update(data as UpdateData<T>);
+
+    return id;
   }
 }
 

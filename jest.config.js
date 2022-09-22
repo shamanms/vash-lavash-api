@@ -15,5 +15,13 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.+(ts|tsx|js)', '**/?(*.)+(spec).+(ts|tsx|js)'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest'
+  },
+  coverageThreshold: {
+    global: {
+      branches: 89,
+      functions: 80,
+      lines: 89,
+      statements: 89
+    }
   }
 };

@@ -1,19 +1,22 @@
 import { Router } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import services, { getProducts, addProducts } from '../services';
+import services from '../services';
 import {
   OrderRequest,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Product,
   TypedRequestBody,
   TypedRequestQuery
 } from '../types';
+import {
+  validateOrdersPost,
+  validateProductsGet,
+  validateProductsPut
+} from './validation';
 
 const router = Router();
 
-//TODO: add Validation and error handler
 router.get(
   '/products',
+  validateProductsGet,
   async (
     req: TypedRequestQuery<{ isAvailable: 'true' | 'false' }>,
     res,
@@ -22,13 +25,7 @@ router.get(
     try {
       // Proceed without filtering if flag not passed
       const { isAvailable } = req.query;
-      if (
-        'isAvailable' in req.query &&
-        !['true', 'false'].includes(isAvailable)
-      ) {
-        return res.status(400).send();
-      }
-      const products = await getProducts({
+      const products = await services.products.getProducts({
         isAvailable: isAvailable ? isAvailable === 'true' : isAvailable
       });
 
@@ -43,20 +40,38 @@ router.get(
 
 // router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
 //   try {
-//     await addProducts(req.body);
-//
+//     await services.products.addProducts(req.body);
+
 //     res.json({ status: "OK" });
 //   } catch(e) {
 //     next(e);
 //   }
 // });
 
+router.put(
+  '/products',
+  validateProductsPut,
+  async (
+    req: TypedRequestBody<{ [key: string]: Partial<Product> }>,
+    res,
+    next
+  ) => {
+    try {
+      const result = await services.products.updateProducts(req.body);
+
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
 router.post(
   '/orders',
+  validateOrdersPost,
   async (req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>, res, next) => {
     try {
-      const service = services.order(req.body);
-      const orderId = await service.addOrder();
+      const orderId = await services.order.addOrder(req.body);
 
       res.json({ orderId });
     } catch (e) {
@@ -64,5 +79,15 @@ router.post(
     }
   }
 );
+
+router.get('/orders', async (req, res, next) => {
+  try {
+    const result = await services.order.getOrder();
+
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+});
 
 export default router;

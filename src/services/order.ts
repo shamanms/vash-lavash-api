@@ -4,13 +4,12 @@ import { Product, OrderModel, OrderRequest } from '../types';
 export class OrderService {
   constructor(
     private readonly orderModel: Model<OrderModel>,
-    private readonly productModel: Model<Product>,
-    private readonly orderRequest: Omit<OrderRequest, 'timestamp'>
+    private readonly productModel: Model<Product>
   ) {}
 
-  public buildOrder() {
+  public buildOrder(orderRequest: Omit<OrderRequest, 'timestamp'>) {
     return {
-      phone: this.orderRequest.phone,
+      phone: orderRequest.phone,
       totalPrice: 0,
       isConfirmed: false,
       isCompleted: false,
@@ -19,8 +18,11 @@ export class OrderService {
     };
   }
 
-  private async composeOrderItems(order: OrderModel) {
-    for (const productId in this.orderRequest.items) {
+  private async composeOrderItems(
+    order: OrderModel,
+    orderRequest: Omit<OrderRequest, 'timestamp'>
+  ) {
+    for (const productId in orderRequest.items) {
       const product = await this.productModel.findOne(productId);
 
       if (product) {
@@ -28,7 +30,7 @@ export class OrderService {
           id: productId,
           name: product.name,
           price: product.price,
-          count: this.orderRequest.items[productId]
+          count: orderRequest.items[productId]
         });
       } else {
         throw new Error(`Product with id: ${productId} not found`);
@@ -43,13 +45,19 @@ export class OrderService {
     );
   }
 
-  public async addOrder(): Promise<string> {
-    const order = this.buildOrder();
-    await this.composeOrderItems(order);
+  public async addOrder(
+    orderRequest: Omit<OrderRequest, 'timestamp'>
+  ): Promise<string> {
+    const order = this.buildOrder(orderRequest);
+    await this.composeOrderItems(order, orderRequest);
     this.countOrderPrice(order);
 
     const { id } = await this.orderModel.insertOne(order);
 
     return id;
+  }
+
+  public async getOrder() {
+    return this.orderModel.findMany();
   }
 }

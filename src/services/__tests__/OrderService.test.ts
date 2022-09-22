@@ -28,7 +28,7 @@ describe('Class OrderService', () => {
       items: { 123: 321 },
       phone: 'abc'
     };
-    const service = new OrderService(db.orders, db.products, orderRequest);
+    const service = new OrderService(db.orders, db.products);
     const expectedResult = {
       phone: orderRequest.phone,
       totalPrice: 0,
@@ -38,7 +38,7 @@ describe('Class OrderService', () => {
       timestamp: dateNow
     };
 
-    const result = service.buildOrder();
+    const result = service.buildOrder(orderRequest);
 
     expect(result).toEqual(expectedResult);
   });
@@ -66,10 +66,10 @@ describe('Class OrderService', () => {
     const id = { id: '33' };
     // @ts-ignore for test purposes
     db.orders.insertOne.mockImplementation(() => id);
-    const service = new OrderService(db.orders, db.products, orderRequest);
+    const service = new OrderService(db.orders, db.products);
 
     const expectedResult = id.id;
-    const result = await service.addOrder();
+    const result = await service.addOrder(orderRequest);
 
     expect(result).toEqual(expectedResult);
     expect(db.products.findOne).toHaveBeenCalledTimes(2);
@@ -98,11 +98,16 @@ describe('Class OrderService', () => {
     db.products.findOne
       // @ts-ignore for test purposes
       .mockImplementation(() => undefined);
-    const service = new OrderService(db.orders, db.products, orderRequest);
+    const service = new OrderService(db.orders, db.products);
     try {
-      await service.addOrder();
+      await service.addOrder(orderRequest);
     } catch (e: any) {
       expect(e?.message).toMatch(`Product with id: 123 not found`);
     }
+  });
+  test('OrderService getOrder() should called', async () => {
+    const service = new OrderService(db.orders, db.products);
+    await service.getOrder();
+    expect(db.orders.findMany).toHaveBeenCalled();
   });
 });

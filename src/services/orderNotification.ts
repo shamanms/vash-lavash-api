@@ -17,16 +17,12 @@ export const orderNotification = (
   event: Event,
   context: CloudFunctionsContext
 ) => {
-  // .at(-1) replaced to be compatible with Node 13
   console.log(
-    `Function triggered by event ${context.eventType
-      ?.split('/')
-      .slice(-1)
-      .join()} on: ${context.resource}`
+    `Function triggered by event ${context.eventType?.split('/').at(-1)} on: ${
+      context.resource
+    }`
   );
-
-  // .at(-1) replaced to be compatible with Node 13
-  const documentId = event.value.name.split('/').slice(-1).join();
+  const documentId = event.value.name.split('/').at(-1);
   const { TELEGRAM_TOKEN, GROUP_ID } = process.env;
 
   if (documentId && TELEGRAM_TOKEN && GROUP_ID) {
