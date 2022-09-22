@@ -1,39 +1,21 @@
 import { Router } from 'express';
 import services from '../services';
-import {
-  OrderRequest,
-  Product,
-  TypedRequestBody,
-  TypedRequestQuery
-} from '../types';
-import {
-  validateOrdersPost,
-  validateProductsGet,
-  validateProductsPut
-} from './validation';
+import { OrderRequest, TypedRequestBody } from '../types';
+import { validateOrdersPost } from './validation';
+import products from './products';
 
 const router = Router();
 
 router.get(
   '/products',
-  validateProductsGet,
-  async (
-    req: TypedRequestQuery<{ isAvailable: 'true' | 'false' }>,
-    res,
-    next
-  ) => {
-    try {
-      // Proceed without filtering if flag not passed
-      const { isAvailable } = req.query;
-      const products = await services.products.getProducts({
-        isAvailable: isAvailable ? isAvailable === 'true' : isAvailable
-      });
+  products.validation.productsGet,
+  products.routes.productsGet
+);
 
-      res.json(products);
-    } catch (e) {
-      next(e);
-    }
-  }
+router.put(
+  '/products',
+  products.validation.productsPut,
+  products.routes.productsPut
 );
 
 //TODO ADD AUTHORISATION for this POST /products
@@ -47,24 +29,6 @@ router.get(
 //     next(e);
 //   }
 // });
-
-router.put(
-  '/products',
-  validateProductsPut,
-  async (
-    req: TypedRequestBody<{ [key: string]: Partial<Product> }>,
-    res,
-    next
-  ) => {
-    try {
-      const result = await services.products.updateProducts(req.body);
-
-      res.json(result);
-    } catch (e) {
-      next(e);
-    }
-  }
-);
 
 router.post(
   '/orders',

@@ -1,5 +1,5 @@
 import { FieldPath, WhereFilterOp } from '@google-cloud/firestore';
-import { Express } from 'express';
+import { Express, NextFunction, Response } from 'express';
 
 //TODO: move to shared package
 export interface Product {
@@ -42,6 +42,10 @@ export interface TypedRequestBody<T> extends Express.Request {
 
 export interface TypedRequestQuery<T> extends Express.Request {
   query: T;
+}
+
+export interface Middleware<R> {
+  (req: R, res: Response, next: NextFunction): void;
 }
 
 export type dbQuery = [

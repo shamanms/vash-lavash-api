@@ -9,52 +9,6 @@ import { ValidationError } from '../models/errors';
 import db from '../models';
 import { FieldPath } from '@google-cloud/firestore';
 
-export const validateProductsPut = function (
-  req: TypedRequestBody<{ [key: string]: Partial<Product> }>,
-  res: Response,
-  next: NextFunction
-) {
-  const products = req.body;
-
-  if (
-    typeof products !== 'object' ||
-    Array.isArray(products) ||
-    products === null
-  ) {
-    throw new ValidationError('Invalid request');
-  }
-
-  if (Object.keys(products).length < 1) {
-    throw new ValidationError('Products not passed');
-  }
-
-  Object.values(products).forEach((product) => {
-    if (
-      typeof product !== 'object' ||
-      product === null ||
-      Array.isArray(product)
-    ) {
-      throw new ValidationError('Incorrect products');
-    }
-  });
-
-  next();
-};
-
-export const validateProductsGet = function (
-  req: TypedRequestQuery<{ isAvailable: 'true' | 'false' }>,
-  res: Response,
-  next: NextFunction
-) {
-  const { isAvailable } = req.query;
-
-  if ('isAvailable' in req.query && !['true', 'false'].includes(isAvailable)) {
-    throw new ValidationError('Invalid parameter');
-  }
-
-  next();
-};
-
 export const validateOrdersPost = async function (
   req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>,
   res: Response,

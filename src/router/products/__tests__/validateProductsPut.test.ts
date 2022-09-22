@@ -1,9 +1,9 @@
-import { validateProductsPut } from '../validation';
-import { ValidationError } from '../../models/errors';
+import { productsPut } from '../validation';
+import { ValidationError } from '../../../models/errors';
 
 const res = {};
 const next = jest.fn();
-describe('validateProductsPut', () => {
+describe('productsPut', () => {
   beforeEach(() => {
     jest.resetModules();
   });
@@ -11,7 +11,7 @@ describe('validateProductsPut', () => {
     const req = {};
     try {
       // @ts-ignore for test purposes
-      validateProductsPut(req, res, next);
+      productsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
@@ -22,7 +22,7 @@ describe('validateProductsPut', () => {
     const req: unknown[] = [];
     try {
       // @ts-ignore for test purposes
-      validateProductsPut(req, res, next);
+      productsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
@@ -35,7 +35,7 @@ describe('validateProductsPut', () => {
     };
     try {
       // @ts-ignore for test purposes
-      validateProductsPut(req, res, next);
+      productsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
@@ -48,7 +48,7 @@ describe('validateProductsPut', () => {
     };
     try {
       // @ts-ignore for test purposes
-      validateProductsPut(req, res, next);
+      productsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Products not passed');
@@ -63,7 +63,7 @@ describe('validateProductsPut', () => {
     };
     try {
       // @ts-ignore for test purposes
-      validateProductsPut(req, res, next);
+      productsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Incorrect products');
@@ -78,7 +78,7 @@ describe('validateProductsPut', () => {
     };
     try {
       // @ts-ignore for test purposes
-      validateProductsPut(req, res, next);
+      productsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Incorrect products');
@@ -93,7 +93,7 @@ describe('validateProductsPut', () => {
     };
     try {
       // @ts-ignore for test purposes
-      validateProductsPut(req, res, next);
+      productsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Incorrect products');
@@ -110,7 +110,7 @@ describe('validateProductsPut', () => {
       }
     };
     // @ts-ignore for test purposes
-    validateProductsPut(req, res, next);
+    productsPut(req, res, next);
     expect(next).toHaveBeenCalled();
   });
 });
