@@ -2,7 +2,6 @@ import { Router } from 'express';
 import services from '../services';
 import {
   OrderRequest,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Product,
   TypedRequestBody,
   TypedRequestQuery
@@ -52,7 +51,11 @@ router.get(
 router.put(
   '/products',
   validateProductsPut,
-  async (req: TypedRequestBody<Product[]>, res, next) => {
+  async (
+    req: TypedRequestBody<{ [key: string]: Partial<Product> }>,
+    res,
+    next
+  ) => {
     try {
       const result = await services.products.updateProducts(req.body);
 

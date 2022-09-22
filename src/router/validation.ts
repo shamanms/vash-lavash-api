@@ -10,7 +10,7 @@ import db from '../models';
 import { FieldPath } from '@google-cloud/firestore';
 
 export const validateProductsPut = function (
-  req: TypedRequestBody<Product[]>,
+  req: TypedRequestBody<{ [key: string]: Partial<Product> }>,
   res: Response,
   next: NextFunction
 ) {

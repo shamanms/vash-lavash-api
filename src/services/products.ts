@@ -18,12 +18,12 @@ export class ProductsService {
     return this.productModel.insertMany(products);
   }
 
-  public async updateProducts(products: Product[]) {
-    let updatedProducts = products.map((product) =>
-      this.productModel.updateOne(product.id, product)
+  public async updateProducts(products: { [key: string]: Partial<Product> }) {
+    let updatedProducts = Object.entries(products).map(([id, product]) =>
+      this.productModel.updateOne(id, product)
     );
     const updatingResult = await Promise.allSettled(updatedProducts);
-    return products.reduce((acc, { id }) => {
+    return Object.keys(products).reduce((acc, id) => {
       const dbResult = updatingResult.find(
         (updateResult) =>
           updateResult.status === 'fulfilled' && updateResult.value === id
