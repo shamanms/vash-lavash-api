@@ -68,8 +68,7 @@ router.post(
   validateOrdersPost,
   async (req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>, res, next) => {
     try {
-      const service = services.order(req.body);
-      const orderId = await service.addOrder();
+      const orderId = await services.order.addOrder(req.body);
 
       res.json({ orderId });
     } catch (e) {
@@ -77,5 +76,15 @@ router.post(
     }
   }
 );
+
+router.get('/orders', async (req, res, next) => {
+  try {
+    const result = await services.order.getOrder();
+
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+});
 
 export default router;
