@@ -1,5 +1,5 @@
 import db from '../../models';
-import { updateProducts } from '..';
+import services from '../index';
 
 jest.mock('../../models', () => ({
   products: {
@@ -36,7 +36,7 @@ describe('updateProducts function', () => {
   test('when both elements updated, returns both IDs true', async () => {
     // @ts-ignore for test purposes
     db.products.updateOne.mockImplementation((id) => id);
-    const result = await updateProducts(products);
+    const result = await services.products.updateProducts(products);
     products.forEach((product, index) => {
       expect(db.products.updateOne).toHaveBeenNthCalledWith(
         index + 1,
@@ -55,7 +55,7 @@ describe('updateProducts function', () => {
       // @ts-ignore for test purposes
       .mockReturnValueOnce(products[0].id)
       .mockReturnValueOnce(new Error());
-    const result = await updateProducts(products);
+    const result = await services.products.updateProducts(products);
     const expectedResult = {
       [products[0].id]: true,
       [products[1].id]: false
@@ -67,7 +67,7 @@ describe('updateProducts function', () => {
       // @ts-ignore for test purposes
       .mockReturnValueOnce(new Error())
       .mockReturnValueOnce(new Error());
-    const result = await updateProducts(products);
+    const result = await services.products.updateProducts(products);
     const expectedResult = {
       [products[0].id]: false,
       [products[1].id]: false

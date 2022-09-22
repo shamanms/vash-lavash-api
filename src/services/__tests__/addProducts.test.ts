@@ -1,6 +1,6 @@
-import { addProducts } from '../index';
 import db from '../../models';
 import { Product } from '../../types';
+import services from '../index';
 
 jest.mock('../../models', () => ({
   products: {
@@ -14,19 +14,19 @@ describe('Service.addProducts', () => {
   });
   test('when called with products = [] call db with products', async () => {
     const products: Product[] = [];
-    await addProducts(products);
+    await services.products.addProducts(products);
     expect(db.products.insertMany).toHaveBeenCalledWith(products);
   });
 
   test('when called with products = string call db with string', async () => {
     // @ts-ignore for test purposes
-    await addProducts(['string']);
+    await services.products.addProducts(['string']);
     expect(db.products.insertMany).toHaveBeenCalledWith(['string']);
   });
 
   test('when called with products = null call db with null', async () => {
     // @ts-ignore for test purposes
-    await addProducts([null]);
+    await services.products.addProducts([null]);
     expect(db.products.insertMany).toHaveBeenCalledWith([null]);
   });
 });
