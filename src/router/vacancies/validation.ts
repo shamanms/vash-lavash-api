@@ -62,7 +62,7 @@ export const vacanciesPost: VacanciesPost = function (req, res, next) {
     isAvailable: 'boolean'
   };
 
-  Object.keys(vacancy).forEach((key) => {
+  Object.keys(requiredKeys).forEach((key) => {
     if (!(typeof vacancy[key] === requiredKeys[key])) {
       throw new ValidationError('Incorrect shape vacancy');
     }
