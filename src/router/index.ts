@@ -1,42 +1,22 @@
 import { Router } from 'express';
-import services from '../services';
-import {
-  OrderRequest,
-  Product,
-  TypedRequestBody,
-  TypedRequestQuery
-} from '../types';
-import {
-  validateOrdersPost,
-  validateProductsGet,
-  validateProductsPut
-} from './validation';
+import products from './products';
+import orders from './orders';
 
 const router = Router();
 
 router.get(
   '/products',
-  validateProductsGet,
-  async (
-    req: TypedRequestQuery<{ isAvailable: 'true' | 'false' }>,
-    res,
-    next
-  ) => {
-    try {
-      // Proceed without filtering if flag not passed
-      const { isAvailable } = req.query;
-      const products = await services.products.getProducts({
-        isAvailable: isAvailable ? isAvailable === 'true' : isAvailable
-      });
-
-      res.json(products);
-    } catch (e) {
-      next(e);
-    }
-  }
+  products.validation.productsGet,
+  products.routes.productsGet
 );
 
-//TODO ADD AUTHORISATION for this POST /products
+router.put(
+  '/products',
+  products.validation.productsPut,
+  products.routes.productsPut
+);
+
+//TODO ADD AUTHORISATION for this POST and PUT /products and GET /orders
 
 // router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
 //   try {
@@ -48,46 +28,8 @@ router.get(
 //   }
 // });
 
-router.put(
-  '/products',
-  validateProductsPut,
-  async (
-    req: TypedRequestBody<{ [key: string]: Partial<Product> }>,
-    res,
-    next
-  ) => {
-    try {
-      const result = await services.products.updateProducts(req.body);
+router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
-      res.json(result);
-    } catch (e) {
-      next(e);
-    }
-  }
-);
-
-router.post(
-  '/orders',
-  validateOrdersPost,
-  async (req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>, res, next) => {
-    try {
-      const orderId = await services.order.addOrder(req.body);
-
-      res.json({ orderId });
-    } catch (e) {
-      next(e);
-    }
-  }
-);
-
-router.get('/orders', async (req, res, next) => {
-  try {
-    const result = await services.order.getOrder();
-
-    res.json(result);
-  } catch (e) {
-    next(e);
-  }
-});
+router.get('/orders', orders.routes.ordersGet);
 
 export default router;

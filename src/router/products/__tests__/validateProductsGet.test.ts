@@ -1,10 +1,10 @@
-import { validateProductsGet } from '../validation';
-import { ValidationError } from '../../models/errors';
+import { productsGet } from '../validation';
+import { ValidationError } from '../../../models/errors';
 
 const res = {};
 const next = jest.fn();
 
-describe('validateProductsGet', () => {
+describe('productsGet', () => {
   beforeEach(() => {
     jest.resetModules();
   });
@@ -17,7 +17,7 @@ describe('validateProductsGet', () => {
     };
     try {
       // @ts-ignore for test purposes
-      validateProductsGet(req, res, next);
+      productsGet(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid parameter');
@@ -32,7 +32,7 @@ describe('validateProductsGet', () => {
       }
     };
     // @ts-ignore for test purposes
-    validateProductsGet(req, res, next);
+    productsGet(req, res, next);
     expect(next).toHaveBeenCalled();
   });
 
@@ -43,14 +43,14 @@ describe('validateProductsGet', () => {
       }
     };
     // @ts-ignore for test purposes
-    validateProductsGet(req, res, next);
+    productsGet(req, res, next);
     expect(next).toHaveBeenCalled();
   });
 
   test('when isAvailable parameter not passed should go next', () => {
     const req = { query: {} };
     // @ts-ignore for test purposes
-    validateProductsGet(req, res, next);
+    productsGet(req, res, next);
     expect(next).toHaveBeenCalled();
   });
 });

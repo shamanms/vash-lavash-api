@@ -1,5 +1,5 @@
-import { validateOrdersPost } from '../validation';
-import { ValidationError } from '../../models/errors';
+import { ValidationError } from '../../../models/errors';
+import { ordersPost } from '../validation';
 
 const next = jest.fn();
 const res = {};
@@ -23,13 +23,13 @@ let products = [
     name: 'Пеновані з шоколадом та горіхами'
   }
 ];
-jest.mock('../../models', () => ({
+jest.mock('../../../models', () => ({
   products: {
     findMany: jest.fn(() => Promise.resolve(products))
   }
 }));
 
-describe('validateOrdersPost', () => {
+describe('ordersPost', () => {
   beforeEach(() => {
     jest.resetModules();
   });
@@ -44,7 +44,7 @@ describe('validateOrdersPost', () => {
       }
     };
     // @ts-ignore for test purposes
-    await validateOrdersPost(req, res, next);
+    await ordersPost(req, res, next);
     expect(next).toHaveBeenCalled();
   });
   test('when body is array should return "Invalid body"', async () => {
@@ -53,7 +53,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid body');
@@ -65,7 +65,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Order is empty');
@@ -79,7 +79,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order');
@@ -93,7 +93,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order');
@@ -107,7 +107,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order');
@@ -124,7 +124,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order item');
@@ -138,7 +138,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order item');
@@ -156,7 +156,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid phone number');
@@ -174,7 +174,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid phone number');
@@ -192,7 +192,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Products not found');
@@ -230,7 +230,7 @@ describe('validateOrdersPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      await validateOrdersPost(req, res, next);
+      await ordersPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Products not found');
