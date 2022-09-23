@@ -3,6 +3,7 @@ import { Express, NextFunction, Response } from 'express';
 
 //TODO: move to shared package
 export interface Product {
+  [key: string]: string | number | boolean;
   id: string;
   name: string;
   price: number;
@@ -24,6 +25,16 @@ export interface OrderModel {
   isCompleted: boolean;
   items: OrderedProduct[];
   timestamp: number;
+}
+
+export interface VacancyModel {
+  [key: string]: string | undefined | boolean;
+  id?: string;
+  position: string;
+  requirements: string;
+  salary: string;
+  description: string;
+  isAvailable: boolean;
 }
 
 export interface OrderItems {

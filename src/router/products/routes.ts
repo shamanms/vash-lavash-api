@@ -1,5 +1,5 @@
 import services from '../../services';
-import { ProductsGet, ProductsPut } from './types';
+import { ProductsGet, ProductsPost, ProductsPut } from './types';
 
 export const productsGet: ProductsGet = async (req, res, next) => {
   try {
@@ -20,6 +20,16 @@ export const productsPut: ProductsPut = async (req, res, next) => {
     const result = await services.products.updateProducts(req.body);
 
     res.json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const productsPost: ProductsPost = async (req, res, next) => {
+  try {
+    await services.products.addProducts(req.body);
+
+    res.json({ status: 'OK' });
   } catch (e) {
     next(e);
   }

@@ -12,3 +12,5 @@ export type ProductsGet = Middleware<
 export type ProductsPut = Middleware<
   TypedRequestBody<{ [key: string]: Partial<Product> }>
 >;
+
+export type ProductsPost = Middleware<TypedRequestBody<Product[]>>;
