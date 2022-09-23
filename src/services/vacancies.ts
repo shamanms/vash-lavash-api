@@ -14,8 +14,8 @@ export class VacancyService {
     return this.vacancyModel.findMany(query);
   }
 
-  public async addVacancies(vacancies: VacancyModel[]) {
-    return this.vacancyModel.insertMany(vacancies);
+  public async addVacancies(vacancies: VacancyModel) {
+    return this.vacancyModel.insertOne(vacancies);
   }
 
   public async updateVacancies(vacancies: {
