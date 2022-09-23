@@ -26,6 +26,15 @@ export interface OrderModel {
   timestamp: number;
 }
 
+export interface VacancyModel {
+  id?: string;
+  position: string;
+  requirements: string;
+  salary: string;
+  description: string;
+  isAvailable: boolean;
+}
+
 export interface OrderItems {
   [key: number]: number;
 }

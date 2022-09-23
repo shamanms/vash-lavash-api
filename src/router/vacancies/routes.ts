@@ -1,15 +1,24 @@
 import { VacanciesGet, VacanciesPost, VacanciesPut } from './types';
+import services from '../../services';
 
-export const vacanciesGet: VacanciesGet = async (req: any, res, next) => {
+export const vacanciesGet: VacanciesGet = async (req, res, next) => {
   try {
-    res.json({ status: 'ok' });
+    // Proceed without filtering if flag not passed
+    const { isAvailable } = req.query;
+    const vacancies = await services.vacancies.getVacancies({
+      isAvailable: isAvailable ? isAvailable === 'true' : isAvailable
+    });
+
+    res.json(vacancies);
   } catch (e) {
     next(e);
   }
 };
 export const vacanciesPut: VacanciesPut = async (req, res, next) => {
   try {
-    res.json({ status: 'ok' });
+    const result = await services.vacancies.updateVacancies(req.body);
+
+    res.json(result);
   } catch (e) {
     next(e);
   }
@@ -17,7 +26,9 @@ export const vacanciesPut: VacanciesPut = async (req, res, next) => {
 
 export const vacanciesPost: VacanciesPost = async (req, res, next) => {
   try {
-    res.json({ status: 'ok' });
+    await services.vacancies.addVacancies(req.body);
+
+    res.json({ status: 'OK' });
   } catch (e) {
     next(e);
   }

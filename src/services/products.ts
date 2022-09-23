@@ -28,7 +28,10 @@ export class ProductsService {
         (updateResult) =>
           updateResult.status === 'fulfilled' && updateResult.value === id
       );
-      console.log(updatingResult);
+      console.log(
+        'ProductsService.ProductsService:: updating result:',
+        updatingResult
+      );
       return {
         ...acc,
         [id]: typeof dbResult === 'object'

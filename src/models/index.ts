@@ -4,7 +4,7 @@ import {
   Firestore,
   UpdateData
 } from '@google-cloud/firestore';
-import { dbQuery, Product } from '../types';
+import { dbQuery, Product, VacancyModel } from '../types';
 import { OrderModel } from '../types';
 
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
@@ -68,5 +68,6 @@ export class Model<T = DocumentData> {
 
 export default {
   orders: new Model<OrderModel>('orders', firestore),
-  products: new Model<Product>('products', firestore)
+  products: new Model<Product>('products', firestore),
+  vacancies: new Model<VacancyModel>('vacancies', firestore)
 };

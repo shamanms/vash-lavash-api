@@ -19,23 +19,27 @@ router.put(
 
 //TODO ADD AUTHORISATION for this POST and PUT /products and GET /orders
 
-// router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
-//   try {
-//     await services.products.addProducts(req.body);
-
-//     res.json({ status: "OK" });
-//   } catch(e) {
-//     next(e);
-//   }
-// });
+router.post(
+  '/products',
+  products.routes.productsPost,
+  products.validation.productsPost
+);
 
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
 router.get('/orders', orders.routes.ordersGet);
 
-router.get('/vacancies', vacancies.routes.vacanciesGet);
+router.get(
+  '/vacancies',
+  vacancies.validation.vacanciesGet,
+  vacancies.routes.vacanciesGet
+);
 
-router.put('/vacancies', vacancies.routes.vacanciesPut);
+router.put(
+  '/vacancies',
+  vacancies.validation.vacanciesPut,
+  vacancies.routes.vacanciesPut
+);
 
 router.post('/vacancies', vacancies.routes.vacanciesPost);
 

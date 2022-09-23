@@ -1,5 +1,5 @@
 import { ValidationError } from '../../models/errors';
-import { ProductsGet, ProductsPut } from './types';
+import { ProductsGet, ProductsPost, ProductsPut } from './types';
 
 export const productsGet: ProductsGet = function (req, res, next) {
   const { isAvailable } = req.query;
@@ -35,6 +35,23 @@ export const productsPut: ProductsPut = function (req, res, next) {
       throw new ValidationError('Incorrect products');
     }
   });
+
+  next();
+};
+
+export const productsPost: ProductsPost = function (req, res, next) {
+  const products = req.body;
+  if (
+    typeof products === 'object' &&
+    products === null &&
+    !Array.isArray(products)
+  ) {
+    throw new ValidationError('Invalid request');
+  }
+
+  if (products === null || products.length < 1) {
+    throw new ValidationError('Incorrect products');
+  }
 
   next();
 };
