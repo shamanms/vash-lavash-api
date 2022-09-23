@@ -13,4 +13,4 @@ export type VacanciesPut = Middleware<
   TypedRequestBody<{ [key: string]: Partial<VacancyModel> }>
 >;
 
-export type VacanciesPost = Middleware<TypedRequestBody<VacancyModel[]>>;
+export type VacanciesPost = Middleware<TypedRequestBody<VacancyModel>>;

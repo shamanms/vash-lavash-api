@@ -41,17 +41,40 @@ export const productsPut: ProductsPut = function (req, res, next) {
 
 export const productsPost: ProductsPost = function (req, res, next) {
   const products = req.body;
-  if (
-    typeof products === 'object' &&
-    products === null &&
-    !Array.isArray(products)
-  ) {
+  if (!Array.isArray(products)) {
     throw new ValidationError('Invalid request');
   }
 
-  if (products === null || products.length < 1) {
-    throw new ValidationError('Incorrect products');
+  if (products.length < 1) {
+    throw new ValidationError('Invalid request');
   }
+  products.forEach((product) => {
+    if (
+      !(
+        typeof product === 'object' &&
+        product !== null &&
+        !Array.isArray(product)
+      )
+    ) {
+      throw new ValidationError('Incorrect products');
+    }
+  });
+  const requiredKeys: { [key: string]: string } = {
+    name: 'string',
+    price: 'number',
+    type: 'string',
+    isAvailable: 'boolean',
+    img: 'string',
+    description: 'string'
+  };
+
+  products.forEach((product) => {
+    Object.keys(product).forEach((key) => {
+      if (!(typeof product[key] === requiredKeys[key])) {
+        throw new ValidationError('Incorrect shape products');
+      }
+    });
+  });
 
   next();
 };

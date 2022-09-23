@@ -21,8 +21,8 @@ router.put(
 
 router.post(
   '/products',
-  products.routes.productsPost,
-  products.validation.productsPost
+  products.validation.productsPost,
+  products.routes.productsPost
 );
 
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
@@ -41,6 +41,10 @@ router.put(
   vacancies.routes.vacanciesPut
 );
 
-router.post('/vacancies', vacancies.routes.vacanciesPost);
+router.post(
+  '/vacancies',
+  vacancies.validation.vacanciesPost,
+  vacancies.routes.vacanciesPost
+);
 
 export default router;
