@@ -1,8 +1,6 @@
 import { Router } from 'express';
-import services from '../services';
-import { OrderRequest, TypedRequestBody } from '../types';
-import { validateOrdersPost } from './validation';
 import products from './products';
+import orders from './orders';
 
 const router = Router();
 
@@ -18,7 +16,7 @@ router.put(
   products.routes.productsPut
 );
 
-//TODO ADD AUTHORISATION for this POST /products
+//TODO ADD AUTHORISATION for this POST and PUT /products and GET /orders
 
 // router.post('/products', async (req: TypedRequestBody<Product[]>, res, next) => {
 //   try {
@@ -30,28 +28,8 @@ router.put(
 //   }
 // });
 
-router.post(
-  '/orders',
-  validateOrdersPost,
-  async (req: TypedRequestBody<Omit<OrderRequest, 'timestamp'>>, res, next) => {
-    try {
-      const orderId = await services.order.addOrder(req.body);
+router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
-      res.json({ orderId });
-    } catch (e) {
-      next(e);
-    }
-  }
-);
-
-router.get('/orders', async (req, res, next) => {
-  try {
-    const result = await services.order.getOrder();
-
-    res.json(result);
-  } catch (e) {
-    next(e);
-  }
-});
+router.get('/orders', orders.routes.ordersGet);
 
 export default router;
