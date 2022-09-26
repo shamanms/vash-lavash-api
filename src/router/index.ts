@@ -6,7 +6,7 @@ import auth from './auth';
 
 const router = Router();
 
-router.post('/login', auth.routes.login);
+router.post('/login', auth.validation.loginPost, auth.routes.login);
 
 router.get(
   '/products',

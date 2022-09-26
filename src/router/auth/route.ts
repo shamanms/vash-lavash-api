@@ -1,11 +1,7 @@
-import { Middleware, TypedRequestBody } from '../../types';
 import jwt from 'jsonwebtoken';
 import services from '../../services';
 import { accessSecretVersion } from '../../services/jwt';
-
-export type LoginRequest = Middleware<
-  TypedRequestBody<{ username: string; password: string }>
->;
+import { LoginRequest } from './types';
 
 export const login: LoginRequest = async (req, res, next) => {
   try {
