@@ -59,7 +59,7 @@ describe('Class OrderService', () => {
       name: 'zxc',
       price: 20
     };
-    db.products.findOne
+    db.products.findOneById
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => insertedDocument1)
       .mockImplementationOnce(() => insertedDocument2);
@@ -72,9 +72,9 @@ describe('Class OrderService', () => {
     const result = await service.addOrder(orderRequest);
 
     expect(result).toEqual(expectedResult);
-    expect(db.products.findOne).toHaveBeenCalledTimes(2);
-    expect(db.products.findOne).toHaveBeenNthCalledWith(1, '123');
-    expect(db.products.findOne).toHaveBeenNthCalledWith(2, '456');
+    expect(db.products.findOneById).toHaveBeenCalledTimes(2);
+    expect(db.products.findOneById).toHaveBeenNthCalledWith(1, '123');
+    expect(db.products.findOneById).toHaveBeenNthCalledWith(2, '456');
     expect(db.orders.insertOne).toHaveBeenCalledWith({
       phone: orderRequest.phone,
       totalPrice: 70,
@@ -95,7 +95,7 @@ describe('Class OrderService', () => {
       },
       phone: 'abc'
     };
-    db.products.findOne
+    db.products.findOneById
       // @ts-ignore for test purposes
       .mockImplementation(() => undefined);
     const service = new OrderService(db.orders, db.products);

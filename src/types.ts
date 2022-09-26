@@ -37,6 +37,14 @@ export interface VacancyModel {
   isAvailable: boolean;
 }
 
+export interface UserModel {
+  id?: string;
+  username: string;
+  password: string;
+  role: string;
+  loginDates: number[];
+}
+
 export interface OrderItems {
   [key: number]: number;
 }
