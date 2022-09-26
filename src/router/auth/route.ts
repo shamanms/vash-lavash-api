@@ -1,5 +1,5 @@
 import { Middleware, TypedRequestBody } from '../../types';
-import jsonwebtoken from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import services from '../../services';
 import { accessSecretVersion } from '../../services/jwt';
 
@@ -13,12 +13,12 @@ export const login: LoginRequest = async (req, res, next) => {
     const { username, password } = req.body;
     console.log(`${username} is trying to login ..`);
 
-    const user = await services.users.getUser(req.body.username);
+    const user = await services.users.getUser(username);
 
     if (username === user.username && password === user.password) {
       await services.users.addLoginTimestamp(user);
       return res.json({
-        token: jsonwebtoken.sign({ id: user.id, role: user.role }, jwtSecret)
+        token: jwt.sign({ id: user.id, role: user.role }, jwtSecret)
       });
     }
 
