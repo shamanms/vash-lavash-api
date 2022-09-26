@@ -16,8 +16,9 @@ export const login: LoginRequest = async (req, res, next) => {
     const user = await services.users.getUser(req.body.username);
 
     if (username === user.username && password === user.password) {
+      await services.users.addLoginTimestamp(user);
       return res.json({
-        token: jsonwebtoken.sign({ role: user.role }, jwtSecret)
+        token: jsonwebtoken.sign({ id: user.id, role: user.role }, jwtSecret)
       });
     }
 

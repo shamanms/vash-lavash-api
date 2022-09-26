@@ -31,7 +31,7 @@ export class VacancyService {
           updateResult.status === 'fulfilled' && updateResult.value === id
       );
       console.log(
-        'VacancyService.VacancyService:: updating result:',
+        'VacancyService.updateVacancies:: updating result:',
         updatingResult
       );
       return {
