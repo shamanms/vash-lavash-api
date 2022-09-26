@@ -2,8 +2,11 @@ import { Router } from 'express';
 import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
+import login from './auth';
 
 const router = Router();
+
+router.post('/login', login.routes.login);
 
 router.get(
   '/products',
