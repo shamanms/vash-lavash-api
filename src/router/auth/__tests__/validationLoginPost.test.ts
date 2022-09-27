@@ -72,7 +72,7 @@ describe('loginPost', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test("when body have key username and password but value one more not string should return 'Invalid username or password'", async () => {
+  test("when body have key username and password but one of values not string should return 'Invalid username or password'", async () => {
     const req = {
       body: {
         username: 'kot',
