@@ -29,7 +29,7 @@ export class ProductsService {
           updateResult.status === 'fulfilled' && updateResult.value === id
       );
       console.log(
-        'ProductsService.ProductsService:: updating result:',
+        'ProductsService.updateProducts:: updating result:',
         updatingResult
       );
       return {

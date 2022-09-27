@@ -23,7 +23,7 @@ export class OrderService {
     orderRequest: Omit<OrderRequest, 'timestamp'>
   ) {
     for (const productId in orderRequest.items) {
-      const product = await this.productModel.findOne(productId);
+      const product = await this.productModel.findOneById(productId);
 
       if (product) {
         order.items.push({

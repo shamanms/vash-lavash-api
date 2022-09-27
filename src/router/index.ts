@@ -2,8 +2,11 @@ import { Router } from 'express';
 import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
+import auth from './auth';
 
 const router = Router();
+
+router.post('/login', auth.validation.loginPost, auth.routes.login);
 
 router.get(
   '/products',
@@ -13,21 +16,21 @@ router.get(
 
 router.put(
   '/products',
+  auth.middlewares.adminAuth,
   products.validation.productsPut,
   products.routes.productsPut
 );
 
-//TODO ADD AUTHORISATION for this POST and PUT /products and GET /orders
-
 router.post(
   '/products',
+  auth.middlewares.adminAuth,
   products.validation.productsPost,
   products.routes.productsPost
 );
 
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
-router.get('/orders', orders.routes.ordersGet);
+router.get('/orders', auth.middlewares.adminAuth, orders.routes.ordersGet);
 
 router.get(
   '/vacancies',
@@ -37,12 +40,14 @@ router.get(
 
 router.put(
   '/vacancies',
+  auth.middlewares.adminAuth,
   vacancies.validation.vacanciesPut,
   vacancies.routes.vacanciesPut
 );
 
 router.post(
   '/vacancies',
+  auth.middlewares.adminAuth,
   vacancies.validation.vacanciesPost,
   vacancies.routes.vacanciesPost
 );

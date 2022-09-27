@@ -4,7 +4,7 @@ import {
   Firestore,
   UpdateData
 } from '@google-cloud/firestore';
-import { dbQuery, Product, VacancyModel } from '../types';
+import { dbQuery, Product, UserModel, VacancyModel } from '../types';
 import { OrderModel } from '../types';
 
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
@@ -53,7 +53,7 @@ export class Model<T = DocumentData> {
     return documents;
   }
 
-  public async findOne(key: string) {
+  public async findOneById(key: string) {
     const snapshot = await this.collection.doc(key).get();
 
     return { id: snapshot.id, ...(snapshot.data() as T) };
@@ -69,5 +69,6 @@ export class Model<T = DocumentData> {
 export default {
   orders: new Model<OrderModel>('orders', firestore),
   products: new Model<Product>('products', firestore),
-  vacancies: new Model<VacancyModel>('vacancies', firestore)
+  vacancies: new Model<VacancyModel>('vacancies', firestore),
+  users: new Model<UserModel>('users', firestore)
 };
