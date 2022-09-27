@@ -10,7 +10,7 @@ export class UsersService {
   }
 
   public async addLoginTimestamp(user: UserModel) {
-    if (user.id) {
+    if (user?.id) {
       return this.usersModel.updateOne(user.id, {
         loginDates: [...user.loginDates, Date.now()]
       });
