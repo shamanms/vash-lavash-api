@@ -72,3 +72,8 @@ export type dbQuery = [
   WhereFilterOp,
   string | number | boolean | string[]
 ];
+
+export enum UserRole {
+  ADMIN = 'admin',
+  CASHIER = 'cashier'
+}

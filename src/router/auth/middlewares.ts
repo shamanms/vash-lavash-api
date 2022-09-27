@@ -1,6 +1,7 @@
 import { Request, NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { accessSecretVersion } from '../../services/jwt';
+import { UserRole } from '../../types';
 
 export const adminAuth = async (
   req: Request,
@@ -16,7 +17,7 @@ export const adminAuth = async (
     const jwtSecret = await accessSecretVersion();
     const decoded = jwt.verify(token.replace('Bearer ', ''), jwtSecret);
 
-    if (typeof decoded !== 'object' || decoded.role !== 'admin') {
+    if (typeof decoded !== 'object' || decoded.role !== UserRole.ADMIN) {
       return res.status(403).send('Not Allowed');
     }
 

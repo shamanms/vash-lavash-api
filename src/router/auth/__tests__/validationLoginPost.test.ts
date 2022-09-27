@@ -60,7 +60,7 @@ describe('loginPost', () => {
   test("when body is object and have key username but don`t have key password should return 'Invalid username or password'", async () => {
     const req = {
       body: {
-        username: 'kit'
+        username: 'kitik'
       }
     };
     try {
@@ -75,7 +75,7 @@ describe('loginPost', () => {
   test("when body have key username and password but one of values not string should return 'Invalid username or password'", async () => {
     const req = {
       body: {
-        username: 'kot',
+        username: 'kotik',
         password: 12
       }
     };
@@ -88,11 +88,28 @@ describe('loginPost', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
+  test("when body have key username and password but one of values length < 5 should return 'Invalid username or password'", async () => {
+    const req = {
+      body: {
+        username: 'kotik',
+        password: '123'
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      await loginPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid username or password');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
+
   test('when request is valid should go next', async () => {
     const req = {
       body: {
-        username: 'kot',
-        password: 'korm'
+        username: 'kotik',
+        password: 'korma'
       }
     };
     // @ts-ignore for test purposes
