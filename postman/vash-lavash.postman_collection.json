@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2050db9c-c84e-4dfd-bdad-c34ac83e7fca",
+		"_postman_id": "fb740e45-9447-4fea-a724-781283ddeee6",
 		"name": "vash-lavash",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22448374"
 	},
 	"item": [
 		{
@@ -35,7 +36,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"items\": {\n        \"0fNni89debIQtGIVQB2g\": 2,\n        \"1L2N8ljWfz6znV2lPVgH\": 1\n    },\n    \"phone\": \"(055) 555-55-55\"\n}",
+					"raw": "{\n    \"items\": {\n        \"pmzBoODciuakz8wNCyih\": 1\n    },\n    \"phone\": \"(000) 000-00-00\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -61,7 +62,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n  { \"name\": \"test\", \"price\": 1, \"description\": \"\", \"img\": \"\", \"type\": \"Випічка дріжджова\", \"isAvailable\": true }\n]",
+					"raw": "[\n    {\n        \"name\": \"dfdsfds\",\n        \"price\": 12,\n        \"type\": \"string\",\n        \"description\": \"dbgfbbdgf\",\n        \"img\": \"\",\n        \"isAvailable\": false\n    }\n]",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -81,21 +82,144 @@
 			"response": []
 		},
 		{
-			"name": "Telegram bot info",
+			"name": "/products",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://api.telegram.org/bot5610663885:AAH418fsCy2C2oKZVD-zOuEwmv9nK9_o7Q8/getUpdates",
-					"protocol": "https",
+					"raw": "{{host}}/orders",
 					"host": [
-						"api",
-						"telegram",
-						"org"
+						"{{host}}"
 					],
 					"path": [
-						"bot5610663885:AAH418fsCy2C2oKZVD-zOuEwmv9nK9_o7Q8",
-						"getUpdates"
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/vacancies",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/vacancies",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"vacancies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/vacancies",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"position\": \"baker\",\n    \"requirements\": \"34567\",\n    \"salary\": \"string\",\n    \"description\": \"string\",\n    \"isAvailable\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/vacancies",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"vacancies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/vacancies",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"lSRd4U7E6q2MhdQJvf3g\": {\n        \"description\": \"new desc\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/vacancies",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"vacancies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/login",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"vasya\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/login",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"login"
 					]
 				}
 			},
