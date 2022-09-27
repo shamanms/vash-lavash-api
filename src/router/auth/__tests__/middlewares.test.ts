@@ -1,7 +1,6 @@
 import { response } from 'express';
 import { adminAuth } from '../middlewares';
 import jwt from 'jsonwebtoken';
-import { accessSecretVersion } from '../../../services/jwt';
 
 const sendFn = jest.fn();
 const next = jest.fn();
@@ -19,6 +18,16 @@ jest.mock('jsonwebtoken', () => ({
 describe('middlewares adminAuth ', () => {
   beforeEach(() => {
     jest.resetModules();
+  });
+  test('when req is empty should return status 403 and message "A token is required for authentication"', async () => {
+    const req = undefined;
+    // @ts-ignore for test purposes
+    await adminAuth(req, response, next);
+
+    expect(response.status).toHaveBeenCalledWith(403);
+    expect(sendFn).toHaveBeenCalledWith(
+      'A token is required for authentication'
+    );
   });
   test('when token have`t "Bearer" should return status 403 and message "A token is required for authentication"', async () => {
     const req = {

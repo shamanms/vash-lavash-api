@@ -12,7 +12,7 @@ jest.mock('../../models', () => ({
     insertOne: jest.fn(),
     insertMany: jest.fn(),
     findMany: jest.fn(),
-    findOne: jest.fn()
+    findOneById: jest.fn()
   }
 }));
 const dateNow = Date.now();

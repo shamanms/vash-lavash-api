@@ -25,8 +25,8 @@ jest.mock('../../../services/jwt', () => ({
 describe('route login', () => {
   beforeEach(() => {
     jest.resetModules();
+    jest.spyOn(console, 'log').mockImplementation();
   });
-  jest.spyOn(console, 'log').mockImplementation();
   test('when username and password correct should return token', async () => {
     const req = {
       body: {
@@ -61,19 +61,24 @@ describe('route login', () => {
     expect(response.json).toHaveBeenCalledWith(parForRes);
     expect(jwt.sign).toHaveBeenCalledWith(parForJwt[0], secret, parForJwt[1]);
   });
-  test('when user invalid should return status 401 and message: "The username and password your provided are invalid"', async () => {
+  test('when user name invalid should return status 401 and message: "The username and password your provided are invalid"', async () => {
     const req = {
       body: {
         username: 'chelovek',
         password: 'mashina'
       }
     };
+    const user = undefined;
+    // @ts-ignore for test purposes
+    services.users.getUser.mockImplementation(() => user);
+    await login(req, response, next);
+
+    expect(console.log).toHaveBeenCalledWith(
+      `${req.body.username} is trying to login ..`
+    );
     const message = {
       message: 'The username and password your provided are invalid'
     };
-    // @ts-ignore for test purposes
-    services.users.getUser.mockImplementation(() => false);
-    await login(req, response, next);
     expect(response.status).toHaveBeenCalledWith(401);
     expect(jsonFn).toHaveBeenCalledWith(message);
   });
