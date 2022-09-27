@@ -7,7 +7,7 @@ export const adminAuth = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization;
+  const token = req?.headers?.authorization;
 
   if (!token || !token.includes('Bearer')) {
     return res.status(403).send('A token is required for authentication');
