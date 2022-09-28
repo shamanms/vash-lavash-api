@@ -21,8 +21,8 @@ export class VacancyService {
   public async updateVacancies(vacancies: {
     [key: string]: Partial<VacancyModel>;
   }) {
-    let updatedVacancies = Object.entries(vacancies).map(([id, product]) =>
-      this.vacancyModel.updateOne(id, product)
+    let updatedVacancies = Object.entries(vacancies).map(([id, vacancy]) =>
+      this.vacancyModel.updateOne(id, vacancy)
     );
     const updatingResult = await Promise.allSettled(updatedVacancies);
     return Object.keys(vacancies).reduce((acc, id) => {

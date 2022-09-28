@@ -32,6 +32,8 @@ router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
 router.get('/orders', auth.middlewares.adminAuth, orders.routes.ordersGet);
 
+router.put('/orders/:id', orders.routes.orderPut);
+
 router.get(
   '/vacancies',
   vacancies.validation.vacanciesGet,
