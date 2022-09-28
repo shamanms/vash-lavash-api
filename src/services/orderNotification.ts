@@ -29,7 +29,7 @@ export const orderNotification = (
     return db.orders.collection
       .doc(documentId)
       .get()
-      .then((snapshot) => {
+      .then(async (snapshot) => {
         const data = snapshot.data();
 
         if (!data) {
@@ -38,7 +38,11 @@ export const orderNotification = (
 
         const tg = new Telegram(TELEGRAM_TOKEN);
 
-        new OrderNotification(data, tg, GROUP_ID).send();
+        await new OrderNotification(
+          { ...data, id: documentId },
+          tg,
+          GROUP_ID
+        ).send();
       });
   } else {
     Object.entries({
