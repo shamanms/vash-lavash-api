@@ -43,7 +43,7 @@ describe('function orderNotification', () => {
     resource: 'zakaz'
   };
   const modifiedDocument = {
-    name: 'aza'
+    id: 'asya'
   };
 
   beforeEach(() => {
