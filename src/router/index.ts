@@ -3,9 +3,6 @@ import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
 import auth from './auth';
-import db from '../models';
-import { OrderStatus } from '../types';
-
 const router = Router();
 
 router.post('/login', auth.validation.loginPost, auth.routes.login);
