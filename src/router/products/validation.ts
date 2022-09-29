@@ -1,5 +1,6 @@
 import { ValidationError } from '../../models/errors';
 import { ProductsGet, ProductsPost, ProductsPut } from './types';
+import { isArrayOfObjects, isObject } from '../../utils';
 
 export const productsGet: ProductsGet = function (req, res, next) {
   const { isAvailable } = req.query;
@@ -14,11 +15,7 @@ export const productsGet: ProductsGet = function (req, res, next) {
 export const productsPut: ProductsPut = function (req, res, next) {
   const products = req.body;
 
-  if (
-    typeof products !== 'object' ||
-    Array.isArray(products) ||
-    products === null
-  ) {
+  if (!isObject(products)) {
     throw new ValidationError('Invalid request');
   }
 
@@ -27,11 +24,7 @@ export const productsPut: ProductsPut = function (req, res, next) {
   }
 
   Object.values(products).forEach((product) => {
-    if (
-      typeof product !== 'object' ||
-      product === null ||
-      Array.isArray(product)
-    ) {
+    if (!isObject(product)) {
       throw new ValidationError('Incorrect products');
     }
   });
@@ -41,24 +34,9 @@ export const productsPut: ProductsPut = function (req, res, next) {
 
 export const productsPost: ProductsPost = function (req, res, next) {
   const products = req.body;
-  if (!Array.isArray(products)) {
-    throw new ValidationError('Invalid request');
-  }
+  if (!isArrayOfObjects(products))
+    throw new ValidationError('Incorrect products');
 
-  if (products.length < 1) {
-    throw new ValidationError('Invalid request');
-  }
-  products.forEach((product) => {
-    if (
-      !(
-        typeof product === 'object' &&
-        product !== null &&
-        !Array.isArray(product)
-      )
-    ) {
-      throw new ValidationError('Incorrect products');
-    }
-  });
   const requiredKeys: { [key: string]: string } = {
     name: 'string',
     price: 'number',

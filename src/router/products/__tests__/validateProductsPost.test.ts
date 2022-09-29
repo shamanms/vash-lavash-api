@@ -7,18 +7,18 @@ describe('productsPost', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test("when req haven't body should return 'Invalid request'", () => {
+  test("when req haven't body should return 'Incorrect products'", () => {
     const req = {};
     try {
       // @ts-ignore for test purposes
       productsPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid request');
+      expect(e?.message).toMatch('Incorrect products');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when body is not array should return "Invalid request"', () => {
+  test('when body is not array should return "Incorrect products"', () => {
     const req = {
       body: 'test'
     };
@@ -27,11 +27,11 @@ describe('productsPost', () => {
       productsPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid request');
+      expect(e?.message).toMatch('Incorrect products');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when body is empty array should return "Invalid request"', () => {
+  test('when body is empty array should return "Incorrect products"', () => {
     const req = {
       body: []
     };
@@ -40,7 +40,7 @@ describe('productsPost', () => {
       productsPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid request');
+      expect(e?.message).toMatch('Incorrect products');
       expect(next).not.toHaveBeenCalled();
     }
   });
