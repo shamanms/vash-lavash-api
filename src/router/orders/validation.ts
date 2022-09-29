@@ -1,8 +1,9 @@
 import { ValidationError } from '../../models/errors';
 import db from '../../models';
 import { FieldPath } from '@google-cloud/firestore';
-import { OrdersPost } from './types';
+import { OrdersPost, OrdersPut } from './types';
 import { isObject } from '../../utils';
+import { OrderStatus } from '../../types';
 
 export const ordersPost: OrdersPost = async function (req, res, next) {
   const order = req.body;
@@ -46,6 +47,25 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
   });
   if (!isProductsValid) {
     throw new ValidationError('Products not found');
+  }
+
+  next();
+};
+
+export const orderPut: OrdersPut = async (req, res, next) => {
+  const id = req.params.id;
+  const status = req.query;
+
+  if (
+    id === undefined &&
+    !isObject(status) &&
+    Object.keys(status).length === 0
+  ) {
+    throw new ValidationError('Invalid request');
+  }
+
+  if (!Object.values(OrderStatus).includes(status.status)) {
+    throw new ValidationError('Invalid status');
   }
 
   next();
