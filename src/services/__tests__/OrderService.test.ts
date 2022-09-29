@@ -32,8 +32,7 @@ describe('Class OrderService', () => {
     const expectedResult = {
       phone: orderRequest.phone,
       totalPrice: 0,
-      isConfirmed: false,
-      isCompleted: false,
+      orderStatus: 'not_confirmed',
       items: [],
       timestamp: dateNow
     };
@@ -78,8 +77,7 @@ describe('Class OrderService', () => {
     expect(db.orders.insertOne).toHaveBeenCalledWith({
       phone: orderRequest.phone,
       totalPrice: 70,
-      isConfirmed: false,
-      isCompleted: false,
+      orderStatus: 'not_confirmed',
       items: [
         { name: 'abc', price: 10, count: 1, id: '123' },
         { name: 'zxc', price: 20, count: 3, id: '456' }

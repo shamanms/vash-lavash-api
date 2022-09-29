@@ -43,6 +43,7 @@ describe('function orderNotification', () => {
     resource: 'zakaz'
   };
   const modifiedDocument = {
+    id: 'asya',
     name: 'aza'
   };
 
