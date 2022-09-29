@@ -8,41 +8,7 @@ describe('orderPut', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test('when id is undefined should return "Invalid request"', async () => {
-    const req = {
-      params: {
-        id: undefined
-      },
-      query: {
-        status: 'completed'
-      }
-    };
-    try {
-      // @ts-ignore for unit test
-      await orderPut(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid request');
-      expect(next).not.toHaveBeenCalled();
-    }
-  });
-  test('when query is not obj should return "Invalid request"', async () => {
-    const req = {
-      params: {
-        id: '123'
-      },
-      query: 123
-    };
-    try {
-      // @ts-ignore for unit test
-      await orderPut(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid request');
-      expect(next).not.toHaveBeenCalled();
-    }
-  });
-  test('when query is empty obj should return "Invalid request"', async () => {
+  test('when query is empty obj should return "Invalid status"', async () => {
     const req = {
       params: {
         id: '123'
@@ -54,7 +20,7 @@ describe('orderPut', () => {
       await orderPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid request');
+      expect(e?.message).toMatch('Invalid status');
       expect(next).not.toHaveBeenCalled();
     }
   });
