@@ -1,6 +1,7 @@
 import { Telegram } from 'telegraf';
-import { OrderModel } from '../types';
+import { OrderModel, OrderStatus } from '../types';
 
+const API_URL = 'https://europe-central2-vash-lavash.cloudfunctions.net/api';
 export class OrderNotification {
   constructor(
     private order: OrderModel,
@@ -9,14 +10,20 @@ export class OrderNotification {
   ) {}
 
   private composeMessage() {
-    const { phone, totalPrice, items } = this.order;
+    const { phone, totalPrice, items, id } = this.order;
+    const confirmedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.CONFIRMED}`;
+    const completedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.COMPLETED}`;
 
     return `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
 Сума: ${totalPrice}UAH
 Товари:
-${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}`;
+${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}
+<a href="${confirmedUrl}">Замовлення підтвердженно</a>
+
+
+<a href="${completedUrl}">Замовлення виконанно</a>`;
   }
 
   public send() {
