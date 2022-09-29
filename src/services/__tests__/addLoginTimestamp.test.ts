@@ -43,4 +43,15 @@ describe('Service.addLoginTimestamp', () => {
       );
     }
   });
+  test('when user is undefined should return "UsersService.addLoginTimestamp:: invalid user id"', async () => {
+    const user = undefined;
+    try {
+      // @ts-ignore for unit test
+      await services.users.addLoginTimestamp(user);
+    } catch (e: any) {
+      expect(e?.message).toMatch(
+        'UsersService.addLoginTimestamp:: invalid user id'
+      );
+    }
+  });
 });

@@ -57,12 +57,3 @@ router.post(
 );
 
 export default router;
-
-router.put('/orders', async (req, res, next) => {
-  const a = await db.orders.findMany();
-  for (const order of a) {
-    await db.orders.updateOne(order.id, { orderStatus: OrderStatus.CONFIRMED });
-  }
-  res.json({});
-  next();
-});

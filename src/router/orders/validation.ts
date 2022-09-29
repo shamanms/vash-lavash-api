@@ -57,8 +57,8 @@ export const orderPut: OrdersPut = async (req, res, next) => {
   const status = req.query;
 
   if (
-    id === undefined &&
-    !isObject(status) &&
+    id === undefined ||
+    !isObject(status) ||
     Object.keys(status).length === 0
   ) {
     throw new ValidationError('Invalid request');
