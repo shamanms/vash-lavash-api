@@ -2,6 +2,7 @@ import { ValidationError } from '../../models/errors';
 import db from '../../models';
 import { FieldPath } from '@google-cloud/firestore';
 import { OrdersPost } from './types';
+import { isObject } from '../../utils';
 
 export const ordersPost: OrdersPost = async function (req, res, next) {
   const order = req.body;
@@ -11,11 +12,7 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
   if (Object.keys(order).length < 1) {
     throw new ValidationError('Order is empty');
   }
-  if (
-    typeof order.items !== 'object' ||
-    order.items === null ||
-    Array.isArray(order.items)
-  ) {
+  if (!isObject(order.items)) {
     throw new ValidationError('Invalid order');
   }
 
