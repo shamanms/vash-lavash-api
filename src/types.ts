@@ -21,8 +21,7 @@ export interface OrderModel {
   id?: string;
   phone: string;
   totalPrice: number;
-  isConfirmed: boolean;
-  isCompleted: boolean;
+  orderStatus: OrderStatus;
   items: OrderedProduct[];
   timestamp: number;
 }
@@ -63,6 +62,10 @@ export interface TypedRequestQuery<T> extends Express.Request {
   query: T;
 }
 
+export interface TypedRequestParams<T> extends Express.Request {
+  params: T;
+}
+
 export interface Middleware<R> {
   (req: R, res: Response, next: NextFunction): void;
 }
@@ -76,4 +79,10 @@ export type dbQuery = [
 export enum UserRole {
   ADMIN = 'admin',
   CASHIER = 'cashier'
+}
+
+export enum OrderStatus {
+  NOT_CONFIRMED = 'not_confirmed',
+  CONFIRMED = 'confirmed',
+  COMPLETED = 'completed'
 }

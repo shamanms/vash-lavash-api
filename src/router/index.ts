@@ -3,7 +3,6 @@ import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
 import auth from './auth';
-
 const router = Router();
 
 router.post('/login', auth.validation.loginPost, auth.routes.login);
@@ -31,6 +30,8 @@ router.post(
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
 router.get('/orders', auth.middlewares.adminAuth, orders.routes.ordersGet);
+
+router.put('/orders/:id', orders.validation.orderPut, orders.routes.orderPut);
 
 router.get(
   '/vacancies',

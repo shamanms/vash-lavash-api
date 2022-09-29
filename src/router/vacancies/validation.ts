@@ -1,5 +1,6 @@
 import { ValidationError } from '../../models/errors';
 import { VacanciesGet, VacanciesPost, VacanciesPut } from './types';
+import { isObject } from '../../utils';
 
 export const vacanciesGet: VacanciesGet = function (req, res, next) {
   const { isAvailable } = req.query;
@@ -14,11 +15,7 @@ export const vacanciesGet: VacanciesGet = function (req, res, next) {
 export const vacanciesPut: VacanciesPut = function (req, res, next) {
   const vacancies = req.body;
 
-  if (
-    typeof vacancies !== 'object' ||
-    Array.isArray(vacancies) ||
-    vacancies === null
-  ) {
+  if (!isObject(vacancies)) {
     throw new ValidationError('Invalid request');
   }
 
@@ -27,11 +24,7 @@ export const vacanciesPut: VacanciesPut = function (req, res, next) {
   }
 
   Object.values(vacancies).forEach((vacancy) => {
-    if (
-      typeof vacancy !== 'object' ||
-      vacancy === null ||
-      Array.isArray(vacancy)
-    ) {
+    if (!isObject(vacancy)) {
       throw new ValidationError('Incorrect vacancies');
     }
   });
@@ -42,11 +35,7 @@ export const vacanciesPut: VacanciesPut = function (req, res, next) {
 export const vacanciesPost: VacanciesPost = function (req, res, next) {
   const vacancy = req.body;
 
-  if (
-    typeof vacancy !== 'object' ||
-    Array.isArray(vacancy) ||
-    vacancy === null
-  ) {
+  if (!isObject(vacancy)) {
     throw new ValidationError('Invalid request');
   }
 

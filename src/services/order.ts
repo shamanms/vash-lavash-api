@@ -1,5 +1,5 @@
 import { Model } from '../models';
-import { Product, OrderModel, OrderRequest } from '../types';
+import { Product, OrderModel, OrderRequest, OrderStatus } from '../types';
 
 export class OrderService {
   constructor(
@@ -11,8 +11,7 @@ export class OrderService {
     return {
       phone: orderRequest.phone,
       totalPrice: 0,
-      isConfirmed: false,
-      isCompleted: false,
+      orderStatus: OrderStatus.NOT_CONFIRMED,
       items: [],
       timestamp: Date.now()
     };
@@ -59,5 +58,11 @@ export class OrderService {
 
   public async getOrder() {
     return this.orderModel.findMany();
+  }
+
+  public async changeOrderStatus(orderId: string, orderStatus: OrderStatus) {
+    await this.orderModel.updateOne(orderId, { orderStatus });
+
+    return orderId;
   }
 }
