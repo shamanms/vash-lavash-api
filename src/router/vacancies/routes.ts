@@ -9,7 +9,7 @@ export const vacanciesGet: VacanciesGet = async (req, res, next) => {
       isAvailable: isAvailable ? isAvailable === 'true' : isAvailable
     });
 
-    res.json(vacancies);
+    res.json({ getVacancies: vacancies });
   } catch (e) {
     next(e);
   }
@@ -18,7 +18,7 @@ export const vacanciesPut: VacanciesPut = async (req, res, next) => {
   try {
     const result = await services.vacancies.updateVacancies(req.body);
 
-    res.json(result);
+    res.json({ updateVacancies: result });
   } catch (e) {
     next(e);
   }
