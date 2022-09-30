@@ -224,6 +224,30 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/orders/ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/orders/ID?status=",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"orders",
+						"ID"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
