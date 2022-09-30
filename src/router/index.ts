@@ -21,7 +21,7 @@ router.put(
   products.routes.productsPut
 );
 
-router.put(
+router.post(
   '/products',
   auth.middlewares.adminAuth,
   products.validation.productsPost,
