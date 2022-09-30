@@ -1,4 +1,5 @@
 import {
+  fileExtensionType,
   Middleware,
   Product,
   TypedRequestBody,
@@ -21,5 +22,5 @@ interface GetRequest<P, Q>
     TypedRequestParams<P> {}
 
 export type ProductGoogleImageUrlGet = Middleware<
-  GetRequest<{ id: string }, { fileExtension: 'jpeg' | 'jpg' }>
+  GetRequest<{ id: string }, { fileExtension: fileExtensionType }>
 >;
