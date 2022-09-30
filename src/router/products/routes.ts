@@ -5,7 +5,7 @@ import {
   ProductsPost,
   ProductsPut
 } from './types';
-import { generateUploadSignedUrl } from '../../services/uploadImg';
+import { generateUploadSignedUrl } from '../../services/imageUploader';
 
 export const productsGet: ProductsGet = async (req, res, next) => {
   try {
