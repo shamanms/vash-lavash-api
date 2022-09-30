@@ -21,16 +21,24 @@ const order = {
   ],
   timestamp: Date.now()
 };
+const API_URL = 'http://test.url';
 const message = `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
 Товари:
-${order.items[0].name}: ${order.items[0].count}шт;`;
+${order.items[0].name}: ${order.items[0].count}шт;
+
+
+<a href="${API_URL}/orders/${order.id}?status=confirmed">ПІДТВЕРДЖЕНО</a>
+
+
+<a href="${API_URL}/orders/${order.id}?status=completed">ВИДАНО</a>`;
 
 describe('Class orderNotification', () => {
   beforeEach(() => {
     jest.resetModules();
+    process.env.API_URL = API_URL;
   });
   afterAll(() => {
     jest.restoreAllMocks();

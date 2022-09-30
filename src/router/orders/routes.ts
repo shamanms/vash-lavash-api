@@ -16,7 +16,7 @@ export const ordersGet: OrdersGet = async (req, res, next) => {
   try {
     const result = await services.order.getOrder();
 
-    res.json({ getOrder: result });
+    res.json(result);
   } catch (e) {
     next(e);
   }

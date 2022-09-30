@@ -9,7 +9,7 @@ export const productsGet: ProductsGet = async (req, res, next) => {
       isAvailable: isAvailable ? isAvailable === 'true' : isAvailable
     });
 
-    res.json({ getProducts: products });
+    res.json(products);
   } catch (e) {
     next(e);
   }
@@ -19,7 +19,7 @@ export const productsPut: ProductsPut = async (req, res, next) => {
   try {
     const result = await services.products.updateProducts(req.body);
 
-    res.json({ updateProducts: result });
+    res.json(result);
   } catch (e) {
     next(e);
   }
