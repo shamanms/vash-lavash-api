@@ -72,7 +72,7 @@ export const productGoogleImageUrlGet: ProductGoogleImageUrlGet = (
     throw new ValidationError('Invalid product id');
   }
 
-  if (!req.query.fileExtension.split(' ').includes('jpeg' || 'jpg')) {
+  if (!['jpeg', 'jpg'].includes(req.query.fileExtension)) {
     throw new ValidationError('Incorrect file extension');
   }
 

@@ -65,7 +65,7 @@ describe('validation productGoogleImageUrlGet', () => {
         id: '12345'
       },
       query: {
-        fileExtension: 'jpeg'
+        fileExtension: 'jpg'
       }
     };
     try {
