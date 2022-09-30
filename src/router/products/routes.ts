@@ -1,6 +1,6 @@
 import services from '../../services';
 import {
-  ProductImagePut,
+  ProductGoogleImageUrlGet,
   ProductsGet,
   ProductsPost,
   ProductsPut
@@ -41,10 +41,14 @@ export const productsPost: ProductsPost = async (req, res, next) => {
   }
 };
 
-export const productImagePut: ProductImagePut = async (req, res, next) => {
+export const productGoogleImageUrlGet: ProductGoogleImageUrlGet = async (
+  req,
+  res,
+  next
+) => {
   try {
-    const productId = req.params.id;
-    const fileExtension = req.query.fileExtension;
+    const productId = req.params?.id;
+    const fileExtension = req.query?.fileExtension;
     const url = await generateUploadSignedUrl({ productId, fileExtension });
 
     res.json({ url });

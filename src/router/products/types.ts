@@ -17,10 +17,10 @@ export type ProductsPut = Middleware<
 
 export type ProductsPost = Middleware<TypedRequestBody<Product[]>>;
 
-interface PutRequest<P, Q>
+interface GetRequest<P, Q>
   extends TypedRequestQuery<Q>,
     TypedRequestParams<P> {}
 
-export type ProductImagePut = Middleware<
-  PutRequest<{ id: string }, { fileExtension: 'jpeg' | 'fileExtension' }>
+export type ProductGoogleImageUrlGet = Middleware<
+  GetRequest<{ id: string }, { fileExtension: 'jpeg' | 'jpg' }>
 >;

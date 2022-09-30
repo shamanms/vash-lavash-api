@@ -1,5 +1,10 @@
 import { ValidationError } from '../../models/errors';
-import { ProductsGet, ProductsPost, ProductsPut } from './types';
+import {
+  ProductGoogleImageUrlGet,
+  ProductsGet,
+  ProductsPost,
+  ProductsPut
+} from './types';
 import { isArrayOfObjects, isObject } from '../../utils';
 
 export const productsGet: ProductsGet = function (req, res, next) {
@@ -53,6 +58,23 @@ export const productsPost: ProductsPost = function (req, res, next) {
       }
     });
   });
+
+  next();
+};
+
+export const productGoogleImageUrlGet: ProductGoogleImageUrlGet = (
+  req,
+  res,
+  next
+) => {
+  const productId = req.params.id;
+  if (productId.length < 4) {
+    throw new ValidationError('Invalid product id');
+  }
+
+  if (!req.query.fileExtension.split('').includes('jpeg' || 'jpg')) {
+    throw new ValidationError('Incorrect file extension');
+  }
 
   next();
 };

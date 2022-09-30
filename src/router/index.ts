@@ -3,7 +3,7 @@ import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
 import auth from './auth';
-import { generateUploadSignedUrl } from '../services/uploadImg';
+
 const router = Router();
 
 router.post('/login', auth.validation.loginPost, auth.routes.login);
@@ -28,7 +28,11 @@ router.put(
   products.routes.productsPost
 );
 
-router.put('/products/:id/image', products.routes.productImagePut);
+router.get(
+  '/products/:id/image',
+  products.validation.productGoogleImageUrlGet,
+  products.routes.productGoogleImageUrlGet
+);
 
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 

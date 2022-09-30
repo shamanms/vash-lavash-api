@@ -1,7 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 
-const bucketName = 'lavash-menu-images';
-const { PROJECT_ID, GCP_SERVICE_ACCOUNT_FILE } = process.env;
+const { PROJECT_ID, GCP_SERVICE_ACCOUNT_FILE, BUCKET_NAME } = process.env;
 
 const storage = new Storage({
   projectId: PROJECT_ID,
@@ -10,8 +9,11 @@ const storage = new Storage({
 
 export async function generateUploadSignedUrl(product: {
   productId: string;
-  fileExtension: 'jpeg' | 'fileExtension';
+  fileExtension: 'jpeg' | 'jpg';
 }) {
+  if (!BUCKET_NAME) {
+    throw new Error('BUCKET_NAME is invalid');
+  }
   const options: any = {
     version: 'v4',
     action: 'write',
@@ -19,8 +21,8 @@ export async function generateUploadSignedUrl(product: {
     contentType: 'application/octet-stream'
   };
   const [url]: any = await storage
-    .bucket(bucketName)
-    .file(`${product.productId}-${Date.now()}.${product.fileExtension}`) // sdfhrtdhbrvbt-13246547657.jpg
+    .bucket(BUCKET_NAME)
+    .file(`${product.productId}-${Date.now()}.${product.fileExtension}`)
     .getSignedUrl(options);
 
   return url;
