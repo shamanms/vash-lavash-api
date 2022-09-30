@@ -1,4 +1,5 @@
 import { OrderNotification } from '../orderNotificationClass';
+import { OrderStatus } from '../../types';
 
 const messenger = {
   sendMessage: jest.fn()
@@ -21,12 +22,19 @@ const order = {
   ],
   timestamp: Date.now()
 };
+const API_URL = 'https://europe-central2-vash-lavash.cloudfunctions.net/api';
+const confirmedUrl = `${API_URL}/orders/${order.id}?status=${OrderStatus.CONFIRMED}`;
+const completedUrl = `${API_URL}/orders/${order.id}?status=${OrderStatus.COMPLETED}`;
 const message = `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
 Товари:
-${order.items[0].name}: ${order.items[0].count}шт;`;
+${order.items[0].name}: ${order.items[0].count}шт;
+<a href="${confirmedUrl}">Замовлення підтвердженно</a>
+
+
+<a href="${completedUrl}">Замовлення виконанно</a>`;
 
 describe('Class orderNotification', () => {
   beforeEach(() => {

@@ -1,6 +1,5 @@
 import {
   Middleware,
-  OrderStatus,
   Product,
   TypedRequestBody,
   TypedRequestParams,
