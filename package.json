@@ -11,7 +11,6 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "deploy:api": "gcloud functions deploy api --entry-point api --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2",
-    "deploy:notification": "gcloud functions deploy order-notification-t --entry-point orderNotification --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2",
     "style:check": "npx prettier --check .",
     "style:fix": "npx prettier --write .",
     "lint": "eslint --ext .ts src/"

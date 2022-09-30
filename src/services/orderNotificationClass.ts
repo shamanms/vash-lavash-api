@@ -1,5 +1,5 @@
 import { Telegram } from 'telegraf';
-import { OrderModel } from '../types';
+import { OrderModel, OrderStatus } from '../types';
 
 export class OrderNotification {
   constructor(
@@ -9,14 +9,23 @@ export class OrderNotification {
   ) {}
 
   private composeMessage() {
-    const { phone, totalPrice, items } = this.order;
+    const { API_URL } = process.env;
+    const { phone, totalPrice, items, id } = this.order;
+    const confirmedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.CONFIRMED}`;
+    const completedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.COMPLETED}`;
 
     return `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
 Сума: ${totalPrice}UAH
 Товари:
-${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}`;
+${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}
+
+
+<a href="${confirmedUrl}">ПІДТВЕРДЖЕНО</a>
+
+
+<a href="${completedUrl}">ВИДАНО</a>`;
   }
 
   public send() {
