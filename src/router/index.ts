@@ -3,6 +3,7 @@ import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
 import auth from './auth';
+
 const router = Router();
 
 router.post('/login', auth.validation.loginPost, auth.routes.login);
@@ -25,6 +26,12 @@ router.post(
   auth.middlewares.adminAuth,
   products.validation.productsPost,
   products.routes.productsPost
+);
+
+router.get(
+  '/products/:id/image',
+  products.validation.productGoogleImageUrlGet,
+  products.routes.productGoogleImageUrlGet
 );
 
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);

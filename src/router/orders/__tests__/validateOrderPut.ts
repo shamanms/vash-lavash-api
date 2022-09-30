@@ -60,6 +60,21 @@ describe('orderPut', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
+  test('when query is undefined should return "Invalid status"', async () => {
+    const req = {
+      params: {
+        id: '123'
+      }
+    };
+    try {
+      // @ts-ignore for unit test
+      await orderPut(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid status');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
   test('when req correct should go next', async () => {
     const req = {
       params: {

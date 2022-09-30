@@ -86,3 +86,5 @@ export enum OrderStatus {
   CONFIRMED = 'confirmed',
   COMPLETED = 'completed'
 }
+
+export type fileExtensionType = 'jpeg' | 'jpg';

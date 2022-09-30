@@ -1,4 +1,5 @@
 import { OrderNotification } from '../orderNotificationClass';
+import { OrderStatus } from '../../types';
 
 const messenger = {
   sendMessage: jest.fn()
@@ -9,8 +10,7 @@ const order = {
   id: '123',
   phone: '777777777',
   totalPrice: 2000,
-  isConfirmed: false,
-  isCompleted: false,
+  status: OrderStatus.NOT_CONFIRMED,
   items: [
     {
       id: '321',
@@ -30,10 +30,10 @@ Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
 ${order.items[0].name}: ${order.items[0].count}шт;
 
 
-<a href="${API_URL}/orders/${order.id}?status=confirmed">ПІДТВЕРДЖЕНО</a>
+<a href="${API_URL}/orders/${order.id}?status=${OrderStatus.CONFIRMED}">ПІДТВЕРДЖЕНО</a>
 
 
-<a href="${API_URL}/orders/${order.id}?status=completed">ВИДАНО</a>`;
+<a href="${API_URL}/orders/${order.id}?status=${OrderStatus.COMPLETED}">ВИДАНО</a>`;
 
 describe('Class orderNotification', () => {
   beforeEach(() => {
