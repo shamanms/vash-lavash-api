@@ -2,17 +2,14 @@ import { generateUploadSignedUrl } from '../imageUploader';
 import { Storage } from '@google-cloud/storage';
 
 jest.mock('@google-cloud/storage');
-const bucketMethod = jest.fn();
-const fileMethod = jest.fn();
-const getSignedUrlMethod = jest.fn(() => [1]);
+const signedUrl = 'http://some.url/img';
+const storage = {
+  bucket: jest.fn().mockReturnThis(),
+  file: jest.fn().mockReturnThis(),
+  getSignedUrl: jest.fn(() => [signedUrl])
+};
 // @ts-ignore
-Storage.mockImplementation(() => ({
-  bucket: bucketMethod.mockImplementation(() => ({
-    file: fileMethod.mockImplementation(() => ({
-      getSignedUrl: getSignedUrlMethod
-    }))
-  }))
-}));
+Storage.mockImplementation(() => storage);
 
 const nowDate = Date.now();
 const options = {
@@ -42,11 +39,28 @@ describe('service.generateUploadSignedUrl', () => {
     // @ts-ignore
     const result = await generateUploadSignedUrl(product);
 
-    expect(bucketMethod).toHaveBeenCalledWith(BUCKET_NAME);
-    expect(fileMethod).toHaveBeenCalledWith(
+    expect(storage.bucket).toHaveBeenCalledWith(BUCKET_NAME);
+    expect(storage.file).toHaveBeenCalledWith(
       `${product.productId}-${nowDate}.${product.fileExtension}`
     );
-    expect(getSignedUrlMethod).toHaveBeenCalledWith(options);
-    expect(result).toEqual(1);
+    expect(storage.getSignedUrl).toHaveBeenCalledWith(options);
+    expect(result).toEqual(signedUrl);
+  });
+  test('when bucket name undefined should return Error "BUCKET_NAME is invalid"', async () => {
+    const BUCKET_NAME = undefined;
+    const product = {
+      productId: 'bulka',
+      fileExtension: 'jpg'
+    };
+    process.env = {
+      ...process.env,
+      BUCKET_NAME
+    };
+    try {
+      // @ts-ignore
+      await generateUploadSignedUrl(product);
+    } catch (e: any) {
+      expect(e?.message).toMatch('BUCKET_NAME is invalid');
+    }
   });
 });
