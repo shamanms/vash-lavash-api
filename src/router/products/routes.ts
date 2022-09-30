@@ -1,5 +1,11 @@
 import services from '../../services';
-import { ProductsGet, ProductsPost, ProductsPut } from './types';
+import {
+  ProductGoogleImageUrlGet,
+  ProductsGet,
+  ProductsPost,
+  ProductsPut
+} from './types';
+import { generateUploadSignedUrl } from '../../services/imageUploader';
 
 export const productsGet: ProductsGet = async (req, res, next) => {
   try {
@@ -30,6 +36,22 @@ export const productsPost: ProductsPost = async (req, res, next) => {
     await services.products.addProducts(req.body);
 
     res.json({ status: 'OK' });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const productGoogleImageUrlGet: ProductGoogleImageUrlGet = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const productId = req.params?.id;
+    const fileExtension = req.query?.fileExtension;
+    const url = await generateUploadSignedUrl({ productId, fileExtension });
+
+    res.json({ url });
   } catch (e) {
     next(e);
   }

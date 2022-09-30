@@ -224,6 +224,67 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/orders/:id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/orders/:id?status=",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"orders",
+						":id"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": ""
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/products/:id/image",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/:id/image?fileExtension=jpg",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						":id",
+						"image"
+					],
+					"query": [
+						{
+							"key": "fileExtension",
+							"value": "jpg"
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

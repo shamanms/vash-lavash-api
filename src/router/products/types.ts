@@ -1,7 +1,9 @@
 import {
+  fileExtensionType,
   Middleware,
   Product,
   TypedRequestBody,
+  TypedRequestParams,
   TypedRequestQuery
 } from '../../types';
 
@@ -14,3 +16,11 @@ export type ProductsPut = Middleware<
 >;
 
 export type ProductsPost = Middleware<TypedRequestBody<Product[]>>;
+
+interface GetRequest<P, Q>
+  extends TypedRequestQuery<Q>,
+    TypedRequestParams<P> {}
+
+export type ProductGoogleImageUrlGet = Middleware<
+  GetRequest<{ id: string }, { fileExtension: fileExtensionType }>
+>;

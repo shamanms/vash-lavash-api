@@ -1,4 +1,5 @@
 import { OrderNotification } from '../orderNotificationClass';
+import { OrderStatus } from '../../types';
 
 const messenger = {
   sendMessage: jest.fn()
