@@ -61,4 +61,6 @@ router.post(
   vacancies.routes.vacanciesPost
 );
 
+router.put('/vacancies/:id', vacancies.routes.vacancyCountPut);
+
 export default router;
