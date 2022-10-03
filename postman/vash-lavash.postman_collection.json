@@ -303,6 +303,30 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/vacancies/:id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/vacancies/:id",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"vacancies",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "lSRd4U7E6q2MhdQJvf3g"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
