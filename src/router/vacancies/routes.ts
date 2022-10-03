@@ -41,7 +41,7 @@ export const vacanciesPost: VacanciesPost = async (req, res, next) => {
 
 export const vacancyCountPut: VacancyCountPut = async (req, res, next) => {
   try {
-    await services.vacancies.addCountVacancy(req.params);
+    await services.vacancies.addCountVacancy(req.params.id);
 
     res.json({ status: 'New view' });
   } catch (e) {

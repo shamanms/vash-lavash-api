@@ -45,7 +45,8 @@ export class VacancyService {
     const vacancy = await this.vacancyModel.findOneById(vacancyId);
 
     if (vacancy) {
-      vacancy.counter += 1;
+      const counter = { counter: vacancy.counter + 1 };
+      await this.vacancyModel.updateOne(vacancyId, counter);
     } else {
       throw new Error(`Product with id: ${vacancyId} not found`);
     }

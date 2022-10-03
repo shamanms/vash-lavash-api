@@ -16,4 +16,4 @@ export type VacanciesPut = Middleware<
 
 export type VacanciesPost = Middleware<TypedRequestBody<VacancyModel>>;
 
-export type VacancyCountPut = Middleware<TypedRequestParams<string>>;
+export type VacancyCountPut = Middleware<TypedRequestParams<{ id: string }>>;
