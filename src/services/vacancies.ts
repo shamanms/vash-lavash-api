@@ -40,4 +40,14 @@ export class VacancyService {
       };
     }, {});
   }
+
+  public async addCountVacancy(vacancyId: string) {
+    const vacancy = await this.vacancyModel.findOneById(vacancyId);
+
+    if (vacancy) {
+      vacancy.counter += 1;
+    } else {
+      throw new Error(`Product with id: ${vacancyId} not found`);
+    }
+  }
 }
