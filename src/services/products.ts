@@ -39,6 +39,8 @@ export class ProductsService {
     }, {});
   }
   public async getProductsTypes() {
-    await this.getProducts({ isAvailable: true });
+    const products = await this.getProducts({ isAvailable: true });
+
+    return products;
   }
 }

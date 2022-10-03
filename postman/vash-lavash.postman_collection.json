@@ -285,6 +285,24 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/products/type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/products/type",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"products",
+						"type"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
