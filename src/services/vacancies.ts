@@ -48,7 +48,7 @@ export class VacancyService {
       const counter = { counter: vacancy.counter + 1 };
       await this.vacancyModel.updateOne(vacancyId, counter);
     } else {
-      throw new Error(`Product with id: ${vacancyId} not found`);
+      throw new Error(`Vacancy with id: ${vacancyId} not found`);
     }
   }
 }

@@ -68,7 +68,7 @@ export const vacanciesPost: VacanciesPost = function (req, res, next) {
 export const vacancyCountPut: VacancyCountPut = (req, res, next) => {
   const vacancyId = req.params.id;
   if (vacancyId.length < 4) {
-    throw new ValidationError('Invalid product id');
+    throw new ValidationError('Invalid vacancy id');
   }
 
   next();
