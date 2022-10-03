@@ -38,4 +38,7 @@ export class ProductsService {
       };
     }, {});
   }
+  public async getProductsTypes() {
+    await this.getProducts({ isAvailable: true });
+  }
 }
