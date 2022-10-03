@@ -61,6 +61,10 @@ router.post(
   vacancies.routes.vacanciesPost
 );
 
-router.put('/vacancies/:id', vacancies.routes.vacancyCountPut);
+router.put(
+  '/vacancies/:id',
+  vacancies.validation.vacancyCountPut,
+  vacancies.routes.vacancyCountPut
+);
 
 export default router;
