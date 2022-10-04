@@ -34,6 +34,8 @@ router.get(
   products.routes.productGoogleImageUrlGet
 );
 
+router.get('/products/type', products.routes.productsTypeGet);
+
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
 router.get('/orders', auth.middlewares.adminAuth, orders.routes.ordersGet);
