@@ -34,6 +34,8 @@ router.get(
   products.routes.productGoogleImageUrlGet
 );
 
+router.get('/products/type', products.routes.productsTypeGet);
+
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
 router.get('/orders', auth.middlewares.adminAuth, orders.routes.ordersGet);
@@ -59,6 +61,12 @@ router.post(
   auth.middlewares.adminAuth,
   vacancies.validation.vacanciesPost,
   vacancies.routes.vacanciesPost
+);
+
+router.put(
+  '/vacancies/:id',
+  vacancies.validation.vacancyCountPut,
+  vacancies.routes.vacancyCountPut
 );
 
 export default router;

@@ -1,5 +1,10 @@
 import { ValidationError } from '../../models/errors';
-import { VacanciesGet, VacanciesPost, VacanciesPut } from './types';
+import {
+  VacanciesGet,
+  VacanciesPost,
+  VacanciesPut,
+  VacancyCountPut
+} from './types';
 import { isObject } from '../../utils';
 
 export const vacanciesGet: VacanciesGet = function (req, res, next) {
@@ -56,6 +61,15 @@ export const vacanciesPost: VacanciesPost = function (req, res, next) {
       throw new ValidationError('Incorrect shape vacancy');
     }
   });
+
+  next();
+};
+
+export const vacancyCountPut: VacancyCountPut = (req, res, next) => {
+  const vacancyId = req.params.id;
+  if (vacancyId.length < 4) {
+    throw new ValidationError('Invalid vacancy id');
+  }
 
   next();
 };
