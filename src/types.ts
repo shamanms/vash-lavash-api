@@ -27,13 +27,14 @@ export interface OrderModel {
 }
 
 export interface VacancyModel {
-  [key: string]: string | undefined | boolean;
+  [key: string]: string | undefined | boolean | number;
   id?: string;
   position: string;
   requirements: string;
   salary: string;
   description: string;
   isAvailable: boolean;
+  counter: number;
 }
 
 export interface UserModel {

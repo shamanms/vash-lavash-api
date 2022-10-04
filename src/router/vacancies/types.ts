@@ -1,6 +1,7 @@
 import {
   Middleware,
   TypedRequestBody,
+  TypedRequestParams,
   TypedRequestQuery,
   VacancyModel
 } from '../../types';
@@ -14,3 +15,5 @@ export type VacanciesPut = Middleware<
 >;
 
 export type VacanciesPost = Middleware<TypedRequestBody<VacancyModel>>;
+
+export type VacancyCountPut = Middleware<TypedRequestParams<{ id: string }>>;

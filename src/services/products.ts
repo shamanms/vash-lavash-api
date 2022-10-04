@@ -38,4 +38,11 @@ export class ProductsService {
       };
     }, {});
   }
+  public async getProductsTypes() {
+    const products = await this.getProducts({ isAvailable: true });
+    const typeProducts = new Set();
+    products.forEach((product) => typeProducts.add(product.type));
+
+    return Array.from(typeProducts);
+  }
 }

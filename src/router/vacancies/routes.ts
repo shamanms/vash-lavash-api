@@ -1,4 +1,9 @@
-import { VacanciesGet, VacanciesPost, VacanciesPut } from './types';
+import {
+  VacanciesGet,
+  VacanciesPost,
+  VacanciesPut,
+  VacancyCountPut
+} from './types';
 import services from '../../services';
 
 export const vacanciesGet: VacanciesGet = async (req, res, next) => {
@@ -29,6 +34,16 @@ export const vacanciesPost: VacanciesPost = async (req, res, next) => {
     await services.vacancies.addVacancies(req.body);
 
     res.json({ status: 'OK' });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const vacancyCountPut: VacancyCountPut = async (req, res, next) => {
+  try {
+    await services.vacancies.addCountVacancy(req.params?.id);
+
+    res.json({ status: 'New view' });
   } catch (e) {
     next(e);
   }

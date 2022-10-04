@@ -24,3 +24,5 @@ interface GetRequest<P, Q>
 export type ProductGoogleImageUrlGet = Middleware<
   GetRequest<{ id: string }, { fileExtension: fileExtensionType }>
 >;
+
+export type ProductsTypesGet = Middleware<TypedRequestBody<{}>>;
