@@ -16,6 +16,8 @@ describe('Service.addLoginTimestamp', () => {
   test('when user id is correct should add date.now in loginDates', async () => {
     const user = {
       id: 'fefw43',
+      firstName: 'Petr',
+      lastName: 'Petrov',
       username: 'pete',
       password: '123',
       role: 'user',
@@ -30,6 +32,8 @@ describe('Service.addLoginTimestamp', () => {
   test('when user id is invalid should return "UsersService.addLoginTimestamp:: invalid user id"', async () => {
     const user = {
       id: undefined,
+      firstName: 'Petr',
+      lastName: 'Petrov',
       username: 'pete',
       password: '123',
       role: 'user',
