@@ -3,7 +3,8 @@ import {
   ProductGoogleImageUrlGet,
   ProductsGet,
   ProductsPost,
-  ProductsPut
+  ProductsPut,
+  ProductsTypesGet
 } from './types';
 import { generateUploadSignedUrl } from '../../services/imageUploader';
 
@@ -52,6 +53,16 @@ export const productGoogleImageUrlGet: ProductGoogleImageUrlGet = async (
     const url = await generateUploadSignedUrl({ productId, fileExtension });
 
     res.json({ url });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const productsTypeGet: ProductsTypesGet = async (req, res, next) => {
+  try {
+    const products = await services.products.getProductsTypes();
+
+    res.json(products);
   } catch (e) {
     next(e);
   }
