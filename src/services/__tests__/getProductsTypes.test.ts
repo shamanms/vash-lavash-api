@@ -18,7 +18,7 @@ describe('Service.getProductsTypes', () => {
     jest.resetModules();
   });
 
-  test('when called should return products where isAvailable true', async () => {
+  test('when called should return products types where isAvailable true', async () => {
     const isAvailable = ['isAvailable', '==', true];
     const result = await services.products.getProductsTypes();
 
