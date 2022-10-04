@@ -38,5 +38,5 @@ gcloud functions deploy order-notification \
   --trigger-event "providers/cloud.firestore/eventTypes/document.create" \
   --trigger-resource "projects/vash-lavash/databases/(default)/documents/orders/{order}" \
   --region "europe-central2" \
-  --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID"
+  --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID,API_URL=$API_URL"
 ```
