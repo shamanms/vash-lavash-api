@@ -49,7 +49,7 @@ describe('route login', () => {
         id: user.id,
         role: user.role
       },
-      { expiresIn: 900000 }
+      { expiresIn: 900 }
     ];
     await login(req, response, next);
 

@@ -23,7 +23,7 @@ export const login: LoginRequest = async (req, res, next) => {
           },
           jwtSecret,
           {
-            expiresIn: 900000
+            expiresIn: 900 // sec
           }
         )
       });
