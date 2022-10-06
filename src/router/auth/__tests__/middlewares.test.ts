@@ -25,9 +25,9 @@ describe('middlewares adminAuth ', () => {
     await adminAuth(req, response, next);
 
     expect(response.status).toHaveBeenCalledWith(403);
-    expect(sendFn).toHaveBeenCalledWith(
-      'A token is required for authentication'
-    );
+    expect(sendFn).toHaveBeenCalledWith({
+      message: 'A token is required for authentication'
+    });
   });
   test('when token have`t "Bearer" should return status 403 and message "A token is required for authentication"', async () => {
     const req = {
@@ -39,9 +39,9 @@ describe('middlewares adminAuth ', () => {
     await adminAuth(req, response, next);
 
     expect(response.status).toHaveBeenCalledWith(403);
-    expect(sendFn).toHaveBeenCalledWith(
-      'A token is required for authentication'
-    );
+    expect(sendFn).toHaveBeenCalledWith({
+      message: 'A token is required for authentication'
+    });
   });
   test('when token is not found in db should return status 403 and message "Not Allowed"', async () => {
     const req = {
@@ -54,7 +54,7 @@ describe('middlewares adminAuth ', () => {
 
     expect(jwt.verify).toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(403);
-    expect(sendFn).toHaveBeenCalledWith('Not Allowed');
+    expect(sendFn).toHaveBeenCalledWith({ message: 'Not Allowed' });
   });
   test('when token is correct but user role not admin should return status 403 and message "Not Allowed"', async () => {
     const req = {
@@ -71,7 +71,7 @@ describe('middlewares adminAuth ', () => {
 
     expect(jwt.verify).toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(403);
-    expect(sendFn).toHaveBeenCalledWith('Not Allowed');
+    expect(sendFn).toHaveBeenCalledWith({ message: 'Not Allowed' });
   });
   test('when token is correct and user role is admin should go next', async () => {
     const req = {
@@ -105,6 +105,6 @@ describe('middlewares adminAuth ', () => {
     await adminAuth(req, response, next);
 
     expect(response.status).toHaveBeenCalledWith(401);
-    expect(sendFn).toHaveBeenCalledWith('Invalid Token');
+    expect(sendFn).toHaveBeenCalledWith({ message: 'Invalid Token' });
   });
 });
