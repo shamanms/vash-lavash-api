@@ -30,6 +30,7 @@ router.post(
 
 router.get(
   '/products/:id/image',
+  auth.middlewares.adminAuth,
   products.validation.productGoogleImageUrlGet,
   products.routes.productGoogleImageUrlGet
 );
