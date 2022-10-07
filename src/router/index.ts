@@ -39,7 +39,7 @@ router.get('/products/type', products.routes.productsTypeGet);
 
 router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 
-router.post('/orders/glovo', orders.routes.glovoOrdersPost);
+router.post('/glovo/orders/dispatched', orders.routes.glovoOrdersPost);
 
 router.get('/orders', auth.middlewares.adminAuth, orders.routes.ordersGet);
 

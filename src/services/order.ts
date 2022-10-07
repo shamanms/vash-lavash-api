@@ -79,7 +79,7 @@ export class OrderService {
       count: product.quantity
     }));
     const order: OrderModel = {
-      phone: glovoOrderRequest.customer.phone_number,
+      phone: glovoOrderRequest?.customer?.phone_number || '',
       orderStatus: OrderStatus.CONFIRMED,
       items: productGlovo,
       timestamp: Date.parse(glovoOrderRequest.order_time),

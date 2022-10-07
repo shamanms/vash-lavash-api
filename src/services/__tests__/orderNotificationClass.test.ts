@@ -6,7 +6,7 @@ const messenger = {
 };
 const groupId = 'chat';
 const mode = { parse_mode: 'HTML' };
-const order = {
+let order = {
   id: '123',
   phone: '777777777',
   totalPrice: 2000,
@@ -19,21 +19,28 @@ const order = {
       count: 2
     }
   ],
-  timestamp: Date.now()
+  timestamp: Date.now(),
+  glovoOrderId: '1234',
+  pickUpCode: '555'
 };
 const API_URL = 'http://test.url';
-const message = `
-        <b>НОВЕ ЗАМОВЛЕННЯ!</b>
+let message = `
+        <b>НОВЕ ЗАМОВЛЕННЯ! ${order.glovoOrderId ? 'GLOVO!' : ''}</b>
 Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
 Товари:
 ${order.items[0].name}: ${order.items[0].count}шт;
+${order.glovoOrderId ? `Код: ${order.pickUpCode}` : ''}
 
 
-<a href="${API_URL}/orders/${order.id}?status=${OrderStatus.CONFIRMED}">ПІДТВЕРДЖЕНО</a>
+<a href="${API_URL}/orders/${order.id}?status=${
+  OrderStatus.CONFIRMED
+}">ПІДТВЕРДЖЕНО</a>
 
 
-<a href="${API_URL}/orders/${order.id}?status=${OrderStatus.COMPLETED}">ВИДАНО</a>`;
+<a href="${API_URL}/orders/${order.id}?status=${
+  OrderStatus.COMPLETED
+}">ВИДАНО</a>`;
 
 describe('Class orderNotification', () => {
   beforeEach(() => {
@@ -43,7 +50,54 @@ describe('Class orderNotification', () => {
   afterAll(() => {
     jest.restoreAllMocks();
   });
-  test('orderNotification should send message', async () => {
+  test('orderNotification should send glovo message', async () => {
+    jest.spyOn(console, 'log').mockImplementation();
+    messenger.sendMessage.mockImplementation(() => Promise.resolve('Ok'));
+    // TODO FIX MESSENGER TYPE
+    // @ts-ignore for test purposes
+    await new OrderNotification(order, messenger, groupId).send();
+
+    expect(messenger.sendMessage).toHaveBeenCalledWith(groupId, message, mode);
+    expect(console.log).toHaveBeenCalledWith(
+      `Message Send for the order: ${order.id}`
+    );
+  });
+  test('orderNotification should send website message', async () => {
+    // @ts-ignore
+    order = {
+      id: '123',
+      phone: '777777777',
+      totalPrice: 2000,
+      status: OrderStatus.NOT_CONFIRMED,
+      items: [
+        {
+          id: '321',
+          name: 'bulka',
+          price: 1000,
+          count: 2
+        }
+      ],
+      timestamp: Date.now()
+    };
+
+    message = `
+        <b>НОВЕ ЗАМОВЛЕННЯ! ${order.glovoOrderId ? 'GLOVO!' : ''}</b>
+Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
+Сума: ${order.totalPrice}UAH
+Товари:
+${order.items[0].name}: ${order.items[0].count}шт;
+${order.glovoOrderId ? `Код: ${order.pickUpCode}` : ''}
+
+
+<a href="${API_URL}/orders/${order.id}?status=${
+      OrderStatus.CONFIRMED
+    }">ПІДТВЕРДЖЕНО</a>
+
+
+<a href="${API_URL}/orders/${order.id}?status=${
+      OrderStatus.COMPLETED
+    }">ВИДАНО</a>`;
+
     jest.spyOn(console, 'log').mockImplementation();
     messenger.sendMessage.mockImplementation(() => Promise.resolve('Ok'));
     // TODO FIX MESSENGER TYPE

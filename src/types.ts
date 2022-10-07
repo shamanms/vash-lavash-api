@@ -63,8 +63,8 @@ export interface OrderRequest {
 export interface GlovoOrderRequest {
   order_id: string;
   order_time: string;
-  customer: {
-    phone_number: string;
+  customer?: {
+    phone_number?: string;
   };
   products: GlovoProduct[];
   pick_up_code: string;
