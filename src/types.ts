@@ -13,7 +13,8 @@ export interface Product {
   isAvailable: boolean;
 }
 
-export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
+export interface OrderedProduct extends Pick<Product, 'name' | 'price'> {
+  id?: string;
   count: number;
 }
 
@@ -24,6 +25,8 @@ export interface OrderModel {
   orderStatus: OrderStatus;
   items: OrderedProduct[];
   timestamp: number;
+  glovoOrderId?: string;
+  pickUpCode?: string;
 }
 
 export interface VacancyModel {
@@ -55,6 +58,22 @@ export interface OrderRequest {
   items: OrderItems;
   phone: string;
   timestamp: number;
+}
+
+export interface GlovoOrderRequest {
+  order_id: string;
+  order_time: string;
+  customer: {
+    phone_number: string;
+  };
+  products: GlovoProduct[];
+  pick_up_code: string;
+}
+
+export interface GlovoProduct {
+  name: string;
+  price: number;
+  quantity: number;
 }
 
 export interface TypedRequestBody<T> extends Express.Request {

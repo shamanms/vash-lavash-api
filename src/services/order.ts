@@ -1,5 +1,11 @@
 import { Model } from '../models';
-import { Product, OrderModel, OrderRequest, OrderStatus } from '../types';
+import {
+  Product,
+  OrderModel,
+  OrderRequest,
+  OrderStatus,
+  GlovoOrderRequest
+} from '../types';
 
 export class OrderService {
   constructor(
@@ -64,5 +70,26 @@ export class OrderService {
     await this.orderModel.updateOne(orderId, { orderStatus });
 
     return orderId;
+  }
+
+  public async addGlovoOrder(glovoOrderRequest: GlovoOrderRequest) {
+    const productGlovo = glovoOrderRequest.products.map((product) => ({
+      name: product.name,
+      price: product.price,
+      count: product.quantity
+    }));
+    const order: OrderModel = {
+      phone: glovoOrderRequest.customer.phone_number,
+      orderStatus: OrderStatus.CONFIRMED,
+      items: productGlovo,
+      timestamp: Date.parse(glovoOrderRequest.order_time),
+      glovoOrderId: glovoOrderRequest.order_id,
+      pickUpCode: glovoOrderRequest.pick_up_code,
+      totalPrice: 0
+    };
+    this.countOrderPrice(order);
+    const { id } = await this.orderModel.insertOne(order);
+
+    return id;
   }
 }

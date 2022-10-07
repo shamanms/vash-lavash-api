@@ -1,4 +1,5 @@
 import {
+  GlovoOrderRequest,
   Middleware,
   OrderRequest,
   OrderStatus,
@@ -20,3 +21,5 @@ interface PutRequest<P, Q>
 export type OrdersPut = Middleware<
   PutRequest<{ id: string }, { status: OrderStatus }>
 >;
+
+export type GlovoOrdersPost = Middleware<TypedRequestBody<GlovoOrderRequest>>;

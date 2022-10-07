@@ -1,4 +1,4 @@
-import { OrdersPost, OrdersGet, OrdersPut } from './types';
+import { OrdersPost, OrdersGet, OrdersPut, GlovoOrdersPost } from './types';
 import services from '../../services';
 import { ValidationError } from '../../models/errors';
 
@@ -34,6 +34,16 @@ export const orderPut: OrdersPut = async (req, res, next) => {
     if (e instanceof Error && e?.message.includes('NOT_FOUND')) {
       return next(new ValidationError('Order Not Found'));
     }
+    next(e);
+  }
+};
+
+export const glovoOrdersPost: GlovoOrdersPost = async (req, res, next) => {
+  try {
+    const orderId = await services.order.addGlovoOrder(req.body);
+
+    res.json({ orderId });
+  } catch (e) {
     next(e);
   }
 };
