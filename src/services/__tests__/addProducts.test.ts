@@ -2,9 +2,28 @@ import db from '../../models';
 import { Product } from '../../types';
 import services from '../index';
 
+const productOne = {
+  id: '10',
+  name: 'bulka',
+  price: 10,
+  description: '',
+  img: '',
+  type: '',
+  isAvailable: false
+};
+const productTwo = {
+  id: '12',
+  name: 'sloika',
+  price: 15,
+  description: '',
+  img: '',
+  type: '',
+  isAvailable: false
+};
 jest.mock('../../models', () => ({
   products: {
-    insertMany: jest.fn()
+    insertMany: jest.fn(),
+    findMany: jest.fn(() => [productOne, productTwo])
   }
 }));
 
@@ -12,21 +31,21 @@ describe('Service.addProducts', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test('when called with products = [] call db with products', async () => {
-    const products: Product[] = [];
-    await services.products.addProducts(products);
+  test('when called with products should return product id', async () => {
+    const products: Omit<Product, 'id'>[] = [
+      {
+        name: 'bulka',
+        price: 10,
+        description: '',
+        img: '',
+        type: '',
+        isAvailable: false
+      }
+    ];
+    // @ts-ignore
+    const result = await services.products.addProducts(products);
     expect(db.products.insertMany).toHaveBeenCalledWith(products);
-  });
-
-  test('when called with products = string call db with string', async () => {
-    // @ts-ignore for test purposes
-    await services.products.addProducts(['string']);
-    expect(db.products.insertMany).toHaveBeenCalledWith(['string']);
-  });
-
-  test('when called with products = null call db with null', async () => {
-    // @ts-ignore for test purposes
-    await services.products.addProducts([null]);
-    expect(db.products.insertMany).toHaveBeenCalledWith([null]);
+    expect(db.products.findMany).toHaveBeenCalledWith(undefined);
+    expect(result).toEqual([productOne]);
   });
 });
