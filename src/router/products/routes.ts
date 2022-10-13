@@ -34,9 +34,9 @@ export const productsPut: ProductsPut = async (req, res, next) => {
 
 export const productsPost: ProductsPost = async (req, res, next) => {
   try {
-    await services.products.addProducts(req.body);
+    const products = await services.products.addProducts(req.body);
 
-    res.json({ status: 'OK' });
+    res.json(products);
   } catch (e) {
     next(e);
   }
