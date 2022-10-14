@@ -15,7 +15,15 @@ export class ProductsService {
   }
 
   public async addProducts(products: Product[]) {
-    return this.productModel.insertMany(products);
+    await this.productModel.insertMany(products);
+    const existingProducts = await this.getProducts({});
+    return products.map((product) =>
+      existingProducts.find((dbProduct) =>
+        Object.entries(product).every(
+          ([key, value]) => dbProduct[key] === value
+        )
+      )
+    );
   }
 
   public async updateProducts(products: { [key: string]: Partial<Product> }) {
@@ -38,6 +46,7 @@ export class ProductsService {
       };
     }, {});
   }
+
   public async getProductsTypes() {
     const products = await this.getProducts({ isAvailable: true });
     const typeProducts = new Set();
