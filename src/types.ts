@@ -24,6 +24,7 @@ export interface OrderModel {
   orderStatus: OrderStatus;
   items: OrderedProduct[];
   timestamp: number;
+  receivingTime: number;
 }
 
 export interface VacancyModel {
@@ -55,6 +56,7 @@ export interface OrderRequest {
   items: OrderItems;
   phone: string;
   timestamp: number;
+  receivingTime: number;
 }
 
 export interface TypedRequestBody<T> extends Express.Request {

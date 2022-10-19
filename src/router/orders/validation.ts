@@ -33,6 +33,32 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
       throw new ValidationError('Invalid phone number');
     }
 
+    if (typeof order.receivingTime !== 'number') {
+      throw new ValidationError('Invalid format date');
+    }
+
+    const timeOpen = new Date().setHours(10, 0, 0);
+    const timeClose = new Date().setHours(19, 0, 0);
+
+    if (order.receivingTime < timeOpen || order.receivingTime > timeClose) {
+      throw new ValidationError('Invalid time order');
+    }
+
+    const dateNow = new Date();
+    const timeOpenTomorrow = new Date(
+      dateNow.setDate(dateNow.getDate() + 1)
+    ).setHours(10, 0, 0);
+    const timeCloseTomorrow = new Date(
+      dateNow.setDate(dateNow.getDate() + 1)
+    ).setHours(19, 0, 0);
+
+    if (
+      order.receivingTime < timeOpenTomorrow ||
+      order.receivingTime > timeCloseTomorrow
+    ) {
+      throw new ValidationError('Invalid time order');
+    }
+
     const products = await db.products.findMany([
       FieldPath.documentId(),
       'in',

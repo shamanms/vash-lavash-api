@@ -37,6 +37,7 @@ describe('Class OrderService', () => {
       timestamp: dateNow
     };
 
+    // @ts-ignore
     const result = service.buildOrder(orderRequest);
 
     expect(result).toEqual(expectedResult);
@@ -68,6 +69,7 @@ describe('Class OrderService', () => {
     const service = new OrderService(db.orders, db.products);
 
     const expectedResult = id.id;
+    // @ts-ignore
     const result = await service.addOrder(orderRequest);
 
     expect(result).toEqual(expectedResult);
@@ -98,6 +100,7 @@ describe('Class OrderService', () => {
       .mockImplementation(() => undefined);
     const service = new OrderService(db.orders, db.products);
     try {
+      // @ts-ignore
       await service.addOrder(orderRequest);
     } catch (e: any) {
       expect(e?.message).toMatch(`Product with id: 123 not found`);

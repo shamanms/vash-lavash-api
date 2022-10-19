@@ -13,7 +13,8 @@ export class OrderService {
       totalPrice: 0,
       orderStatus: OrderStatus.NOT_CONFIRMED,
       items: [],
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      receivingTime: orderRequest.receivingTime
     };
   }
 
