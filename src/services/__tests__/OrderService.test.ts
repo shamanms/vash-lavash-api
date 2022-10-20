@@ -1,6 +1,5 @@
 import db from '../../models';
 import { OrderService } from '../order';
-import { OrderRequest } from '../../types';
 
 jest.mock('../../models', () => ({
   orders: {

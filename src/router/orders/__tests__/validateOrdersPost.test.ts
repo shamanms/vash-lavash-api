@@ -263,7 +263,8 @@ describe('ordersPost', () => {
           [products[0].id]: 2,
           [products[1].id]: 1
         },
-        phone: 34545
+        phone: 34545,
+        receivingTime: new Date().setHours(12, 10, 15)
       }
     };
     try {
@@ -282,7 +283,8 @@ describe('ordersPost', () => {
           [products[0].id]: 2,
           [products[1].id]: 1
         },
-        phone: '5345345346'
+        phone: '5345345346',
+        receivingTime: new Date().setHours(12, 10, 15)
       }
     };
     try {
@@ -301,7 +303,8 @@ describe('ordersPost', () => {
           [products[0].id]: 2,
           someId: 1
         },
-        phone: '(000) 000-00-00'
+        phone: '(000) 000-00-00',
+        receivingTime: new Date().setHours(12, 40, 15)
       }
     };
     try {
@@ -340,7 +343,8 @@ describe('ordersPost', () => {
           [products[0].id]: 2,
           someId: 1
         },
-        phone: '(000) 000-00-00'
+        phone: '(000) 000-00-00',
+        receivingTime: new Date().setHours(12, 20, 15)
       }
     };
     try {

@@ -39,11 +39,6 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
 
     const timeOpen = new Date().setHours(10, 0, 0);
     const timeClose = new Date().setHours(19, 0, 0);
-
-    if (order.receivingTime < timeOpen || order.receivingTime > timeClose) {
-      throw new ValidationError('Invalid time order');
-    }
-
     const dateNow = new Date();
     const timeOpenTomorrow = new Date(
       dateNow.setDate(dateNow.getDate() + 1)
@@ -53,8 +48,9 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
     ).setHours(19, 0, 0);
 
     if (
-      order.receivingTime < timeOpenTomorrow ||
-      order.receivingTime > timeCloseTomorrow
+      (order.receivingTime < timeOpen || order.receivingTime > timeClose) &&
+      (order.receivingTime < timeOpenTomorrow ||
+        order.receivingTime > timeCloseTomorrow)
     ) {
       throw new ValidationError('Invalid time order');
     }
