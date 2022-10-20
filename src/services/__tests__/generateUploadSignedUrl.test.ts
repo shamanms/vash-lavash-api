@@ -1,4 +1,4 @@
-import { generateUploadSignedUrl } from '../imageUploader';
+import { generateUploadSignedUrl } from '../imageUploaderProducts';
 import { Storage } from '@google-cloud/storage';
 
 jest.mock('@google-cloud/storage');

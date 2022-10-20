@@ -26,6 +26,16 @@ export interface OrderModel {
   timestamp: number;
 }
 
+export interface OrderItems {
+  [key: number]: number;
+}
+
+export interface OrderRequest {
+  items: OrderItems;
+  phone: string;
+  timestamp: number;
+}
+
 export interface VacancyModel {
   [key: string]: string | undefined | boolean | number;
   id?: string;
@@ -47,14 +57,12 @@ export interface UserModel {
   loginDates: number[];
 }
 
-export interface OrderItems {
-  [key: number]: number;
-}
-
-export interface OrderRequest {
-  items: OrderItems;
-  phone: string;
-  timestamp: number;
+export interface SalesModel {
+  id: string;
+  name: string;
+  img: string;
+  isAvailable: boolean;
+  description: string;
 }
 
 export interface TypedRequestBody<T> extends Express.Request {
@@ -90,4 +98,4 @@ export enum OrderStatus {
   COMPLETED = 'completed'
 }
 
-export type fileExtensionType = 'jpeg' | 'jpg';
+export type FileExtensionType = 'jpeg' | 'jpg';
