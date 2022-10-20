@@ -29,6 +29,11 @@ jest.mock('../../../models', () => ({
   }
 }));
 
+const dateTests = {
+  'Invalid order date': [],
+  'Invalid order time': [],
+};
+
 describe('ordersPost', () => {
   beforeEach(() => {
     jest.resetModules();
@@ -46,9 +51,11 @@ describe('ordersPost', () => {
     };
     // @ts-ignore for test purposes
     await ordersPost(req, res, next);
+
     expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toHaveLength(0);
   });
-  test('when order receivingTime not number should return "Invalid format date"', async () => {
+  test('when order receivingTime not number should throw "Invalid format date"', async () => {
     const req = {
       body: {
         items: {
@@ -59,14 +66,13 @@ describe('ordersPost', () => {
         receivingTime: '10'
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid format date');
-      expect(next).not.toHaveBeenCalled();
-    }
+    const error = new ValidationError('Invalid format date');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when order receivingTime after timeClose should return "Invalid time order"', async () => {
     const req = {
@@ -79,14 +85,14 @@ describe('ordersPost', () => {
         receivingTime: new Date().setHours(22, 10, 15)
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid time order');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order time');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when order receivingTime before timeOpen should return "Invalid time order"', async () => {
     const req = {
@@ -99,14 +105,14 @@ describe('ordersPost', () => {
         receivingTime: new Date().setHours(8, 45, 25)
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid time order');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order time');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when order receivingTime before timeOpen next day should return "Invalid time order"', async () => {
     const req = {
@@ -121,14 +127,14 @@ describe('ordersPost', () => {
         ).setHours(8, 20, 21)
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid time order');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order date');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when order receivingTime after timeClose next day should return "Invalid time order"', async () => {
     const req = {
@@ -143,40 +149,40 @@ describe('ordersPost', () => {
         ).setHours(21, 45, 22)
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid time order');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order date');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when body is array should return "Invalid body"', async () => {
     const req = {
       body: []
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid body');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid body');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when body is empty object should return "Order is empty"', async () => {
     const req = {
       body: {}
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Order is empty');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Order is empty');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when items is not a object should return "Invalid order"', async () => {
     const req = {
@@ -184,14 +190,14 @@ describe('ordersPost', () => {
         items: 123
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid order');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when items is null should return "Invalid order"', async () => {
     const req = {
@@ -199,14 +205,14 @@ describe('ordersPost', () => {
         items: null
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid order');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when items is a empty array should return "Invalid order"', async () => {
     const req = {
@@ -214,14 +220,14 @@ describe('ordersPost', () => {
         items: []
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid order');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when items value is not a number should return "Invalid order item"', async () => {
     const req = {
@@ -232,14 +238,14 @@ describe('ordersPost', () => {
         }
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid order item');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order item');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when items is a empty object should return "Invalid order item"', async () => {
     const req = {
@@ -247,14 +253,14 @@ describe('ordersPost', () => {
         items: {}
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid order item');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid order item');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when phone is not a string should return "Invalid phone number', async () => {
     const req = {
@@ -267,14 +273,14 @@ describe('ordersPost', () => {
         receivingTime: new Date().setHours(12, 10, 15)
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid phone number');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid phone number');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when phone is not correct should return "Invalid phone number', async () => {
     const req = {
@@ -287,14 +293,14 @@ describe('ordersPost', () => {
         receivingTime: new Date().setHours(12, 10, 15)
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid phone number');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Invalid phone number');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when productId is not exists in db should return "Products not found"', async () => {
     const req = {
@@ -307,14 +313,14 @@ describe('ordersPost', () => {
         receivingTime: new Date().setHours(12, 40, 15)
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Products not found');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Products not found');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when product is not available in db should return "Products not found"', async () => {
     products = [
@@ -347,13 +353,13 @@ describe('ordersPost', () => {
         receivingTime: new Date().setHours(12, 20, 15)
       }
     };
-    try {
-      // @ts-ignore for test purposes
-      await ordersPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Products not found');
-      expect(next).not.toHaveBeenCalled();
-    }
+
+    const error = new ValidationError('Products not found');
+
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toEqual([error]);
   });
 });

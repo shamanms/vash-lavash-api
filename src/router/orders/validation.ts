@@ -37,22 +37,25 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
       throw new ValidationError('Invalid format date');
     }
 
-    const timeOpen = new Date().setHours(10, 0, 0);
-    const timeClose = new Date().setHours(19, 0, 0);
-    const dateNow = new Date();
-    const timeOpenTomorrow = new Date(
-      dateNow.setDate(dateNow.getDate() + 1)
-    ).setHours(10, 0, 0);
-    const timeCloseTomorrow = new Date(
-      dateNow.setDate(dateNow.getDate() + 1)
-    ).setHours(19, 0, 0);
+    const receivingDate = new Date(order.receivingTime);
+    const nowDate = new Date();
 
     if (
-      (order.receivingTime < timeOpen || order.receivingTime > timeClose) &&
-      (order.receivingTime < timeOpenTomorrow ||
-        order.receivingTime > timeCloseTomorrow)
+      receivingDate.getDay() < nowDate.getDay() ||
+      receivingDate.getDay() > nowDate.getDay() + 1
     ) {
-      throw new ValidationError('Invalid time order');
+      throw new ValidationError('Invalid order date');
+    }
+
+    // TODO: check with UTC
+    const timeOpen = 10;
+    const timeClose = 19;
+
+    if (
+      receivingDate.getHours() < timeOpen ||
+      receivingDate.getHours() > timeClose
+    ) {
+      throw new ValidationError('Invalid order time');
     }
 
     const products = await db.products.findMany([
