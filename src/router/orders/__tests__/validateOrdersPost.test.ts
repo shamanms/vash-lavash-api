@@ -40,12 +40,117 @@ describe('ordersPost', () => {
           [products[0].id]: 2,
           [products[1].id]: 1
         },
-        phone: '(000) 465-45-23'
+        phone: '(000) 465-45-23',
+        receivingTime: new Date().setHours(12, 10, 15)
       }
     };
     // @ts-ignore for test purposes
     await ordersPost(req, res, next);
     expect(next).toHaveBeenCalled();
+  });
+  test('when order receivingTime not number should return "Invalid format date"', async () => {
+    const req = {
+      body: {
+        items: {
+          [products[0].id]: 2,
+          [products[1].id]: 1
+        },
+        phone: '(000) 465-45-23',
+        receivingTime: '10'
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      await ordersPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid format date');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
+  test('when order receivingTime after timeClose should return "Invalid time order"', async () => {
+    const req = {
+      body: {
+        items: {
+          [products[0].id]: 2,
+          [products[1].id]: 1
+        },
+        phone: '(000) 465-45-23',
+        receivingTime: new Date().setHours(22, 10, 15)
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      await ordersPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid time order');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
+  test('when order receivingTime before timeOpen should return "Invalid time order"', async () => {
+    const req = {
+      body: {
+        items: {
+          [products[0].id]: 2,
+          [products[1].id]: 1
+        },
+        phone: '(000) 465-45-23',
+        receivingTime: new Date().setHours(8, 45, 25)
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      await ordersPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid time order');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
+  test('when order receivingTime before timeOpen next day should return "Invalid time order"', async () => {
+    const req = {
+      body: {
+        items: {
+          [products[0].id]: 2,
+          [products[1].id]: 1
+        },
+        phone: '(000) 465-45-23',
+        receivingTime: new Date(
+          new Date().setDate(new Date().getDate() + 1)
+        ).setHours(8, 20, 21)
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      await ordersPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid time order');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
+  test('when order receivingTime after timeClose next day should return "Invalid time order"', async () => {
+    const req = {
+      body: {
+        items: {
+          [products[0].id]: 2,
+          [products[1].id]: 1
+        },
+        phone: '(000) 465-45-23',
+        receivingTime: new Date(
+          new Date().setDate(new Date().getDate() + 1)
+        ).setHours(21, 45, 22)
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      await ordersPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid time order');
+      expect(next).not.toHaveBeenCalled();
+    }
   });
   test('when body is array should return "Invalid body"', async () => {
     const req = {
@@ -57,6 +162,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid body');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when body is empty object should return "Order is empty"', async () => {
@@ -69,6 +175,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Order is empty');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when items is not a object should return "Invalid order"', async () => {
@@ -83,6 +190,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when items is null should return "Invalid order"', async () => {
@@ -97,6 +205,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when items is a empty array should return "Invalid order"', async () => {
@@ -111,6 +220,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when items value is not a number should return "Invalid order item"', async () => {
@@ -128,6 +238,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order item');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when items is a empty object should return "Invalid order item"', async () => {
@@ -142,6 +253,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid order item');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when phone is not a string should return "Invalid phone number', async () => {
@@ -160,6 +272,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid phone number');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when phone is not correct should return "Invalid phone number', async () => {
@@ -178,6 +291,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid phone number');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when productId is not exists in db should return "Products not found"', async () => {
@@ -185,7 +299,7 @@ describe('ordersPost', () => {
       body: {
         items: {
           [products[0].id]: 2,
-          sdsd: 1
+          someId: 1
         },
         phone: '(000) 000-00-00'
       }
@@ -196,6 +310,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Products not found');
+      expect(next).not.toHaveBeenCalled();
     }
   });
   test('when product is not available in db should return "Products not found"', async () => {
@@ -223,7 +338,7 @@ describe('ordersPost', () => {
       body: {
         items: {
           [products[0].id]: 2,
-          sdsd: 1
+          someId: 1
         },
         phone: '(000) 000-00-00'
       }
@@ -234,6 +349,7 @@ describe('ordersPost', () => {
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Products not found');
+      expect(next).not.toHaveBeenCalled();
     }
   });
 });
