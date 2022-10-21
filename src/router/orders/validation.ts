@@ -47,9 +47,8 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
       throw new ValidationError('Invalid order date');
     }
 
-    // TODO: check with UTC
-    const timeOpen = 10;
-    const timeClose = 19;
+    const timeOpen = 7;
+    const timeClose = 16;
 
     if (
       receivingDate.getHours() < timeOpen ||
