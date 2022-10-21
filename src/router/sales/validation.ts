@@ -1,6 +1,6 @@
 import { ValidationError } from '../../models/errors';
 import { SalesGet, SalesGoogleImageUrlGet, SalesPost, SalesPut } from './types';
-import { isArrayOfObjects, isObject } from '../../utils';
+import { isObject } from '../../utils';
 
 export const salesGet: SalesGet = function (req, res, next) {
   const { isAvailable } = req.query;
@@ -34,7 +34,12 @@ export const salesPut: SalesPut = function (req, res, next) {
 
 export const salesPost: SalesPost = function (req, res, next) {
   const sales = req.body;
-  if (!isArrayOfObjects(sales)) throw new ValidationError('Incorrect sales');
+
+  if (!isObject(sales)) throw new ValidationError('Incorrect sales');
+
+  if (Object.keys(sales).length < 1) {
+    throw new ValidationError('Incorrect sales');
+  }
 
   const requiredKeys: { [key: string]: string } = {
     name: 'string',
@@ -45,7 +50,7 @@ export const salesPost: SalesPost = function (req, res, next) {
 
   Object.keys(requiredKeys).forEach((key) => {
     if (!(typeof sales[key] === requiredKeys[key])) {
-      throw new ValidationError('Incorrect shape vacancy');
+      throw new ValidationError('Incorrect shape sales');
     }
   });
 
