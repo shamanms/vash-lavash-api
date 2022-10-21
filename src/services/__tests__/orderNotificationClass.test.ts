@@ -1,5 +1,6 @@
 import { OrderNotification } from '../orderNotificationClass';
 import { OrderStatus } from '../../types';
+import { dateTimeFormatter } from '../../utils/dateTimeFormatter';
 
 const messenger = {
   sendMessage: jest.fn()
@@ -19,7 +20,8 @@ const order = {
       count: 2
     }
   ],
-  timestamp: Date.now()
+  timestamp: Date.now(),
+  receivingTime: new Date().setHours(12, 10, 15)
 };
 const API_URL = 'http://test.url';
 const message = `
@@ -28,12 +30,18 @@ Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
 Товари:
 ${order.items[0].name}: ${order.items[0].count}шт;
+Заказ оформлено на час:
+${dateTimeFormatter(order.receivingTime)}
 
 
-<a href="${API_URL}/orders/${order.id}?status=${OrderStatus.CONFIRMED}">ПІДТВЕРДЖЕНО</a>
+<a href="${API_URL}/orders/${order.id}?status=${
+  OrderStatus.CONFIRMED
+}">ПІДТВЕРДЖЕНО</a>
 
 
-<a href="${API_URL}/orders/${order.id}?status=${OrderStatus.COMPLETED}">ВИДАНО</a>`;
+<a href="${API_URL}/orders/${order.id}?status=${
+  OrderStatus.COMPLETED
+}">ВИДАНО</a>`;
 
 describe('Class orderNotification', () => {
   beforeEach(() => {
