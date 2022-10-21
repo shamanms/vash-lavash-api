@@ -140,7 +140,7 @@ describe('ordersPost', () => {
           [products[1].id]: 1
         },
         phone: '(000) 465-45-23',
-        receivingTime: new Date().setHours(19, 0, 1)
+        receivingTime: new Date().setHours(16, 0, 1)
       }
     };
 
@@ -160,7 +160,7 @@ describe('ordersPost', () => {
           [products[1].id]: 1
         },
         phone: '(000) 465-45-23',
-        receivingTime: new Date().setHours(9, 59, 59)
+        receivingTime: new Date().setHours(6, 59, 59)
       }
     };
 
@@ -182,7 +182,7 @@ describe('ordersPost', () => {
         phone: '(000) 465-45-23',
         receivingTime: new Date(
           new Date().setDate(new Date().getDate() + 1)
-        ).setHours(9, 59, 59)
+        ).setHours(6, 59, 59)
       }
     };
 
@@ -204,7 +204,7 @@ describe('ordersPost', () => {
         phone: '(000) 465-45-23',
         receivingTime: new Date(
           new Date().setDate(new Date().getDate() + 1)
-        ).setHours(19, 0, 1)
+        ).setHours(16, 0, 1)
       }
     };
 
