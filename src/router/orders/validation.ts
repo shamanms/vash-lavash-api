@@ -34,7 +34,7 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
     }
 
     if (typeof order.receivingTime !== 'number') {
-      throw new ValidationError('Invalid format date');
+      throw new ValidationError('Invalid date format');
     }
 
     const receivingDate = new Date(order.receivingTime);

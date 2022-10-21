@@ -10,4 +10,5 @@ describe('utils dateTimeFormatter', () => {
       )
     ).toEqual(`${date} ${time}`);
   });
+  expect(dateTimeFormatter(1645674053980)).toEqual('24/02/2022 05:40');
 });

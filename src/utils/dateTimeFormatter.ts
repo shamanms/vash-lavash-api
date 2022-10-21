@@ -12,7 +12,8 @@ const timeFormat: Intl.DateTimeFormatOptions = {
 export const dateTimeFormatter = (date: number) =>
   new Intl.DateTimeFormat('en-GB', {
     ...dateFormat,
-    ...timeFormat
+    ...timeFormat,
+    timeZone: 'Europe/Kiev'
   })
     .format(date)
     .replace(/,/, '');
