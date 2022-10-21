@@ -2,10 +2,10 @@ import { Storage, GetSignedUrlConfig } from '@google-cloud/storage';
 import { FileExtensionType } from '../types';
 
 export async function generateUploadSignedUrl({
-  productId,
+  itemId,
   fileExtension
 }: {
-  productId: string;
+  itemId: string;
   fileExtension: FileExtensionType;
 }) {
   const { PROJECT_ID, GCP_SERVICE_ACCOUNT_FILE, BUCKET_NAME } = process.env;
@@ -26,7 +26,7 @@ export async function generateUploadSignedUrl({
   };
   const [url] = await storage
     .bucket(BUCKET_NAME)
-    .file(`${productId}-${Date.now()}.${fileExtension}`)
+    .file(`${itemId}-${Date.now()}.${fileExtension}`)
     .getSignedUrl(options);
 
   return url;

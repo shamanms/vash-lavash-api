@@ -3,6 +3,7 @@ import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
 import auth from './auth';
+import sales from './sales';
 
 const router = Router();
 
@@ -68,6 +69,18 @@ router.put(
   '/vacancies/:id',
   vacancies.validation.vacancyCountPut,
   vacancies.routes.vacancyCountPut
+);
+
+router.get('/sales', sales.validation.salesGet, sales.routes.salesGet);
+
+router.post('/sales', sales.validation.salesPost, sales.routes.salesPost);
+
+router.put('/sales', sales.validation.salesPut, sales.routes.salesPut);
+
+router.get(
+  '/sales/:id/image',
+  sales.validation.salesGoogleImageUrlGet,
+  sales.routes.salesGoogleImageUrlGet
 );
 
 export default router;

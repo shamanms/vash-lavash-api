@@ -58,6 +58,7 @@ export interface UserModel {
 }
 
 export interface SalesModel {
+  [key: string]: string | boolean;
   id: string;
   name: string;
   img: string;

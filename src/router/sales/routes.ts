@@ -1,6 +1,6 @@
 import services from '../../services';
 import { SalesGet, SalesGoogleImageUrlGet, SalesPost, SalesPut } from './types';
-import { generateUploadSignedUrl } from '../../services/imageUploaderSales';
+import { generateUploadSignedUrl } from '../../services/imageUploader';
 
 export const salesGet: SalesGet = async (req, res, next) => {
   try {
@@ -44,7 +44,10 @@ export const salesGoogleImageUrlGet: SalesGoogleImageUrlGet = async (
   try {
     const salesId = req.params?.id;
     const fileExtension = req.query?.fileExtension;
-    const url = await generateUploadSignedUrl({ salesId, fileExtension });
+    const url = await generateUploadSignedUrl({
+      itemId: salesId,
+      fileExtension
+    });
 
     res.json({ url });
   } catch (e) {
