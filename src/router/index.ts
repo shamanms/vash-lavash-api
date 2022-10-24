@@ -73,12 +73,23 @@ router.put(
 
 router.get('/sales', sales.validation.salesGet, sales.routes.salesGet);
 
-router.post('/sales', sales.validation.salesPost, sales.routes.salesPost);
+router.post(
+  '/sales',
+  auth.middlewares.adminAuth,
+  sales.validation.salesPost,
+  sales.routes.salesPost
+);
 
-router.put('/sales', sales.validation.salesPut, sales.routes.salesPut);
+router.put(
+  '/sales',
+  auth.middlewares.adminAuth,
+  sales.validation.salesPut,
+  sales.routes.salesPut
+);
 
 router.get(
   '/sales/:id/image',
+  auth.middlewares.adminAuth,
   sales.validation.salesGoogleImageUrlGet,
   sales.routes.salesGoogleImageUrlGet
 );

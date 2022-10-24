@@ -57,7 +57,7 @@ export interface UserModel {
   loginDates: number[];
 }
 
-export interface SalesModel {
+export interface SaleModel {
   [key: string]: string | boolean;
   id: string;
   name: string;

@@ -42,10 +42,10 @@ export const salesGoogleImageUrlGet: SalesGoogleImageUrlGet = async (
   next
 ) => {
   try {
-    const salesId = req.params?.id;
+    const saleId = req.params?.id;
     const fileExtension = req.query?.fileExtension;
     const url = await generateUploadSignedUrl({
-      itemId: salesId,
+      itemId: saleId,
       fileExtension
     });
 

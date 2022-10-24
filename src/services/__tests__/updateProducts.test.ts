@@ -26,7 +26,7 @@ const products = {
 };
 jest.spyOn(console, 'log').mockImplementation();
 
-describe('updateProducts function', () => {
+describe('Service.updateProducts', () => {
   beforeEach(() => {
     jest.resetModules();
   });

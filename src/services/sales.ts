@@ -1,8 +1,8 @@
 import { Model } from '../models';
-import { dbQuery, SalesModel } from '../types';
+import { dbQuery, SaleModel } from '../types';
 
 export class SalesService {
-  constructor(private readonly salesModel: Model<SalesModel>) {}
+  constructor(private readonly salesModel: Model<SaleModel>) {}
 
   public async getSales({ isAvailable }: { isAvailable?: boolean }) {
     let query;
@@ -14,11 +14,11 @@ export class SalesService {
     return this.salesModel.findMany(query);
   }
 
-  public async addSales(sales: SalesModel) {
+  public async addSales(sales: SaleModel) {
     return this.salesModel.insertOne(sales);
   }
 
-  public async updateSales(sales: { [key: string]: Partial<SalesModel> }) {
+  public async updateSales(sales: { [key: string]: Partial<SaleModel> }) {
     let updatedSales = Object.entries(sales).map(([id, sales]) =>
       this.salesModel.updateOne(id, sales)
     );

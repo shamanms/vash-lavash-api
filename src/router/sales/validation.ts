@@ -20,7 +20,7 @@ export const salesPut: SalesPut = function (req, res, next) {
   }
 
   if (Object.keys(sales).length < 1) {
-    throw new ValidationError('Products not passed');
+    throw new ValidationError('Sale not passed');
   }
 
   Object.values(sales).forEach((product) => {
@@ -35,10 +35,10 @@ export const salesPut: SalesPut = function (req, res, next) {
 export const salesPost: SalesPost = function (req, res, next) {
   const sales = req.body;
 
-  if (!isObject(sales)) throw new ValidationError('Incorrect sales');
+  if (!isObject(sales)) throw new ValidationError('Incorrect sale');
 
   if (Object.keys(sales).length < 1) {
-    throw new ValidationError('Incorrect sales');
+    throw new ValidationError('Incorrect sale');
   }
 
   const requiredKeys: { [key: string]: string } = {
@@ -64,7 +64,7 @@ export const salesGoogleImageUrlGet: SalesGoogleImageUrlGet = (
 ) => {
   const salesId = req.params.id;
   if (salesId.length < 4) {
-    throw new ValidationError('Invalid product id');
+    throw new ValidationError('Invalid sale id');
   }
 
   if (!['jpeg', 'jpg'].includes(req.query.fileExtension)) {
