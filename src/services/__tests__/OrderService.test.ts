@@ -26,7 +26,8 @@ describe('Class OrderService', () => {
   test('OrderService buildOrder() should return default', () => {
     const orderRequest = {
       items: { 123: 321 },
-      phone: 'abc'
+      phone: 'abc',
+      receivingTime: 123
     };
     const service = new OrderService(db.orders, db.products);
     const expectedResult = {
@@ -34,7 +35,8 @@ describe('Class OrderService', () => {
       totalPrice: 0,
       orderStatus: 'not_confirmed',
       items: [],
-      timestamp: dateNow
+      timestamp: dateNow,
+      receivingTime: 123
     };
 
     const result = service.buildOrder(orderRequest);
@@ -48,7 +50,8 @@ describe('Class OrderService', () => {
         123: 1,
         456: 3
       },
-      phone: 'abc'
+      phone: 'abc',
+      receivingTime: 123
     };
     const insertedDocument1 = {
       name: 'abc',
@@ -68,6 +71,7 @@ describe('Class OrderService', () => {
     const service = new OrderService(db.orders, db.products);
 
     const expectedResult = id.id;
+
     const result = await service.addOrder(orderRequest);
 
     expect(result).toEqual(expectedResult);
@@ -82,7 +86,8 @@ describe('Class OrderService', () => {
         { name: 'abc', price: 10, count: 1, id: '123' },
         { name: 'zxc', price: 20, count: 3, id: '456' }
       ],
-      timestamp: dateNow
+      timestamp: dateNow,
+      receivingTime: 123
     });
   });
   test('OrderService addOrder() should return error', async () => {
@@ -91,7 +96,8 @@ describe('Class OrderService', () => {
         123: 1,
         456: 3
       },
-      phone: 'abc'
+      phone: 'abc',
+      receivingTime: 123
     };
     db.products.findOneById
       // @ts-ignore for test purposes

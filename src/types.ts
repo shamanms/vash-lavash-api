@@ -24,6 +24,7 @@ export interface OrderModel {
   orderStatus: OrderStatus;
   items: OrderedProduct[];
   timestamp: number;
+  receivingTime: number;
 }
 
 export interface OrderItems {
@@ -34,6 +35,7 @@ export interface OrderRequest {
   items: OrderItems;
   phone: string;
   timestamp: number;
+  receivingTime: number;
 }
 
 export interface VacancyModel {
@@ -99,4 +101,4 @@ export enum OrderStatus {
   COMPLETED = 'completed'
 }
 
-export type FileExtensionType = 'jpeg' | 'jpg';
+export type fileExtensionType = 'jpeg' | 'jpg';
