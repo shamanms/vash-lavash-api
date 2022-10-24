@@ -101,4 +101,4 @@ export enum OrderStatus {
   COMPLETED = 'completed'
 }
 
-export type fileExtensionType = 'jpeg' | 'jpg';
+export type FileExtensionType = 'jpeg' | 'jpg';
