@@ -35,7 +35,7 @@ export const salesPut: SalesPut = function (req, res, next) {
 export const salesPost: SalesPost = function (req, res, next) {
   const sales = req.body;
 
-  if (!isObject(sales)) throw new ValidationError('Incorrect sale');
+  if (!isObject(sales)) throw new ValidationError('Invalid request');
 
   if (Object.keys(sales).length < 1) {
     throw new ValidationError('Incorrect sale');
@@ -50,7 +50,7 @@ export const salesPost: SalesPost = function (req, res, next) {
 
   Object.keys(requiredKeys).forEach((key) => {
     if (!(typeof sales[key] === requiredKeys[key])) {
-      throw new ValidationError('Incorrect shape sales');
+      throw new ValidationError('Incorrect shape sale');
     }
   });
 
