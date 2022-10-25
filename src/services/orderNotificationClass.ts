@@ -15,12 +15,27 @@ export class OrderNotification {
     const confirmedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.CONFIRMED}`;
     const completedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.COMPLETED}`;
 
+    let additiveName: string;
+    let additiveCount: number;
+    items.map((item) => {
+      for (const additives of item.additives) {
+        additiveName = additives.name;
+        additiveCount = additives.count;
+      }
+    });
+
     return `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
 Сума: ${totalPrice}UAH
 Товари:
-${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}
+${items
+  .map(
+    (item) =>
+      `${item.name}: ${item.count}шт; 
+Добавки: ${additiveName}: ${additiveCount}шт;`
+  )
+  .join('\n')}
 Заказ оформлено на час:
 ${dateTimeFormatter(receivingTime)}
 
