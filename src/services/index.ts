@@ -6,7 +6,7 @@ import { UsersService } from './users';
 import { AdditivesService } from './additives';
 
 export default {
-  order: new OrderService(db.orders, db.products),
+  order: new OrderService(db.orders, db.products, db.additives),
   products: new ProductsService(db.products),
   vacancies: new VacancyService(db.vacancies),
   users: new UsersService(db.users),

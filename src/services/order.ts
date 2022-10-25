@@ -34,7 +34,7 @@ export class OrderService {
 
       const additives = [];
 
-      for (const additiveId in orderItem) {
+      for (const additiveId in orderItem.additives) {
         const additive = await this.additiveModel.findOneById(additiveId);
         if (additive) {
           additives.push({
