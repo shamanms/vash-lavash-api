@@ -14,8 +14,12 @@ export class VacancyService {
     return this.vacancyModel.findMany(query);
   }
 
-  public async addVacancies(vacancies: VacancyModel) {
-    return this.vacancyModel.insertOne(vacancies);
+  public async addVacancy(vacancy: VacancyModel) {
+    await this.vacancyModel.insertOne(vacancy);
+    const existingVacancy = await this.getVacancies({});
+    return existingVacancy.find((dbVacancy) =>
+      Object.entries(vacancy).every(([key, value]) => dbVacancy[key] === value)
+    );
   }
 
   public async updateVacancies(vacancies: {
