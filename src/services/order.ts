@@ -1,10 +1,17 @@
 import { Model } from '../models';
-import { Product, OrderModel, OrderRequest, OrderStatus } from '../types';
+import {
+  Product,
+  OrderModel,
+  OrderRequest,
+  OrderStatus,
+  AdditivesModel
+} from '../types';
 
 export class OrderService {
   constructor(
     private readonly orderModel: Model<OrderModel>,
-    private readonly productModel: Model<Product>
+    private readonly productModel: Model<Product>,
+    private readonly additiveModel: Model<AdditivesModel>
   ) {}
 
   public buildOrder(orderRequest: Omit<OrderRequest, 'timestamp'>) {
@@ -22,25 +29,48 @@ export class OrderService {
     order: OrderModel,
     orderRequest: Omit<OrderRequest, 'timestamp'>
   ) {
-    for (const productId in orderRequest.items) {
-      const product = await this.productModel.findOneById(productId);
+    for (const orderItem of orderRequest.items) {
+      const product = await this.productModel.findOneById(orderItem.productId);
+
+      const additives = [];
+
+      for (const additiveId in orderItem) {
+        const additive = await this.additiveModel.findOneById(additiveId);
+        if (additive) {
+          additives.push({
+            id: additiveId,
+            name: additive.name,
+            price: additive.price,
+            count: orderItem.additives[additiveId]
+          });
+        }
+      }
 
       if (product) {
         order.items.push({
-          id: productId,
+          id: orderItem.productId,
           name: product.name,
           price: product.price,
-          count: orderRequest.items[productId]
+          count: orderItem.count,
+          additives: additives
         });
       } else {
-        throw new Error(`Product with id: ${productId} not found`);
+        throw new Error(`Product with id: ${orderItem.productId} not found`);
       }
     }
   }
 
   private countOrderPrice(order: OrderModel) {
     order.totalPrice = order.items.reduce(
-      (sum, { price, count }) => sum + price * count,
+      (sum, { price, count, additives }) => {
+        const additivesTotalPrice = additives.reduce(
+          (sum, { count, price }) => {
+            return sum + price * count;
+          },
+          0
+        );
+        return sum + price * count + additivesTotalPrice;
+      },
       order.totalPrice
     );
   }

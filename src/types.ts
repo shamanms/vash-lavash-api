@@ -3,7 +3,7 @@ import { Express, NextFunction, Response } from 'express';
 
 //TODO: move to shared package
 export interface Product {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | object;
   id: string;
   name: string;
   price: number;
@@ -11,10 +11,7 @@ export interface Product {
   img: string;
   type: string;
   isAvailable: boolean;
-}
-
-export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
-  count: number;
+  additives: string[];
 }
 
 export interface OrderModel {
@@ -48,12 +45,35 @@ export interface UserModel {
   loginDates: number[];
 }
 
-export interface OrderItems {
-  [key: number]: number;
+export interface AdditivesModel {
+  [key: string]: string | number | boolean;
+  id: string;
+  name: string;
+  price: number;
+  img: string;
+  isAvailable: boolean;
+}
+
+export interface AdditivesProduct
+  extends Pick<AdditivesModel, 'id' | 'name' | 'price'> {
+  count: number;
+}
+
+export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
+  count: number;
+  additives: AdditivesProduct[];
+}
+
+export interface OrderItem {
+  productId: string;
+  count: number;
+  additives: {
+    [key: string]: number;
+  };
 }
 
 export interface OrderRequest {
-  items: OrderItems;
+  items: OrderItem[];
   phone: string;
   timestamp: number;
   receivingTime: number;
