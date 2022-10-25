@@ -14,8 +14,12 @@ export class SalesService {
     return this.salesModel.findMany(query);
   }
 
-  public async addSales(sales: SaleModel) {
-    return this.salesModel.insertOne(sales);
+  public async addSale(sale: SaleModel) {
+    await this.salesModel.insertOne(sale);
+    const existingSale = await this.getSales({});
+    return existingSale.find((dbSale) =>
+      Object.entries(sale).every(([key, value]) => dbSale[key] === value)
+    );
   }
 
   public async updateSales(sales: { [key: string]: Partial<SaleModel> }) {

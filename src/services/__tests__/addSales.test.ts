@@ -1,9 +1,19 @@
 import db from '../../models';
 import services from '../index';
+import { SaleModel } from '../../types';
+
+const dbSale = {
+  id: '1',
+  name: 'super lavash',
+  img: '',
+  isAvailable: false,
+  description: '2+1'
+};
 
 jest.mock('../../models', () => ({
   sales: {
-    insertOne: jest.fn()
+    insertOne: jest.fn(),
+    findMany: jest.fn(() => [dbSale])
   }
 }));
 
@@ -11,21 +21,17 @@ describe('Service.addSales', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test('when called with sales = {} call db with vacancies', async () => {
+  test('when called with sale should add sale and return with id', async () => {
+    const sale: Omit<SaleModel, 'id'> = {
+      name: 'super lavash',
+      img: '',
+      isAvailable: false,
+      description: '2+1'
+    };
     // @ts-ignore for test purposes
-    await services.sales.addSales({});
-    expect(db.sales.insertOne).toHaveBeenCalledWith({});
-  });
-
-  test('when called with sales = string call db with string', async () => {
-    // @ts-ignore for test purposes
-    await services.sales.addSales(['string']);
-    expect(db.sales.insertOne).toHaveBeenCalledWith(['string']);
-  });
-
-  test('when called with sales = null call db with null', async () => {
-    // @ts-ignore for test purposes
-    await services.sales.addSales([null]);
-    expect(db.sales.insertOne).toHaveBeenCalledWith([null]);
+    const result = await services.sales.addSale(sale);
+    expect(db.sales.insertOne).toHaveBeenCalledWith(sale);
+    expect(db.sales.findMany).toHaveBeenCalled();
+    expect(result).toEqual(dbSale);
   });
 });

@@ -28,9 +28,9 @@ export const salesPut: SalesPut = async (req, res, next) => {
 
 export const salesPost: SalesPost = async (req, res, next) => {
   try {
-    await services.sales.addSales(req.body);
+    const sale = await services.sales.addSale(req.body);
 
-    res.json({ status: 'OK' });
+    res.json(sale);
   } catch (e) {
     next(e);
   }
