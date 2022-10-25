@@ -1,9 +1,20 @@
 import db from '../../models';
 import services from '../index';
+import { VacancyModel } from '../../types';
 
+const dbVacancy = {
+  id: '1',
+  position: 'povar',
+  requirements: 'vkesno gotov',
+  salary: '100',
+  description: 'bludo',
+  isAvailable: false,
+  counter: 0
+};
 jest.mock('../../models', () => ({
   vacancies: {
-    insertOne: jest.fn()
+    insertOne: jest.fn(),
+    findMany: jest.fn(() => [dbVacancy])
   }
 }));
 
@@ -11,22 +22,19 @@ describe('Service.addVacancies', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test('when called with vacancies = {} call db with vacancies', async () => {
-    const vacancy = {};
+  test('when called with vacancy should add vacancy and return with id', async () => {
+    const vacancy: Omit<VacancyModel, 'id'> = {
+      position: 'povar',
+      requirements: 'vkesno gotov',
+      salary: '100',
+      description: 'bludo',
+      isAvailable: false,
+      counter: 0
+    };
     // @ts-ignore for test purposes
-    await services.vacancies.addVacancies(vacancy);
+    const result = await services.vacancies.addVacancy(vacancy);
     expect(db.vacancies.insertOne).toHaveBeenCalledWith(vacancy);
-  });
-
-  test('when called with vacancies = string call db with string', async () => {
-    // @ts-ignore for test purposes
-    await services.vacancies.addVacancies(['string']);
-    expect(db.vacancies.insertOne).toHaveBeenCalledWith(['string']);
-  });
-
-  test('when called with products = null call db with null', async () => {
-    // @ts-ignore for test purposes
-    await services.vacancies.addVacancies([null]);
-    expect(db.vacancies.insertOne).toHaveBeenCalledWith([null]);
+    expect(db.vacancies.findMany).toHaveBeenCalled();
+    expect(result).toEqual(dbVacancy);
   });
 });
