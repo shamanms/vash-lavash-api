@@ -43,6 +43,8 @@ export class OrderService {
             price: additive.price,
             count: orderItem.additives[additiveId]
           });
+        } else {
+          throw new Error(`Additive with id: ${additiveId} not found`);
         }
       }
 

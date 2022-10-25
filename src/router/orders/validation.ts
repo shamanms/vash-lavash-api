@@ -1,9 +1,7 @@
 import { ValidationError } from '../../models/errors';
-import db from '../../models';
-import { FieldPath } from '@google-cloud/firestore';
 import { OrdersPost, OrdersPut } from './types';
-import { isObject } from '../../utils';
 import { OrderStatus } from '../../types';
+import services from '../../services';
 
 export const ordersPost: OrdersPost = async function (req, res, next) {
   try {
@@ -14,17 +12,23 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
     if (Object.keys(order).length < 1) {
       throw new ValidationError('Order is empty');
     }
-    if (!isObject(order.items)) {
+    if (!Array.isArray(order.items)) {
       throw new ValidationError('Invalid order');
     }
 
-    const orderValues = Object.values(order.items);
-    const isOrderValuesValid = orderValues.every(
-      (value) => typeof value === 'number'
-    );
+    for (const item of order.items) {
+      const orderAdditiveValues = Object.values(item.additives);
+      const isOrderAdditiveValuesValid = orderAdditiveValues.every(
+        (value) => typeof value === 'number'
+      );
 
-    if (orderValues.length < 1 || !isOrderValuesValid) {
-      throw new ValidationError('Invalid order item');
+      if (
+        typeof item.productId !== 'string' ||
+        typeof item.count !== 'number' ||
+        !isOrderAdditiveValuesValid
+      ) {
+        throw new ValidationError('Invalid order item');
+      }
     }
 
     const phoneRegex = /^((\(0\d{2}\)))[ ]\d{3}[-]\d{2}[-]\d{2}$/;
@@ -58,21 +62,23 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
       throw new ValidationError('Invalid order time');
     }
 
-    const products = await db.products.findMany([
-      FieldPath.documentId(),
-      'in',
-      Object.keys(order.items)
-    ]);
-    const productInStock = products
-      .filter((product) => {
-        if (product.isAvailable) return product;
-      })
-      .map(({ id }) => id);
-    const isProductsValid = Object.keys(order.items).every((id) => {
-      return productInStock.includes(id);
-    });
-    if (!isProductsValid) {
-      throw new ValidationError('Products not found');
+    for (const item of order.items) {
+      const additives = await services.additives.getAdditives({
+        isAvailable: true
+      });
+      const isAdditivesValid = additives.some(({ id }) =>
+        Object.keys(item.additives).includes(id)
+      );
+
+      const products = await services.products.getProducts({
+        isAvailable: true
+      });
+      const isProductsValid = products.some(({ id }) => id === item.productId);
+      if (!isProductsValid) {
+        throw new ValidationError('Products not found');
+      } else if (!isAdditivesValid) {
+        throw new ValidationError('Additives not found');
+      }
     }
 
     next();
