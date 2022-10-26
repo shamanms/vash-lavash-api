@@ -60,13 +60,11 @@ export interface AdditivesProduct
 }
 
 export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
-  count: number;
   additives: AdditivesProduct[];
 }
 
 export interface OrderItem {
   productId: string;
-  count: number;
   additives: {
     [key: string]: number;
   };

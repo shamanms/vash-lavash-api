@@ -1,5 +1,5 @@
 import { Telegram } from 'telegraf';
-import { OrderModel, OrderStatus } from '../types';
+import { AdditivesProduct, OrderModel, OrderStatus } from '../types';
 import { dateTimeFormatter } from '../utils/dateTimeFormatter';
 
 export class OrderNotification {
@@ -9,33 +9,32 @@ export class OrderNotification {
     private groupId: string
   ) {}
 
+  private composeAdditives(additives: AdditivesProduct[]) {
+    if (additives?.length) {
+      return `
+    Добавки:
+      ${additives
+        .map((additive) => `${additive.name}: ${additive.count}шт;`)
+        .join('\n      ')}`;
+    }
+
+    return '';
+  }
+
   private composeMessage() {
     const { API_URL } = process.env;
     const { phone, totalPrice, items, id, receivingTime } = this.order;
     const confirmedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.CONFIRMED}`;
     const completedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.COMPLETED}`;
 
-    let additiveName: string;
-    let additiveCount: number;
-    items.map((item) => {
-      for (const additives of item.additives) {
-        additiveName = additives.name;
-        additiveCount = additives.count;
-      }
-    });
-
     return `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
 Сума: ${totalPrice}UAH
-Товари:
-${items
-  .map(
-    (item) =>
-      `${item.name}: ${item.count}шт; 
-Добавки: ${additiveName}: ${additiveCount}шт;`
-  )
-  .join('\n')}
+<b>Товари:</b>
+  ${items
+    .map((item) => `${item.name}${this.composeAdditives(item.additives)}`)
+    .join('\n  ')}
 Заказ оформлено на час:
 ${dateTimeFormatter(receivingTime)}
 

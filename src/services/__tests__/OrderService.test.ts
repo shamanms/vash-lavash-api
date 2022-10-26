@@ -61,14 +61,14 @@ describe('Class OrderService', () => {
       items: [
         {
           productId: '123',
-          count: 1,
           additives: {
             idOne: 2
           }
         },
+        { productId: '123', additives: {} },
+        { productId: '123', additives: {} },
         {
           productId: '456',
-          count: 3,
           additives: {
             idTwo: 1
           }
@@ -82,6 +82,14 @@ describe('Class OrderService', () => {
       price: 10
     };
     const insertedProductDocument2 = {
+      name: 'abc',
+      price: 10
+    };
+    const insertedProductDocument3 = {
+      name: 'abc',
+      price: 10
+    };
+    const insertedProductDocument4 = {
       name: 'zxc',
       price: 20
     };
@@ -96,7 +104,9 @@ describe('Class OrderService', () => {
     db.products.findOneById
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => insertedProductDocument1)
-      .mockImplementationOnce(() => insertedProductDocument2);
+      .mockImplementationOnce(() => insertedProductDocument2)
+      .mockImplementationOnce(() => insertedProductDocument3)
+      .mockImplementationOnce(() => insertedProductDocument4);
     db.additives.findOneById
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => insertedAdditiveDocument1)
@@ -111,28 +121,40 @@ describe('Class OrderService', () => {
     const result = await service.addOrder(orderRequest);
 
     expect(result).toEqual(expectedResult);
-    expect(db.products.findOneById).toHaveBeenCalledTimes(2);
+    expect(db.products.findOneById).toHaveBeenCalledTimes(4);
     expect(db.products.findOneById).toHaveBeenNthCalledWith(1, '123');
-    expect(db.products.findOneById).toHaveBeenNthCalledWith(2, '456');
+    expect(db.products.findOneById).toHaveBeenNthCalledWith(2, '123');
+    expect(db.products.findOneById).toHaveBeenNthCalledWith(3, '123');
+    expect(db.products.findOneById).toHaveBeenNthCalledWith(4, '456');
     expect(db.additives.findOneById).toHaveBeenCalledTimes(2);
     expect(db.additives.findOneById).toHaveBeenNthCalledWith(1, 'idOne');
     expect(db.additives.findOneById).toHaveBeenNthCalledWith(2, 'idTwo');
     expect(db.orders.insertOne).toHaveBeenCalledWith({
       phone: orderRequest.phone,
-      totalPrice: 74,
+      totalPrice: 54,
       orderStatus: 'not_confirmed',
       items: [
         {
           name: 'abc',
           price: 10,
-          count: 1,
           id: '123',
           additives: [{ name: 'cba', price: 1, count: 2, id: 'idOne' }]
         },
         {
+          name: 'abc',
+          price: 10,
+          id: '123',
+          additives: []
+        },
+        {
+          name: 'abc',
+          price: 10,
+          id: '123',
+          additives: []
+        },
+        {
           name: 'zxc',
           price: 20,
-          count: 3,
           id: '456',
           additives: [{ name: 'cxz', price: 2, count: 1, id: 'idTwo' }]
         }
@@ -146,7 +168,6 @@ describe('Class OrderService', () => {
       items: [
         {
           productId: '123',
-          count: 1,
           additives: {
             id: 1
           }
@@ -172,7 +193,6 @@ describe('Class OrderService', () => {
       items: [
         {
           productId: '123',
-          count: 1,
           additives: {
             id: 1
           }

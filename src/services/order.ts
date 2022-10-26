@@ -53,7 +53,6 @@ export class OrderService {
           id: orderItem.productId,
           name: product.name,
           price: product.price,
-          count: orderItem.count,
           additives: additives
         });
       } else {
@@ -63,18 +62,12 @@ export class OrderService {
   }
 
   private countOrderPrice(order: OrderModel) {
-    order.totalPrice = order.items.reduce(
-      (sum, { price, count, additives }) => {
-        const additivesTotalPrice = additives.reduce(
-          (sum, { count, price }) => {
-            return sum + price * count;
-          },
-          0
-        );
-        return sum + price * count + additivesTotalPrice;
-      },
-      order.totalPrice
-    );
+    order.totalPrice = order.items.reduce((sum, { price, additives }) => {
+      const additivesTotalPrice = additives.reduce((sum, { count, price }) => {
+        return sum + price * count;
+      }, 0);
+      return sum + price + additivesTotalPrice;
+    }, order.totalPrice);
   }
 
   public async addOrder(
