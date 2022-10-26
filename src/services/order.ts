@@ -14,7 +14,7 @@ export class OrderService {
     private readonly additiveModel: Model<AdditivesModel>
   ) {}
 
-  public buildOrder(orderRequest: Omit<OrderRequest, 'timestamp'>) {
+  public buildOrder(orderRequest: Omit<OrderRequest, 'timestamp'>): OrderModel {
     return {
       phone: orderRequest.phone,
       totalPrice: 0,
