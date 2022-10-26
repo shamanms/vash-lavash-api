@@ -1,7 +1,9 @@
+import { FieldPath } from '@google-cloud/firestore';
 import { ValidationError } from '../../models/errors';
 import { OrdersPost, OrdersPut } from './types';
 import { OrderStatus } from '../../types';
-import services from '../../services';
+import { isArrayOfObjects, isObject } from '../../utils';
+import db from '../../models';
 
 export const ordersPost: OrdersPost = async function (req, res, next) {
   try {
@@ -15,16 +17,24 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
     if (!Array.isArray(order.items)) {
       throw new ValidationError('Invalid order');
     }
+    if (!isArrayOfObjects(order.items)) {
+      throw new ValidationError('Invalid order items');
+    }
+
+    if (order.items.length < 1) {
+      throw new ValidationError('Invalid order');
+    }
 
     for (const item of order.items) {
+      const isOrderItemsValid = isObject(item.additives);
       const orderAdditiveValues = Object.values(item.additives);
       const isOrderAdditiveValuesValid = orderAdditiveValues.every(
         (value) => typeof value === 'number'
       );
 
       if (
+        !isOrderItemsValid ||
         typeof item.productId !== 'string' ||
-        typeof item.count !== 'number' ||
         !isOrderAdditiveValuesValid
       ) {
         throw new ValidationError('Invalid order item');
@@ -63,24 +73,27 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
     }
 
     for (const item of order.items) {
-      const additives = await services.additives.getAdditives({
-        isAvailable: true
-      });
-      const isAdditivesValid = additives.some(({ id }) =>
-        Object.keys(item.additives).includes(id)
-      );
-
-      const products = await services.products.getProducts({
-        isAvailable: true
-      });
-      const isProductsValid = products.some(({ id }) => id === item.productId);
-      if (!isProductsValid) {
+      const product = await db.products.findOneById(item.productId);
+      if (!product || !product.isAvailable) {
         throw new ValidationError('Products not found');
-      } else if (!isAdditivesValid) {
+      }
+      const additives = await db.additives.findMany([
+        FieldPath.documentId(),
+        'in',
+        Object.keys(item.additives)
+      ]);
+      const additiveInStock = additives
+        .filter((additive) => {
+          if (additive.isAvailable) return additive;
+        })
+        .map(({ id }) => id);
+      const isProductsValid = Object.keys(item.additives).every((id) => {
+        return additiveInStock.includes(id);
+      });
+      if (!isProductsValid) {
         throw new ValidationError('Additives not found');
       }
     }
-
     next();
   } catch (e) {
     next(e);
