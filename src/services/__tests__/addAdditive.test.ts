@@ -16,7 +16,7 @@ jest.mock('../../models', () => ({
   }
 }));
 
-describe('Service.addVacancies', () => {
+describe('Service.addAdditives', () => {
   beforeEach(() => {
     jest.resetModules();
   });

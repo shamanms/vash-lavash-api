@@ -62,7 +62,13 @@ export class Model<T = DocumentData> {
   public async findOneById(key: string) {
     const snapshot = await this.collection.doc(key).get();
 
-    return { id: snapshot.id, ...(snapshot.data() as T) };
+    const data = snapshot.data();
+
+    if (typeof data === 'object') {
+      return { id: key, ...data };
+    }
+
+    return data;
   }
 
   public async updateOne(id: string, data: Partial<T>) {

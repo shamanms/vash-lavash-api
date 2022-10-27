@@ -3,6 +3,7 @@ import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
 import auth from './auth';
+import additives from './additives';
 
 const router = Router();
 
@@ -68,6 +69,26 @@ router.put(
   '/vacancies/:id',
   vacancies.validation.vacancyCountPut,
   vacancies.routes.vacancyCountPut
+);
+
+router.get(
+  '/additives',
+  additives.validation.additivesGet,
+  additives.routes.additivesGet
+);
+
+router.put(
+  '/additives',
+  auth.middlewares.adminAuth,
+  additives.validation.additivesPut,
+  additives.routes.additivesPut
+);
+
+router.post(
+  '/additives',
+  auth.middlewares.adminAuth,
+  additives.validation.additivesPost,
+  additives.routes.additivesPost
 );
 
 export default router;

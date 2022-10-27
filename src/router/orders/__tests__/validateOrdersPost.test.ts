@@ -52,12 +52,15 @@ jest.mock('../../../models', () => ({
 describe('ordersPost', () => {
   beforeEach(() => {
     jest.resetModules();
+    jest.resetAllMocks();
   });
   test('when order correct and receiving time today should go next', async () => {
     db.products.findOneById
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => productOne)
       .mockImplementationOnce(() => productTwo);
+    // @ts-ignore for test purposes
+    db.additives.findMany.mockImplementation(() => Promise.resolve(additives));
     const req = {
       body: {
         items: [
@@ -85,6 +88,8 @@ describe('ordersPost', () => {
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => productOne)
       .mockImplementationOnce(() => productTwo);
+    // @ts-ignore for test purposes
+    db.additives.findMany.mockImplementation(() => Promise.resolve(additives));
     const req = {
       body: {
         items: [
@@ -557,17 +562,14 @@ describe('ordersPost', () => {
     expect(next.mock.calls[0]).toEqual([error]);
   });
   test('when productId is not exists in db should throw "Products not found"', async () => {
-    db.products.findOneById
-      // @ts-ignore for test purposes
-      .mockImplementationOnce(() => ({
-        id: 'someId'
-      }));
+    // @ts-ignore for test purposes
+    await db.products.findOneById.mockImplementationOnce(() => undefined);
     const req = {
       body: {
         items: [
           {
-            productId: 'someId',
-            additives: { [additives[0].id]: 2, [additives[1].id]: 1 }
+            productId: '',
+            additives: {}
           }
         ],
         phone: '(000) 000-00-00',
@@ -594,10 +596,13 @@ describe('ordersPost', () => {
       name: 'Пеновані з шоколадом та горіхами',
       additives: ['1', '2']
     };
+    // @ts-ignore for test purposes
+    db.additives.findMany.mockImplementation(() => Promise.resolve(additives));
     db.products.findOneById
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => productOne)
       .mockImplementationOnce(() => productTwo);
+
     const req = {
       body: {
         items: [
@@ -644,6 +649,8 @@ describe('ordersPost', () => {
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => productOne)
       .mockImplementationOnce(() => productTwo);
+    // @ts-ignore for test purposes
+    db.additives.findMany.mockImplementation(() => Promise.resolve(additives));
     const req = {
       body: {
         items: [
