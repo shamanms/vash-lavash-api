@@ -8,7 +8,8 @@ import {
   AdditivesModel,
   dbQuery,
   Product,
- SaleModel, UserModel,
+  SaleModel,
+  UserModel,
   VacancyModel
 } from '../types';
 import { OrderModel } from '../types';
