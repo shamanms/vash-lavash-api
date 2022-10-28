@@ -31,7 +31,7 @@ describe('Service.addProducts', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test('when called with products should return product id', async () => {
+  test('when called with products should add product and return with id', async () => {
     const products: Omit<Product, 'id'>[] = [
       {
         name: 'bulka',
@@ -45,7 +45,7 @@ describe('Service.addProducts', () => {
     // @ts-ignore
     const result = await services.products.addProducts(products);
     expect(db.products.insertMany).toHaveBeenCalledWith(products);
-    expect(db.products.findMany).toHaveBeenCalledWith(undefined);
+    expect(db.products.findMany).toHaveBeenCalled();
     expect(result).toEqual([productOne]);
   });
 });

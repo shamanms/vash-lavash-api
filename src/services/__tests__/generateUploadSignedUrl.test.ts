@@ -25,31 +25,31 @@ describe('service.generateUploadSignedUrl', () => {
     global.Date.now = jest.fn(() => nowDate);
   });
 
-  test('when called with product should return url', async () => {
+  test('when called with item should return url', async () => {
     const BUCKET_NAME = 'testBucket';
     process.env = {
       ...process.env,
       BUCKET_NAME
     };
 
-    const product = {
-      productId: 'bulka',
+    const item = {
+      itemId: 'someId',
       fileExtension: 'jpg'
     };
     // @ts-ignore
-    const result = await generateUploadSignedUrl(product);
+    const result = await generateUploadSignedUrl(item);
 
     expect(storage.bucket).toHaveBeenCalledWith(BUCKET_NAME);
     expect(storage.file).toHaveBeenCalledWith(
-      `${product.productId}-${nowDate}.${product.fileExtension}`
+      `${item.itemId}-${nowDate}.${item.fileExtension}`
     );
     expect(storage.getSignedUrl).toHaveBeenCalledWith(options);
     expect(result).toEqual(signedUrl);
   });
   test('when bucket name undefined should return Error "BUCKET_NAME is invalid"', async () => {
     const BUCKET_NAME = undefined;
-    const product = {
-      productId: 'bulka',
+    const item = {
+      itemId: 'sumId',
       fileExtension: 'jpg'
     };
     process.env = {
@@ -58,7 +58,7 @@ describe('service.generateUploadSignedUrl', () => {
     };
     try {
       // @ts-ignore
-      await generateUploadSignedUrl(product);
+      await generateUploadSignedUrl(item);
     } catch (e: any) {
       expect(e?.message).toMatch('BUCKET_NAME is invalid');
     }

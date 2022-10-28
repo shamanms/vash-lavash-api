@@ -1,28 +1,26 @@
 import {
   FileExtensionType,
   Middleware,
-  Product,
+  SaleModel,
   TypedRequestBody,
   TypedRequestParams,
   TypedRequestQuery
 } from '../../types';
 
-export type ProductsGet = Middleware<
+export type SalesGet = Middleware<
   TypedRequestQuery<{ isAvailable: 'true' | 'false' }>
 >;
 
-export type ProductsPut = Middleware<
-  TypedRequestBody<{ [key: string]: Partial<Product> }>
+export type SalesPut = Middleware<
+  TypedRequestBody<{ [key: string]: Partial<SaleModel> }>
 >;
-
-export type ProductsPost = Middleware<TypedRequestBody<Product[]>>;
 
 interface GetRequest<P, Q>
   extends TypedRequestQuery<Q>,
     TypedRequestParams<P> {}
 
-export type ProductGoogleImageUrlGet = Middleware<
+export type SalesPost = Middleware<TypedRequestBody<SaleModel>>;
+
+export type SalesGoogleImageUrlGet = Middleware<
   GetRequest<{ id: string }, { fileExtension: FileExtensionType }>
 >;
-
-export type ProductsTypesGet = Middleware<TypedRequestBody<{}>>;
