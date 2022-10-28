@@ -114,7 +114,7 @@ describe('ordersPost', () => {
     expect(next).toHaveBeenCalled();
     expect(next.mock.calls[0]).toHaveLength(0);
   });
-  test('when order receivingTime not number should throw "Invalid format date"', async () => {
+  test('when order receivingTime not number should throw "Invalid date format"', async () => {
     db.products.findOneById
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => productOne)
@@ -135,7 +135,7 @@ describe('ordersPost', () => {
         receivingTime: '10'
       }
     };
-    const error = new ValidationError('Invalid format date');
+    const error = new ValidationError('Invalid date format');
 
     // @ts-ignore for test purposes
     await ordersPost(req, res, next);
