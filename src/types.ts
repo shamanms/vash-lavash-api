@@ -44,6 +44,14 @@ export interface UserModel {
   role: string;
   loginDates: number[];
 }
+export interface SaleModel {
+  [key: string]: string | boolean;
+  id: string;
+  name: string;
+  img: string;
+  isAvailable: boolean;
+  description: string;
+}
 
 export interface AdditivesModel {
   [key: string]: string | number | boolean;
@@ -110,4 +118,4 @@ export enum OrderStatus {
   COMPLETED = 'completed'
 }
 
-export type fileExtensionType = 'jpeg' | 'jpg';
+export type FileExtensionType = 'jpeg' | 'jpg';

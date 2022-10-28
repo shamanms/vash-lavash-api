@@ -24,7 +24,7 @@ describe('Service.addVacancies', () => {
     expect(db.vacancies.insertOne).toHaveBeenCalledWith(['string']);
   });
 
-  test('when called with products = null call db with null', async () => {
+  test('when called with vacancies = null call db with null', async () => {
     // @ts-ignore for test purposes
     await services.vacancies.addVacancies([null]);
     expect(db.vacancies.insertOne).toHaveBeenCalledWith([null]);

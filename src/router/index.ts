@@ -3,6 +3,7 @@ import products from './products';
 import orders from './orders';
 import vacancies from './vacancies';
 import auth from './auth';
+import sales from './sales';
 import additives from './additives';
 
 const router = Router();
@@ -69,6 +70,29 @@ router.put(
   '/vacancies/:id',
   vacancies.validation.vacancyCountPut,
   vacancies.routes.vacancyCountPut
+);
+
+router.get('/sales', sales.validation.salesGet, sales.routes.salesGet);
+
+router.post(
+  '/sales',
+  auth.middlewares.adminAuth,
+  sales.validation.salesPost,
+  sales.routes.salesPost
+);
+
+router.put(
+  '/sales',
+  auth.middlewares.adminAuth,
+  sales.validation.salesPut,
+  sales.routes.salesPut
+);
+
+router.get(
+  '/sales/:id/image',
+  auth.middlewares.adminAuth,
+  sales.validation.salesGoogleImageUrlGet,
+  sales.routes.salesGoogleImageUrlGet
 );
 
 router.get(

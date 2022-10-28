@@ -50,7 +50,10 @@ export const productGoogleImageUrlGet: ProductGoogleImageUrlGet = async (
   try {
     const productId = req.params?.id;
     const fileExtension = req.query?.fileExtension;
-    const url = await generateUploadSignedUrl({ productId, fileExtension });
+    const url = await generateUploadSignedUrl({
+      itemId: productId,
+      fileExtension
+    });
 
     res.json({ url });
   } catch (e) {

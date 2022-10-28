@@ -8,7 +8,7 @@ import {
   AdditivesModel,
   dbQuery,
   Product,
-  UserModel,
+ SaleModel, UserModel,
   VacancyModel
 } from '../types';
 import { OrderModel } from '../types';
@@ -83,5 +83,6 @@ export default {
   products: new Model<Product>('products', firestore),
   vacancies: new Model<VacancyModel>('vacancies', firestore),
   users: new Model<UserModel>('users', firestore),
-  additives: new Model<AdditivesModel>('additives', firestore)
+  additives: new Model<AdditivesModel>('additives', firestore),
+  sales: new Model<SaleModel>('sales', firestore)
 };
