@@ -3,7 +3,7 @@ import { ValidationError } from '../../../models/errors';
 
 const res = {};
 const next = jest.fn();
-describe('validation productGoogleImageUrlGet', () => {
+describe('validation salesGoogleImageUrlGet', () => {
   beforeEach(() => {
     jest.resetModules();
   });
