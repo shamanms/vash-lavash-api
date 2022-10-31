@@ -31,9 +31,9 @@ export const vacanciesPut: VacanciesPut = async (req, res, next) => {
 
 export const vacanciesPost: VacanciesPost = async (req, res, next) => {
   try {
-    await services.vacancies.addVacancies(req.body);
+    const vacancy = await services.vacancies.addVacancy(req.body);
 
-    res.json({ status: 'OK' });
+    res.json(vacancy);
   } catch (e) {
     next(e);
   }
