@@ -1,6 +1,12 @@
 import { ValidationError } from '../../models/errors';
-import { AdditivesGet, AdditivesPost, AdditivesPut } from './types';
+import {
+  AdditiveGoogleImageUrlGet,
+  AdditivesGet,
+  AdditivesPost,
+  AdditivesPut
+} from './types';
 import { isObject } from '../../utils';
+import { ProductGoogleImageUrlGet } from '../products/types';
 
 export const additivesGet: AdditivesGet = function (req, res, next) {
   const { isAvailable } = req.query;
@@ -55,6 +61,23 @@ export const additivesPost: AdditivesPost = function (req, res, next) {
       throw new ValidationError('Incorrect shape additive');
     }
   });
+
+  next();
+};
+
+export const additiveGoogleImageUrlGet: AdditiveGoogleImageUrlGet = (
+  req,
+  res,
+  next
+) => {
+  const additiveId = req.params.id;
+  if (additiveId.length < 4) {
+    throw new ValidationError('Invalid additive id');
+  }
+
+  if (!['jpeg', 'jpg'].includes(req.query.fileExtension)) {
+    throw new ValidationError('Incorrect file extension');
+  }
 
   next();
 };

@@ -5,6 +5,7 @@ import vacancies from './vacancies';
 import auth from './auth';
 import sales from './sales';
 import additives from './additives';
+import { additiveGoogleImageUrlGet } from './additives/routes';
 
 const router = Router();
 
@@ -113,6 +114,13 @@ router.post(
   auth.middlewares.adminAuth,
   additives.validation.additivesPost,
   additives.routes.additivesPost
+);
+
+router.get(
+  '/additives/:id/image',
+  auth.middlewares.adminAuth,
+  additives.validation.additiveGoogleImageUrlGet,
+  additives.routes.additiveGoogleImageUrlGet
 );
 
 export default router;

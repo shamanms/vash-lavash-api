@@ -1,5 +1,11 @@
-import { AdditivesGet, AdditivesPost, AdditivesPut } from './types';
+import {
+  AdditivesGet,
+  AdditivesPost,
+  AdditivesPut,
+  AdditiveGoogleImageUrlGet
+} from './types';
 import services from '../../services';
+import { generateUploadSignedUrl } from '../../services/imageUploader';
 
 export const additivesGet: AdditivesGet = async (req, res, next) => {
   try {
@@ -19,6 +25,25 @@ export const additivesPut: AdditivesPut = async (req, res, next) => {
     const result = await services.additives.updateAdditives(req.body);
 
     res.json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const additiveGoogleImageUrlGet: AdditiveGoogleImageUrlGet = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const additiveId = req.params?.id;
+    const fileExtension = req.query?.fileExtension;
+    const url = await generateUploadSignedUrl({
+      itemId: additiveId,
+      fileExtension
+    });
+
+    res.json({ url });
   } catch (e) {
     next(e);
   }
