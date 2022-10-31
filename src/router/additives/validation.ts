@@ -6,7 +6,6 @@ import {
   AdditivesPut
 } from './types';
 import { isObject } from '../../utils';
-import { ProductGoogleImageUrlGet } from '../products/types';
 
 export const additivesGet: AdditivesGet = function (req, res, next) {
   const { isAvailable } = req.query;

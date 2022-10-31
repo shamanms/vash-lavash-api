@@ -85,7 +85,8 @@ describe('productsPost', () => {
           type: 'string',
           isAvailable: 'boolean',
           img: 'string',
-          description: 'string'
+          description: 'string',
+          additives: []
         }
       ]
     };
@@ -108,7 +109,7 @@ describe('productsPost', () => {
           isAvailable: false,
           img: 'string',
           description: 'string',
-          additives: true
+          additives: null
         }
       ]
     };
