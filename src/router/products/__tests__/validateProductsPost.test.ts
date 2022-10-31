@@ -98,6 +98,29 @@ describe('productsPost', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
+  test('when additives not array should return "Incorrect shape products"', () => {
+    const req = {
+      body: [
+        {
+          name: 'string',
+          price: 11,
+          type: 'string',
+          isAvailable: false,
+          img: 'string',
+          description: 'string',
+          additives: true
+        }
+      ]
+    };
+    try {
+      // @ts-ignore for test purposes
+      productsPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Incorrect shape products');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
   test('when request is valid should go next', () => {
     const req = {
       body: [
@@ -107,7 +130,8 @@ describe('productsPost', () => {
           type: 'pechka',
           isAvailable: false,
           img: 'url',
-          description: 'vkysno'
+          description: 'vkysno',
+          additives: []
         }
       ]
     };
