@@ -1,5 +1,5 @@
 import { Telegram } from 'telegraf';
-import { AdditivesProduct, OrderModel, OrderStatus } from '../types';
+import { Additive, OrderModel, OrderStatus } from '../types';
 import { dateTimeFormatter } from '../utils/dateTimeFormatter';
 
 export class OrderNotification {
@@ -9,7 +9,7 @@ export class OrderNotification {
     private groupId: string
   ) {}
 
-  private composeAdditives(additives: AdditivesProduct[]) {
+  private composeAdditives(additives: Additive[]) {
     if (additives?.length) {
       return `
     Добавки:

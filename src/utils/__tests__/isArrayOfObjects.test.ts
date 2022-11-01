@@ -41,4 +41,11 @@ describe('utils isArrayOfObjects', () => {
     const result = isArrayOfObjects(variable);
     expect(result).toEqual(true);
   });
+  test('when variable is empty array should return true', () => {
+    // @ts-ignore
+    const variable = [];
+    // @ts-ignore
+    const result = isArrayOfObjects(variable);
+    expect(result).toEqual(true);
+  });
 });
