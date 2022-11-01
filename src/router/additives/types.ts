@@ -1,5 +1,5 @@
 import {
-  AdditivesModel,
+  AdditiveModel,
   FileExtensionType,
   Middleware,
   TypedRequestBody,
@@ -12,10 +12,10 @@ export type AdditivesGet = Middleware<
 >;
 
 export type AdditivesPut = Middleware<
-  TypedRequestBody<{ [key: string]: Partial<AdditivesModel> }>
+  TypedRequestBody<{ [key: string]: Partial<AdditiveModel> }>
 >;
 
-export type AdditivesPost = Middleware<TypedRequestBody<AdditivesModel>>;
+export type AdditivesPost = Middleware<TypedRequestBody<AdditiveModel>>;
 
 interface GetRequest<P, Q>
   extends TypedRequestQuery<Q>,

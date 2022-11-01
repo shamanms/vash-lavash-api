@@ -5,7 +5,7 @@ import {
   UpdateData
 } from '@google-cloud/firestore';
 import {
-  AdditivesModel,
+  AdditiveModel,
   dbQuery,
   Product,
   SaleModel,
@@ -84,6 +84,6 @@ export default {
   products: new Model<Product>('products', firestore),
   vacancies: new Model<VacancyModel>('vacancies', firestore),
   users: new Model<UserModel>('users', firestore),
-  additives: new Model<AdditivesModel>('additives', firestore),
+  additives: new Model<AdditiveModel>('additives', firestore),
   sales: new Model<SaleModel>('sales', firestore)
 };

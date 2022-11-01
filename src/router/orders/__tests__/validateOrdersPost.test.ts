@@ -433,7 +433,9 @@ describe('ordersPost', () => {
             productId: productTwo.id,
             additives: {}
           }
-        ]
+        ],
+        phone: '(000) 000-00-00',
+        receivingTime: new Date().setHours(12, 20, 15)
       }
     };
 
@@ -461,7 +463,9 @@ describe('ordersPost', () => {
             productId: productTwo.id,
             additives: {}
           }
-        ]
+        ],
+        phone: '(000) 000-00-00',
+        receivingTime: new Date().setHours(12, 20, 15)
       }
     };
 
@@ -489,7 +493,9 @@ describe('ordersPost', () => {
             productId: productTwo.id,
             additives: {}
           }
-        ]
+        ],
+        phone: '(000) 000-00-00',
+        receivingTime: new Date().setHours(12, 20, 15)
       }
     };
 

@@ -25,22 +25,6 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
       throw new ValidationError('Invalid order');
     }
 
-    for (const item of order.items) {
-      const isOrderItemsValid = isObject(item.additives);
-      const orderAdditiveValues = Object.values(item.additives);
-      const isOrderAdditiveValuesValid = orderAdditiveValues.every(
-        (value) => typeof value === 'number'
-      );
-
-      if (
-        !isOrderItemsValid ||
-        typeof item.productId !== 'string' ||
-        !isOrderAdditiveValuesValid
-      ) {
-        throw new ValidationError('Invalid order item');
-      }
-    }
-
     const phoneRegex = /^((\(0\d{2}\)))[ ]\d{3}[-]\d{2}[-]\d{2}$/;
 
     if (!(typeof order.phone === 'string' && phoneRegex.test(order.phone))) {
@@ -72,6 +56,18 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
     }
 
     for (const item of order.items) {
+      const isItemAdditivesValid = isObject(item.additives);
+      if (!isItemAdditivesValid) {
+        throw new ValidationError('Invalid order item');
+      }
+      const orderAdditiveValues = Object.values(item.additives);
+      const isOrderAdditiveValuesValid = orderAdditiveValues.every(
+        (value) => typeof value === 'number'
+      );
+
+      if (typeof item.productId !== 'string' || !isOrderAdditiveValuesValid) {
+        throw new ValidationError('Invalid order item');
+      }
       const product = await db.products.findOneById(item.productId);
       if (!product || !product.isAvailable) {
         throw new ValidationError('Products not found');
@@ -82,14 +78,12 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
         Object.keys(item.additives)
       ]);
       const additiveInStock = additives
-        .filter((additive) => {
-          if (additive.isAvailable) return additive;
-        })
+        .filter(({ isAvailable }) => isAvailable)
         .map(({ id }) => id);
-      const isProductsValid = Object.keys(item.additives).every((id) => {
+      const isAdditivesValid = Object.keys(item.additives).every((id) => {
         return additiveInStock.includes(id);
       });
-      if (!isProductsValid) {
+      if (!isAdditivesValid) {
         throw new ValidationError('Additives not found');
       }
     }

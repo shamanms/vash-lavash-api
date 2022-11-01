@@ -1,8 +1,8 @@
-import { AdditivesModel, dbQuery } from '../types';
+import { AdditiveModel, dbQuery } from '../types';
 import { Model } from '../models';
 
 export class AdditivesService {
-  constructor(private readonly additivesModel: Model<AdditivesModel>) {}
+  constructor(private readonly additivesModel: Model<AdditiveModel>) {}
 
   public async getAdditives({ isAvailable }: { isAvailable?: boolean }) {
     let query;
@@ -14,7 +14,7 @@ export class AdditivesService {
     return this.additivesModel.findMany(query);
   }
 
-  public async addAdditive(additive: AdditivesModel) {
+  public async addAdditive(additive: AdditiveModel) {
     await this.additivesModel.insertOne(additive);
     const existingAdditive = await this.getAdditives({});
     return existingAdditive.find((dbAdditive) =>
@@ -25,7 +25,7 @@ export class AdditivesService {
   }
 
   public async updateAdditives(additives: {
-    [key: string]: Partial<AdditivesModel>;
+    [key: string]: Partial<AdditiveModel>;
   }) {
     let updatedAdditives = Object.entries(additives).map(([id, additive]) =>
       this.additivesModel.updateOne(id, additive)

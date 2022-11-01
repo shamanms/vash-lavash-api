@@ -4,14 +4,15 @@ import {
   OrderModel,
   OrderRequest,
   OrderStatus,
-  AdditivesModel
+  AdditiveModel
 } from '../types';
+import { ValidationError } from '../models/errors';
 
 export class OrderService {
   constructor(
     private readonly orderModel: Model<OrderModel>,
     private readonly productModel: Model<Product>,
-    private readonly additiveModel: Model<AdditivesModel>
+    private readonly additiveModel: Model<AdditiveModel>
   ) {}
 
   public buildOrder(orderRequest: Omit<OrderRequest, 'timestamp'>): OrderModel {
@@ -44,7 +45,9 @@ export class OrderService {
             count: orderItem.additives[additiveId]
           });
         } else {
-          throw new Error(`Additive with id: ${additiveId} not found`);
+          throw new ValidationError(
+            `Additive with id: ${additiveId} not found`
+          );
         }
       }
 
@@ -56,7 +59,9 @@ export class OrderService {
           additives: additives
         });
       } else {
-        throw new Error(`Product with id: ${orderItem.productId} not found`);
+        throw new ValidationError(
+          `Product with id: ${orderItem.productId} not found`
+        );
       }
     }
   }
