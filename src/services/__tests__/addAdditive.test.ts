@@ -1,6 +1,6 @@
 import db from '../../models';
 import services from '../index';
-import { AdditivesModel } from '../../types';
+import { AdditiveModel } from '../../types';
 
 const dbAdditive = {
   id: '1',
@@ -21,7 +21,7 @@ describe('Service.addAdditives', () => {
     jest.resetModules();
   });
   test('when called with additive should add additive and return with id', async () => {
-    const additive: Omit<AdditivesModel, 'id'> = {
+    const additive: Omit<AdditiveModel, 'id'> = {
       name: 'perec',
       price: 1,
       img: '',
