@@ -19,9 +19,11 @@ export class ProductsService {
     const existingProducts = await this.getProducts({});
     return products.map((product) =>
       existingProducts.find((dbProduct) =>
-        Object.entries(product).every(
-          ([key, value]) => dbProduct[key] === value
-        )
+        Object.entries(product)
+          .filter(([, value]) => typeof value !== 'object') // additives === [""] but [""] !== [""]
+          .every(([key, value]) => {
+            return dbProduct[key] === value;
+          })
       )
     );
   }

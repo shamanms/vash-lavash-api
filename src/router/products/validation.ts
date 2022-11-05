@@ -52,6 +52,10 @@ export const productsPost: ProductsPost = function (req, res, next) {
   };
 
   products.forEach((product) => {
+    if (!Array.isArray(product.additives)) {
+      throw new ValidationError('Incorrect shape products');
+    }
+
     Object.keys(requiredKeys).forEach((key) => {
       if (!(typeof product[key] === requiredKeys[key])) {
         throw new ValidationError('Incorrect shape products');

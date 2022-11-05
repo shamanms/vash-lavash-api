@@ -10,26 +10,73 @@ const mode = { parse_mode: 'HTML' };
 const order = {
   id: '123',
   phone: '777777777',
-  totalPrice: 2000,
+  totalPrice: 3038,
   status: OrderStatus.NOT_CONFIRMED,
   items: [
     {
       id: '321',
       name: 'bulka',
       price: 1000,
-      count: 2
+      additives: []
+    },
+    {
+      id: '321',
+      name: 'bulka',
+      price: 1000,
+      additives: [
+        {
+          id: 'id',
+          name: 'perec',
+          price: 11,
+          count: 2
+        },
+        {
+          id: 'id',
+          name: 'sol',
+          price: 5,
+          count: 1
+        }
+      ]
+    },
+    {
+      id: '456',
+      name: 'pizza',
+      price: 500,
+      additives: [
+        {
+          id: 'id',
+          name: 'perec',
+          price: 11,
+          count: 1
+        },
+        {
+          id: 'id',
+          name: 'sol',
+          price: 5,
+          count: 1
+        }
+      ]
     }
   ],
   timestamp: Date.now(),
   receivingTime: new Date().setHours(12, 10, 15)
 };
 const API_URL = 'http://test.url';
+// prettier-ignore
 const message = `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
-Товари:
-${order.items[0].name}: ${order.items[0].count}шт;
+<b>Товари:</b>
+  ${order.items[0].name}
+  ${order.items[1].name}
+    Добавки:
+      ${order.items[1].additives[0].name}: ${order.items[1].additives[0].count}шт;
+      ${order.items[1].additives[1].name}: ${order.items[1].additives[1].count}шт;
+  ${order.items[2].name}
+    Добавки:
+      ${order.items[2].additives[0].name}: ${order.items[2].additives[0].count}шт;
+      ${order.items[2].additives[1].name}: ${order.items[2].additives[1].count}шт;
 Заказ оформлено на час:
 ${dateTimeFormatter(order.receivingTime)}
 

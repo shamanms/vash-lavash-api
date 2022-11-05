@@ -3,7 +3,7 @@ import { Express, NextFunction, Response } from 'express';
 
 //TODO: move to shared package
 export interface Product {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | object;
   id: string;
   name: string;
   price: number;
@@ -11,10 +11,7 @@ export interface Product {
   img: string;
   type: string;
   isAvailable: boolean;
-}
-
-export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
-  count: number;
+  additives: string[];
 }
 
 export interface OrderModel {
@@ -23,17 +20,6 @@ export interface OrderModel {
   totalPrice: number;
   orderStatus: OrderStatus;
   items: OrderedProduct[];
-  timestamp: number;
-  receivingTime: number;
-}
-
-export interface OrderItems {
-  [key: number]: number;
-}
-
-export interface OrderRequest {
-  items: OrderItems;
-  phone: string;
   timestamp: number;
   receivingTime: number;
 }
@@ -58,7 +44,6 @@ export interface UserModel {
   role: string;
   loginDates: number[];
 }
-
 export interface SaleModel {
   [key: string]: string | boolean;
   id: string;
@@ -66,6 +51,37 @@ export interface SaleModel {
   img: string;
   isAvailable: boolean;
   description: string;
+}
+
+export interface AdditiveModel {
+  [key: string]: string | number | boolean;
+  id: string;
+  name: string;
+  price: number;
+  img: string;
+  isAvailable: boolean;
+}
+
+export interface Additive extends Pick<AdditiveModel, 'id' | 'name' | 'price'> {
+  count: number;
+}
+
+export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
+  additives: Additive[];
+}
+
+export interface OrderItem {
+  productId: string;
+  additives: {
+    [key: string]: number;
+  };
+}
+
+export interface OrderRequest {
+  items: OrderItem[];
+  phone: string;
+  timestamp: number;
+  receivingTime: number;
 }
 
 export interface TypedRequestBody<T> extends Express.Request {

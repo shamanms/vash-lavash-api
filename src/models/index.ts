@@ -4,7 +4,14 @@ import {
   Firestore,
   UpdateData
 } from '@google-cloud/firestore';
-import { dbQuery, Product, SaleModel, UserModel, VacancyModel } from '../types';
+import {
+  AdditiveModel,
+  dbQuery,
+  Product,
+  SaleModel,
+  UserModel,
+  VacancyModel
+} from '../types';
 import { OrderModel } from '../types';
 
 const { PROJECT_ID, GCP_CREDENTIALS_FILE } = process.env;
@@ -56,7 +63,13 @@ export class Model<T = DocumentData> {
   public async findOneById(key: string) {
     const snapshot = await this.collection.doc(key).get();
 
-    return { id: snapshot.id, ...(snapshot.data() as T) };
+    const data = snapshot.data();
+
+    if (typeof data === 'object') {
+      return { id: key, ...data };
+    }
+
+    return data;
   }
 
   public async updateOne(id: string, data: Partial<T>) {
@@ -71,5 +84,6 @@ export default {
   products: new Model<Product>('products', firestore),
   vacancies: new Model<VacancyModel>('vacancies', firestore),
   users: new Model<UserModel>('users', firestore),
+  additives: new Model<AdditiveModel>('additives', firestore),
   sales: new Model<SaleModel>('sales', firestore)
 };

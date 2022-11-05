@@ -4,6 +4,7 @@ import orders from './orders';
 import vacancies from './vacancies';
 import auth from './auth';
 import sales from './sales';
+import additives from './additives';
 
 const router = Router();
 
@@ -92,6 +93,33 @@ router.get(
   auth.middlewares.adminAuth,
   sales.validation.salesGoogleImageUrlGet,
   sales.routes.salesGoogleImageUrlGet
+);
+
+router.get(
+  '/additives',
+  additives.validation.additivesGet,
+  additives.routes.additivesGet
+);
+
+router.put(
+  '/additives',
+  auth.middlewares.adminAuth,
+  additives.validation.additivesPut,
+  additives.routes.additivesPut
+);
+
+router.post(
+  '/additives',
+  auth.middlewares.adminAuth,
+  additives.validation.additivesPost,
+  additives.routes.additivesPost
+);
+
+router.get(
+  '/additives/:id/image',
+  auth.middlewares.adminAuth,
+  additives.validation.additiveGoogleImageUrlGet,
+  additives.routes.additiveGoogleImageUrlGet
 );
 
 export default router;

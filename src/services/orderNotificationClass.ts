@@ -1,5 +1,5 @@
 import { Telegram } from 'telegraf';
-import { OrderModel, OrderStatus } from '../types';
+import { Additive, OrderModel, OrderStatus } from '../types';
 import { dateTimeFormatter } from '../utils/dateTimeFormatter';
 
 export class OrderNotification {
@@ -8,6 +8,18 @@ export class OrderNotification {
     private messenger: Telegram,
     private groupId: string
   ) {}
+
+  private composeAdditives(additives: Additive[]) {
+    if (additives?.length) {
+      return `
+    Добавки:
+      ${additives
+        .map((additive) => `${additive.name}: ${additive.count}шт;`)
+        .join('\n      ')}`;
+    }
+
+    return '';
+  }
 
   private composeMessage() {
     const { API_URL } = process.env;
@@ -19,8 +31,10 @@ export class OrderNotification {
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
 Сума: ${totalPrice}UAH
-Товари:
-${items.map((item) => `${item.name}: ${item.count}шт;`).join('\n')}
+<b>Товари:</b>
+  ${items
+    .map((item) => `${item.name}${this.composeAdditives(item.additives)}`)
+    .join('\n  ')}
 Заказ оформлено на час:
 ${dateTimeFormatter(receivingTime)}
 

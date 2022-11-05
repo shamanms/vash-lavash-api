@@ -1,9 +1,9 @@
-import { ValidationError } from '../../models/errors';
-import db from '../../models';
 import { FieldPath } from '@google-cloud/firestore';
+import { ValidationError } from '../../models/errors';
 import { OrdersPost, OrdersPut } from './types';
-import { isObject } from '../../utils';
 import { OrderStatus } from '../../types';
+import { isArrayOfObjects, isObject } from '../../utils';
+import db from '../../models';
 
 export const ordersPost: OrdersPost = async function (req, res, next) {
   try {
@@ -14,17 +14,15 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
     if (Object.keys(order).length < 1) {
       throw new ValidationError('Order is empty');
     }
-    if (!isObject(order.items)) {
+    if (!Array.isArray(order.items)) {
       throw new ValidationError('Invalid order');
     }
+    if (!isArrayOfObjects(order.items)) {
+      throw new ValidationError('Invalid order items');
+    }
 
-    const orderValues = Object.values(order.items);
-    const isOrderValuesValid = orderValues.every(
-      (value) => typeof value === 'number'
-    );
-
-    if (orderValues.length < 1 || !isOrderValuesValid) {
-      throw new ValidationError('Invalid order item');
+    if (order.items.length < 1) {
+      throw new ValidationError('Invalid order');
     }
 
     const phoneRegex = /^((\(0\d{2}\)))[ ]\d{3}[-]\d{2}[-]\d{2}$/;
@@ -57,23 +55,38 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
       throw new ValidationError('Invalid order time');
     }
 
-    const products = await db.products.findMany([
-      FieldPath.documentId(),
-      'in',
-      Object.keys(order.items)
-    ]);
-    const productInStock = products
-      .filter((product) => {
-        if (product.isAvailable) return product;
-      })
-      .map(({ id }) => id);
-    const isProductsValid = Object.keys(order.items).every((id) => {
-      return productInStock.includes(id);
-    });
-    if (!isProductsValid) {
-      throw new ValidationError('Products not found');
-    }
+    for (const item of order.items) {
+      const isItemAdditivesValid = isObject(item.additives);
+      if (!isItemAdditivesValid) {
+        throw new ValidationError('Invalid order item');
+      }
+      const orderAdditiveValues = Object.values(item.additives);
+      const isOrderAdditiveValuesValid = orderAdditiveValues.every(
+        (value) => typeof value === 'number'
+      );
 
+      if (typeof item.productId !== 'string' || !isOrderAdditiveValuesValid) {
+        throw new ValidationError('Invalid order item');
+      }
+      const product = await db.products.findOneById(item.productId);
+      if (!product || !product.isAvailable) {
+        throw new ValidationError('Products not found');
+      }
+      const additives = await db.additives.findMany([
+        FieldPath.documentId(),
+        'in',
+        Object.keys(item.additives)
+      ]);
+      const additiveInStock = additives
+        .filter(({ isAvailable }) => isAvailable)
+        .map(({ id }) => id);
+      const isAdditivesValid = Object.keys(item.additives).every((id) => {
+        return additiveInStock.includes(id);
+      });
+      if (!isAdditivesValid) {
+        throw new ValidationError('Additives not found');
+      }
+    }
     next();
   } catch (e) {
     next(e);
