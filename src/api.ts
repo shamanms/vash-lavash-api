@@ -4,10 +4,12 @@ import cors from 'cors';
 import router from './router';
 import { errorHandler } from './router/errorHandler';
 
+const { ALLOWED_DOMAINS } = process.env;
+
 export const app = express();
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://shamanms.com']
+    origin: ALLOWED_DOMAINS?.split(', ')
   })
 );
 app.use(router);
