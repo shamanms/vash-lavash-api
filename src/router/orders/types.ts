@@ -7,9 +7,7 @@ import {
   TypedRequestQuery
 } from '../../types';
 
-export type OrdersPost = Middleware<
-  TypedRequestBody<Omit<OrderRequest, 'timestamp'>>
->;
+export type OrdersPost = Middleware<TypedRequestBody<OrderRequest>>;
 
 export type OrdersGet = Middleware<TypedRequestBody<{}>>;
 

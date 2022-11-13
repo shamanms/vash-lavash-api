@@ -57,7 +57,7 @@ describe('Class OrderService', () => {
   });
 
   test('OrderService addOrder() should return id', async () => {
-    const orderRequest: Omit<OrderRequest, 'timestamp'> = {
+    const orderRequest: OrderRequest = {
       items: [
         {
           productId: '123',

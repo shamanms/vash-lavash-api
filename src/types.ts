@@ -76,11 +76,9 @@ export interface OrderItem {
     [key: string]: number;
   };
 }
-
 export interface OrderRequest {
   items: OrderItem[];
   phone: string;
-  timestamp: number;
   receivingTime: number;
 }
 

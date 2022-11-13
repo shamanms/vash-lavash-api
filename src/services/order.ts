@@ -15,7 +15,7 @@ export class OrderService {
     private readonly additiveModel: Model<AdditiveModel>
   ) {}
 
-  public buildOrder(orderRequest: Omit<OrderRequest, 'timestamp'>): OrderModel {
+  public buildOrder(orderRequest: OrderRequest): OrderModel {
     return {
       phone: orderRequest.phone,
       totalPrice: 0,
@@ -28,7 +28,7 @@ export class OrderService {
 
   private async composeOrderItems(
     order: OrderModel,
-    orderRequest: Omit<OrderRequest, 'timestamp'>
+    orderRequest: OrderRequest
   ) {
     for (const orderItem of orderRequest.items) {
       const product = await this.productModel.findOneById(orderItem.productId);
@@ -75,9 +75,7 @@ export class OrderService {
     }, order.totalPrice);
   }
 
-  public async addOrder(
-    orderRequest: Omit<OrderRequest, 'timestamp'>
-  ): Promise<string> {
+  public async addOrder(orderRequest: OrderRequest): Promise<string> {
     const order = this.buildOrder(orderRequest);
     await this.composeOrderItems(order, orderRequest);
     this.countOrderPrice(order);
