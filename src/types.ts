@@ -12,6 +12,8 @@ export interface Product {
   type: string;
   isAvailable: boolean;
   additives: string[];
+  bestseller: boolean;
+  spicy: boolean;
 }
 
 export interface OrderModel {
