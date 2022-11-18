@@ -1,17 +1,20 @@
 import jwt from 'jsonwebtoken';
 import services from '../../services';
-import { accessSecretVersion } from '../../services/jwt';
 import { LoginRequest } from './types';
 
 export const login: LoginRequest = async (req, res, next) => {
   try {
-    const jwtSecret = await accessSecretVersion();
     const { username, password } = req.body;
+    const { JWT_SECRET } = process.env;
     console.log(`${username} is trying to login ..`);
 
     const user = await services.users.getUser(username);
 
-    if (username === user?.username && password === user.password) {
+    if (
+      username === user?.username &&
+      password === user.password &&
+      JWT_SECRET
+    ) {
       await services.users.addLoginTimestamp(user);
       return res.json({
         token: jwt.sign(
@@ -21,7 +24,7 @@ export const login: LoginRequest = async (req, res, next) => {
             firstName: user.firstName,
             lastName: user.lastName
           },
-          jwtSecret,
+          JWT_SECRET,
           {
             expiresIn: 900 // sec
           }

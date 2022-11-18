@@ -42,3 +42,14 @@ gcloud functions deploy order-notification \
   --region "europe-central2" \
   --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID,API_URL=$API_URL"
 ```
+
+```sh
+gcloud functions deploy api \
+  --entry-point api \
+  --allow-unauthenticated \
+  --trigger-http \
+  --runtime nodejs16 \
+  --region europe-central2 \
+  --set-env-vars "PROJECT_ID=$PROJECT_ID,ALLOWED_DOMAINS=$ALLOWED_DOMAINS,BUCKET_NAME=$BUCKET_NAME"\
+  --set-secrets=JWT_SECRET=projects/$PROJECT_ID/secrets/$JWT_SECRET_NAME/versions/latest
+```

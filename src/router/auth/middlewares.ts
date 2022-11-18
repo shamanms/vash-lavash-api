@@ -1,6 +1,5 @@
 import { Request, NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { accessSecretVersion } from '../../services/jwt';
 import { UserRole } from '../../types';
 
 export const adminAuth = async (
@@ -16,8 +15,10 @@ export const adminAuth = async (
       .send({ message: 'A token is required for authentication' });
   }
   try {
-    const jwtSecret = await accessSecretVersion();
-    const decoded = jwt.verify(token.replace('Bearer ', ''), jwtSecret);
+    const decoded = jwt.verify(
+      token.replace('Bearer ', ''),
+      process.env.JWT_SECRET || ''
+    );
 
     if (typeof decoded !== 'object' || decoded.role !== UserRole.ADMIN) {
       return res.status(403).send({ message: 'Not Allowed' });
