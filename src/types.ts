@@ -74,7 +74,7 @@ export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
 
 export interface OrderItem {
   productId: string;
-  additives: {
+  additives?: {
     [key: string]: number;
   };
 }
