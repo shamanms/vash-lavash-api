@@ -17,15 +17,19 @@ jest.mock('jsonwebtoken', () => ({
 jest.mock('express', () => ({
   response: { status: jest.fn(() => ({ json: jsonFn })), json: jest.fn() }
 }));
-const secret = '12345';
-jest.mock('../../../services/jwt', () => ({
-  accessSecretVersion: jest.fn(() => Promise.resolve(secret))
-}));
+const JWT_SECRET = '12345';
 
 describe('route login', () => {
   beforeEach(() => {
     jest.resetModules();
     jest.spyOn(console, 'log').mockImplementation();
+    process.env = {
+      ...process.env,
+      JWT_SECRET
+    };
+  });
+  afterAll(() => {
+    delete process.env.JWT_SECRET;
   });
   test('when username and password correct should return token', async () => {
     const req = {
@@ -59,7 +63,11 @@ describe('route login', () => {
     expect(services.users.getUser).toHaveBeenCalledWith(req.body.username);
     expect(services.users.addLoginTimestamp).toHaveBeenCalledWith(user);
     expect(response.json).toHaveBeenCalledWith(parForRes);
-    expect(jwt.sign).toHaveBeenCalledWith(parForJwt[0], secret, parForJwt[1]);
+    expect(jwt.sign).toHaveBeenCalledWith(
+      parForJwt[0],
+      JWT_SECRET,
+      parForJwt[1]
+    );
   });
   test('when user name invalid should return status 401 and message: "The username and password your provided are invalid"', async () => {
     const req = {

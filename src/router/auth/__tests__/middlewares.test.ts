@@ -7,10 +7,7 @@ const next = jest.fn();
 jest.mock('express', () => ({
   response: { status: jest.fn(() => ({ send: sendFn })) }
 }));
-const secret = '12345';
-jest.mock('../../../services/jwt', () => ({
-  accessSecretVersion: jest.fn(() => Promise.resolve(secret))
-}));
+const JWT_SECRET = '12345';
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn()
 }));
@@ -18,6 +15,13 @@ jest.mock('jsonwebtoken', () => ({
 describe('middlewares adminAuth ', () => {
   beforeEach(() => {
     jest.resetModules();
+    process.env = {
+      ...process.env,
+      JWT_SECRET
+    };
+  });
+  afterAll(() => {
+    delete process.env.JWT_SECRET;
   });
   test('when req is empty should return status 403 and message "A token is required for authentication"', async () => {
     const req = undefined;
@@ -87,7 +91,7 @@ describe('middlewares adminAuth ', () => {
     // @ts-ignore for test purposes
     await adminAuth(req, response, next);
 
-    expect(jwt.verify).toHaveBeenCalledWith(token, secret);
+    expect(jwt.verify).toHaveBeenCalledWith(token, JWT_SECRET);
     expect(next).toHaveBeenCalled();
   });
   test('when token is invalid should return status 403 and message "Invalid Token"', async () => {
