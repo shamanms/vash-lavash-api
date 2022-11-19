@@ -54,6 +54,33 @@ describe('ordersPost', () => {
     jest.resetModules();
     jest.resetAllMocks();
   });
+  test('when order don`t have additives should go next', async () => {
+    db.products.findOneById
+      // @ts-ignore for test purposes
+      .mockImplementationOnce(() => productOne)
+      .mockImplementationOnce(() => productTwo);
+    // @ts-ignore for test purposes
+    db.additives.findMany.mockImplementation(() => Promise.resolve(additives));
+    const req = {
+      body: {
+        items: [
+          {
+            productId: productOne.id
+          },
+          {
+            productId: productTwo.id
+          }
+        ],
+        phone: '(000) 465-45-23',
+        receivingTime: new Date().setHours(12, 10, 15)
+      }
+    };
+    // @ts-ignore for test purposes
+    await ordersPost(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next.mock.calls[0]).toHaveLength(0);
+  });
   test('when order correct and receiving time today should go next', async () => {
     db.products.findOneById
       // @ts-ignore for test purposes
@@ -431,7 +458,7 @@ describe('ordersPost', () => {
           },
           {
             productId: productTwo.id,
-            additives: {}
+            additives: ''
           }
         ],
         phone: '(000) 000-00-00',
