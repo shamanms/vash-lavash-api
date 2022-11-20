@@ -1,18 +1,4 @@
-## Deploying
-
-Before deploying, need to authorize with `gcloud` and select the project:
-
-```sh
-gcloud auth login
-gcloud config set project PROJECTNAME
-
-gcloud compute project-info add-metadata \
-    --metadata google-compute-default-region=europe-central2,google-compute-default-zone=europe-central2-b
-
-gcloud auth application-default login // to save auth creds for the app
-```
-
-Setup env vars:
+Before start setup env vars:
 
 ```sh
 export PROJECT_ID=vash-lavash
@@ -25,31 +11,19 @@ export JWT_SECRET_NAME=...
 export JWT_SECRET_VERSION=...
 export ALLOWED_DOMAINS=http://localhost:xxxx
 export PORT=....(8080 used by default)
+export BUCKET_NAME=...
 ```
 
-Then you can deploy with:
-
+## Deploying
+1. Install the [gcloud CLI](https://cloud.google.com/sdk/docs/install)
+2. Authorize with `gcloud` and select the project:
 ```sh
-npm run build && npm run deploy
-```
+gcloud auth login
+gcloud config set project PROJECTNAME
 
-```sh
-gcloud functions deploy order-notification \
-  --entry-point orderNotification \
-  --runtime nodejs16 \
-  --trigger-event "providers/cloud.firestore/eventTypes/document.create" \
-  --trigger-resource "projects/vash-lavash/databases/(default)/documents/orders/{order}" \
-  --region "europe-central2" \
-  --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID,API_URL=$API_URL"
-```
+gcloud compute project-info add-metadata \
+    --metadata google-compute-default-region=europe-central2,google-compute-default-zone=europe-central2-b
 
-```sh
-gcloud functions deploy api \
-  --entry-point api \
-  --allow-unauthenticated \
-  --trigger-http \
-  --runtime nodejs16 \
-  --region europe-central2 \
-  --set-env-vars "PROJECT_ID=$PROJECT_ID,ALLOWED_DOMAINS=$ALLOWED_DOMAINS,BUCKET_NAME=$BUCKET_NAME"\
-  --set-secrets=JWT_SECRET=projects/$PROJECT_ID/secrets/$JWT_SECRET_NAME/versions/latest
+gcloud auth application-default login // to save auth creds for the app
 ```
+3. Use one of the deploy commands from the ``package.json`` file
