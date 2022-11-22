@@ -5,6 +5,7 @@ import vacancies from './vacancies';
 import auth from './auth';
 import sales from './sales';
 import additives from './additives';
+import labels from './labels';
 
 const router = Router();
 
@@ -120,6 +121,22 @@ router.get(
   auth.middlewares.adminAuth,
   additives.validation.additiveGoogleImageUrlGet,
   additives.routes.additiveGoogleImageUrlGet
+);
+
+router.get('/labels', labels.routes.labelsGet);
+
+router.post(
+  '/labels',
+  auth.middlewares.adminAuth,
+  labels.validation.labelPost,
+  labels.routes.labelPost
+);
+
+router.put(
+  '/labels',
+  auth.middlewares.adminAuth,
+  labels.validation.labelsPut,
+  labels.routes.labelsPut
 );
 
 export default router;
