@@ -15,8 +15,10 @@ export BUCKET_NAME=...
 ```
 
 ## Deploying
+
 1. Install the [gcloud CLI](https://cloud.google.com/sdk/docs/install)
 2. Authorize with `gcloud` and select the project:
+
 ```sh
 gcloud auth login
 gcloud config set project PROJECTNAME
@@ -26,4 +28,5 @@ gcloud compute project-info add-metadata \
 
 gcloud auth application-default login // to save auth creds for the app
 ```
-3. Use one of the deploy commands from the ``package.json`` file
+
+3. Use one of the deploy commands from the `package.json` file
