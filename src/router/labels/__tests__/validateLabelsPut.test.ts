@@ -55,7 +55,7 @@ describe('labelsPut', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when req.id not object should return "Incorrect labels"', () => {
+  test('when req.id not object should return "Incorrect label"', () => {
     const req = {
       body: {
         id: 123
@@ -66,11 +66,11 @@ describe('labelsPut', () => {
       labelsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Incorrect labels');
+      expect(e?.message).toMatch('Incorrect label');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when req.id is null should return "Incorrect labels"', () => {
+  test('when req.id is null should return "Incorrect label"', () => {
     const req = {
       body: {
         id: null
@@ -81,11 +81,11 @@ describe('labelsPut', () => {
       labelsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Incorrect labels');
+      expect(e?.message).toMatch('Incorrect label');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when req.id is array should return "Incorrect labels"', () => {
+  test('when req.id is array should return "Incorrect label"', () => {
     const req = {
       body: {
         id: [123, 123]
@@ -96,7 +96,7 @@ describe('labelsPut', () => {
       labelsPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Incorrect labels');
+      expect(e?.message).toMatch('Incorrect label');
       expect(next).not.toHaveBeenCalled();
     }
   });
