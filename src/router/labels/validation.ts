@@ -13,9 +13,9 @@ export const labelsPut: LabelsPut = function (req, res, next) {
     throw new ValidationError('Label not passed');
   }
 
-  Object.values(labels).forEach((additive) => {
-    if (!isObject(additive)) {
-      throw new ValidationError('Incorrect labels');
+  Object.values(labels).forEach((label) => {
+    if (!isObject(label)) {
+      throw new ValidationError('Incorrect label');
     }
   });
 
