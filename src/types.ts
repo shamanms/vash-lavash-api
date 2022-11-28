@@ -12,6 +12,7 @@ export interface Product {
   type: string;
   isAvailable: boolean;
   additives: string[];
+  labels: string[];
 }
 
 export interface OrderModel {
@@ -62,6 +63,13 @@ export interface AdditiveModel {
   isAvailable: boolean;
 }
 
+export interface LabelsModel {
+  [key: string]: string;
+  id: string;
+  name: string;
+  color: string;
+}
+
 export interface Additive extends Pick<AdditiveModel, 'id' | 'name' | 'price'> {
   count: number;
 }
@@ -72,7 +80,7 @@ export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
 
 export interface OrderItem {
   productId: string;
-  additives: {
+  additives?: {
     [key: string]: number;
   };
 }

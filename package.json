@@ -10,7 +10,8 @@
     "start:api": "npm run build && npx @google-cloud/functions-framework --target=api",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "deploy:api": "gcloud functions deploy api --entry-point api --allow-unauthenticated --trigger-http --runtime nodejs16 --region europe-central2",
+    "deploy:api": "sh deploy.sh --api",
+    "deploy:order-notification": "sh deploy.sh --order-notification",
     "style:check": "npx prettier --check .",
     "style:fix": "npx prettier --write .",
     "lint": "eslint --ext .ts src/"

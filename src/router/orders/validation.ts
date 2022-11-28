@@ -56,35 +56,37 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
     }
 
     for (const item of order.items) {
-      const isItemAdditivesValid = isObject(item.additives);
-      if (!isItemAdditivesValid) {
+      if ('additives' in item && !isObject(item.additives)) {
         throw new ValidationError('Invalid order item');
       }
-      const orderAdditiveValues = Object.values(item.additives);
-      const isOrderAdditiveValuesValid = orderAdditiveValues.every(
-        (value) => typeof value === 'number'
-      );
 
-      if (typeof item.productId !== 'string' || !isOrderAdditiveValuesValid) {
-        throw new ValidationError('Invalid order item');
-      }
-      const product = await db.products.findOneById(item.productId);
-      if (!product || !product.isAvailable) {
-        throw new ValidationError('Products not found');
-      }
-      const additives = await db.additives.findMany([
-        FieldPath.documentId(),
-        'in',
-        Object.keys(item.additives)
-      ]);
-      const additiveInStock = additives
-        .filter(({ isAvailable }) => isAvailable)
-        .map(({ id }) => id);
-      const isAdditivesValid = Object.keys(item.additives).every((id) => {
-        return additiveInStock.includes(id);
-      });
-      if (!isAdditivesValid) {
-        throw new ValidationError('Additives not found');
+      if (item.additives) {
+        const orderAdditiveValues = Object.values(item.additives);
+        const isOrderAdditiveValuesValid = orderAdditiveValues.every(
+          (value) => typeof value === 'number'
+        );
+
+        if (typeof item.productId !== 'string' || !isOrderAdditiveValuesValid) {
+          throw new ValidationError('Invalid order item');
+        }
+        const product = await db.products.findOneById(item.productId);
+        if (!product || !product.isAvailable) {
+          throw new ValidationError('Products not found');
+        }
+        const additives = await db.additives.findMany([
+          FieldPath.documentId(),
+          'in',
+          Object.keys(item.additives)
+        ]);
+        const additiveInStock = additives
+          .filter(({ isAvailable }) => isAvailable)
+          .map(({ id }) => id);
+        const isAdditivesValid = Object.keys(item.additives).every((id) => {
+          return additiveInStock.includes(id);
+        });
+        if (!isAdditivesValid) {
+          throw new ValidationError('Additives not found');
+        }
       }
     }
     next();
