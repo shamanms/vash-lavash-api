@@ -10,6 +10,7 @@ import {
   LabelsModel,
   Product,
   SaleModel,
+  AppConfigModel,
   UserModel,
   VacancyModel
 } from '../types';
@@ -87,5 +88,6 @@ export default {
   users: new Model<UserModel>('users', firestore),
   additives: new Model<AdditiveModel>('additives', firestore),
   sales: new Model<SaleModel>('sales', firestore),
-  labels: new Model<LabelsModel>('labels', firestore)
+  labels: new Model<LabelsModel>('labels', firestore),
+  appConfig: new Model<AppConfigModel>('appConfig', firestore)
 };
