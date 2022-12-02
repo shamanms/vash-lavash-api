@@ -25,10 +25,14 @@ describe('AppConfigService.getAppConfig', () => {
     expect(result).toEqual(appConfigTest);
   });
 
-  test('when APP_CONFIG_ID = undefined call db with ""', async () => {
+  test('when APP_CONFIG_ID = undefined should trow error "AppConfigId is wrong"', async () => {
     const service = new AppConfigService(db.appConfig, undefined);
-    await service.getAppConfig();
-    expect(db.appConfig.findOneById).toHaveBeenCalledWith('');
+    try {
+      await service.getAppConfig();
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(Error);
+      expect(e?.message).toMatch('AppConfigId is wrong');
+    }
   });
 });
 
@@ -59,7 +63,7 @@ describe('AppConfigService.setIsOrderingAvailable', () => {
     expect(result).toEqual(undefined);
   });
 
-  test('when APP_CONFIG_ID = undefined call db with ""', async () => {
+  test('when APP_CONFIG_ID = undefined should trow error "AppConfigId is wrong"', async () => {
     const service = new AppConfigService(db.appConfig, undefined);
     const isOpen = { isOpen: true };
     try {
