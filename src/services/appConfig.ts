@@ -8,7 +8,10 @@ export class AppConfigService {
   ) {}
 
   public async getAppConfig() {
-    return this.appConfig.findOneById(this.configId);
+    if (this.configId) {
+      return this.appConfig.findOneById(this.configId);
+    }
+    throw new Error('AppConfigId is wrong');
   }
 
   public async setIsOrderingAvailable(setOpen: Pick<AppConfigModel, 'isOpen'>) {
@@ -19,7 +22,7 @@ export class AppConfigService {
       );
       await this.appConfig.updateOne(this.configId, setOpen);
     } else {
-      return new Error('AppConfigId is wrong');
+      throw new Error('AppConfigId is wrong');
     }
   }
 }
