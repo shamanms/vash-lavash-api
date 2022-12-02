@@ -70,6 +70,10 @@ export interface LabelsModel {
   color: string;
 }
 
+export interface AppConfigModel {
+  isOpen: boolean;
+}
+
 export interface Additive extends Pick<AdditiveModel, 'id' | 'name' | 'price'> {
   count: number;
 }
