@@ -14,14 +14,14 @@ export const setIsOrderingAvailablePut: SetIsOrderingAvailablePut = (
   }
 
   if (
-    Object.keys(setOpen).length !== 1 ||
+    Object.keys(setOpen).length !== 1 &&
     Object.keys(setOpen).includes('isOpen')
   ) {
     throw new ValidationError('Invalid request');
   }
   Object.values(setOpen).forEach((val) => {
     if (typeof val !== 'boolean') {
-      throw new ValidationError('Invalid request');
+      throw new ValidationError('Invalid value');
     }
   });
 
