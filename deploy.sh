@@ -11,7 +11,7 @@ case $1 in
                   --runtime nodejs16 \
                   --region europe-central2 \
                   --set-env-vars PROJECT_ID=$PROJECT_ID,ALLOWED_DOMAINS=$ALLOWED_DOMAINS,BUCKET_NAME=$BUCKET_NAME,APP_CONFIG_ID=$APP_CONFIG_ID\
-                  --set-secrets=JWT_SECRET=projects/$PROJECT_ID/secrets/$JWT_SECRET_NAME/versions/latest
+                  --set-secrets=JWT_SECRET=projects/$PROJECT_ID/secrets/$JWT_SECRET_NAME/versions/latest,SERVICE_ACCOUNT_PRIVATE_KEY=projects/$PROJECT_ID/secrets/$SA_KEY_NAME/versions/latest,SERVICE_ACCOUNT_EMAIL=projects/$PROJECT_ID/secrets/$SA_EMAIL_NAME/versions/latest
                 ;;
         "--${lambdas[1]}")
                 echo "Start ${lambdas[1]} lambda deployment..."
