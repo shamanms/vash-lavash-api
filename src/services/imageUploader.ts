@@ -9,11 +9,13 @@ export async function generateUploadSignedUrl({
   fileExtension: FileExtensionType;
 }) {
   const { PROJECT_ID, GCP_SERVICE_ACCOUNT_FILE, BUCKET_NAME } = process.env;
+  console.log(GCP_SERVICE_ACCOUNT_FILE);
 
   const storage = new Storage({
     projectId: PROJECT_ID,
     keyFilename: GCP_SERVICE_ACCOUNT_FILE
   });
+  console.log(storage);
 
   if (!BUCKET_NAME) {
     throw new Error('BUCKET_NAME is invalid');
