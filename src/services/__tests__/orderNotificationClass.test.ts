@@ -1,5 +1,5 @@
 import { OrderNotification } from '../orderNotificationClass';
-import { OrderStatus } from '../../types';
+import { OrderModel, OrderStatus } from '../../types';
 import { dateTimeFormatter } from '../../utils/dateTimeFormatter';
 
 const messenger = {
@@ -7,12 +7,12 @@ const messenger = {
 };
 const groupId = 'chat';
 const mode = { parse_mode: 'HTML' };
-let order = {
+let order: OrderModel = {
   id: '123',
   delivery: 'home',
   phone: '777777777',
   totalPrice: 3038,
-  status: OrderStatus.NOT_CONFIRMED,
+  orderStatus: OrderStatus.NOT_CONFIRMED,
   items: [
     {
       id: '321',
@@ -116,11 +116,10 @@ describe('Class orderNotification', () => {
   test('orderNotification should send message', async () => {
     order = {
       id: '123',
-      // @ts-ignore
       delivery: null,
       phone: '777777777',
       totalPrice: 3038,
-      status: OrderStatus.NOT_CONFIRMED,
+      orderStatus: OrderStatus.NOT_CONFIRMED,
       items: [
         {
           id: '321',

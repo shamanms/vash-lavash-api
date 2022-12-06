@@ -89,11 +89,9 @@ export interface OrderItem {
     [key: string]: number;
   };
 }
-export interface OrderRequest {
+export interface OrderRequest
+  extends Pick<OrderModel, 'phone' | 'receivingTime' | 'delivery'> {
   items: OrderItem[];
-  phone: string;
-  receivingTime: number;
-  delivery: string | null;
 }
 
 export interface TypedRequestBody<T> extends Express.Request {

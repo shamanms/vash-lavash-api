@@ -1,6 +1,5 @@
 import { ValidationError } from '../../../models/errors';
 import { setIsOrderingAvailablePut } from '../validation';
-import { labelPost } from '../../labels/validation';
 
 const next = jest.fn();
 const res = {};
