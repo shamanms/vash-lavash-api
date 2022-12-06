@@ -23,7 +23,8 @@ export class OrderNotification {
 
   private composeMessage() {
     const { API_URL } = process.env;
-    const { phone, totalPrice, items, id, receivingTime } = this.order;
+    const { phone, totalPrice, items, id, receivingTime, delivery } =
+      this.order;
     const confirmedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.CONFIRMED}`;
     const completedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.COMPLETED}`;
 
@@ -36,7 +37,9 @@ Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
     .map((item) => `${item.name}${this.composeAdditives(item.additives)}`)
     .join('\n  ')}
 Заказ оформлено на час:
-${dateTimeFormatter(receivingTime)}
+  ${dateTimeFormatter(receivingTime)}
+Спосіб отримання:
+  ${delivery ? `Доставка за адресою: ${delivery}` : 'Самовивіз'}
 
 
 <a href="${confirmedUrl}">ПІДТВЕРДЖЕНО</a>
