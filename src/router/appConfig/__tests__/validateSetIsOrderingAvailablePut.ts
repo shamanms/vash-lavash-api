@@ -81,4 +81,14 @@ describe('setIsOrderingAvailablePut', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
+  test('when request is valid should go next', () => {
+    const req = {
+      body: {
+        isOpen: true
+      }
+    };
+    // @ts-ignore for test purposes
+    setIsOrderingAvailablePut(req, res, next);
+    expect(next).toHaveBeenCalled();
+  });
 });

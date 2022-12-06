@@ -23,6 +23,7 @@ export interface OrderModel {
   items: OrderedProduct[];
   timestamp: number;
   receivingTime: number;
+  delivery: string | null;
 }
 
 export interface VacancyModel {
@@ -88,10 +89,9 @@ export interface OrderItem {
     [key: string]: number;
   };
 }
-export interface OrderRequest {
+export interface OrderRequest
+  extends Pick<OrderModel, 'phone' | 'receivingTime' | 'delivery'> {
   items: OrderItem[];
-  phone: string;
-  receivingTime: number;
 }
 
 export interface TypedRequestBody<T> extends Express.Request {

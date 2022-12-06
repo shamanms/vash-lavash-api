@@ -1,5 +1,5 @@
 import { OrderNotification } from '../orderNotificationClass';
-import { OrderStatus } from '../../types';
+import { OrderModel, OrderStatus } from '../../types';
 import { dateTimeFormatter } from '../../utils/dateTimeFormatter';
 
 const messenger = {
@@ -7,11 +7,12 @@ const messenger = {
 };
 const groupId = 'chat';
 const mode = { parse_mode: 'HTML' };
-const order = {
+let order: OrderModel = {
   id: '123',
+  delivery: 'home',
   phone: '777777777',
   totalPrice: 3038,
-  status: OrderStatus.NOT_CONFIRMED,
+  orderStatus: OrderStatus.NOT_CONFIRMED,
   items: [
     {
       id: '321',
@@ -63,7 +64,7 @@ const order = {
 };
 const API_URL = 'http://test.url';
 // prettier-ignore
-const message = `
+let message = `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
@@ -78,7 +79,9 @@ Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
       ${order.items[2].additives[0].name}: ${order.items[2].additives[0].count}шт;
       ${order.items[2].additives[1].name}: ${order.items[2].additives[1].count}шт;
 Заказ оформлено на час:
-${dateTimeFormatter(order.receivingTime)}
+  ${dateTimeFormatter(order.receivingTime)}
+Спосіб отримання:
+  ${order.delivery ? `Доставка за адресою: ${order.delivery}` : 'Самовивіз'}
 
 
 <a href="${API_URL}/orders/${order.id}?status=${
@@ -99,6 +102,57 @@ describe('Class orderNotification', () => {
     jest.restoreAllMocks();
   });
   test('orderNotification should send message', async () => {
+    jest.spyOn(console, 'log').mockImplementation();
+    messenger.sendMessage.mockImplementation(() => Promise.resolve('Ok'));
+    // TODO FIX MESSENGER TYPE
+    // @ts-ignore for test purposes
+    await new OrderNotification(order, messenger, groupId).send();
+
+    expect(messenger.sendMessage).toHaveBeenCalledWith(groupId, message, mode);
+    expect(console.log).toHaveBeenCalledWith(
+      `Message Send for the order: ${order.id}`
+    );
+  });
+  test('orderNotification should send message', async () => {
+    order = {
+      id: '123',
+      delivery: null,
+      phone: '777777777',
+      totalPrice: 3038,
+      orderStatus: OrderStatus.NOT_CONFIRMED,
+      items: [
+        {
+          id: '321',
+          name: 'bulka',
+          price: 1000,
+          additives: []
+        }
+      ],
+      timestamp: Date.now(),
+      receivingTime: new Date().setHours(12, 10, 15)
+    };
+    // prettier-ignore
+    message = `
+        <b>НОВЕ ЗАМОВЛЕННЯ!</b>
+Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
+Сума: ${order.totalPrice}UAH
+<b>Товари:</b>
+  ${order.items[0].name}
+Заказ оформлено на час:
+  ${dateTimeFormatter(order.receivingTime)}
+Спосіб отримання:
+  ${order.delivery ? `Доставка за адресою: ${order.delivery}` : 'Самовивіз'}
+
+
+<a href="${API_URL}/orders/${order.id}?status=${
+      OrderStatus.CONFIRMED
+    }">ПІДТВЕРДЖЕНО</a>
+
+
+<a href="${API_URL}/orders/${order.id}?status=${
+      OrderStatus.COMPLETED
+    }">ВИДАНО</a>`;
+
     jest.spyOn(console, 'log').mockImplementation();
     messenger.sendMessage.mockImplementation(() => Promise.resolve('Ok'));
     // TODO FIX MESSENGER TYPE
