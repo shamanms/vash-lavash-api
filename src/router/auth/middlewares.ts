@@ -24,6 +24,10 @@ export const adminAuth = async (
       return res.status(403).send({ message: 'Not Allowed' });
     }
 
+    req.user = {
+      id: decoded?.id,
+      role: decoded?.role
+    };
     next();
   } catch (err) {
     return res.status(401).send({ message: 'Invalid Token' });

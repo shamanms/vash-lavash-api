@@ -14,19 +14,24 @@ export class VacancyService {
     return this.vacancyModel.findMany(query);
   }
 
-  public async addVacancy(vacancy: VacancyModel) {
-    await this.vacancyModel.insertOne(vacancy);
+  public async addVacancy(vacancy: VacancyModel, userId?: string) {
+    await this.vacancyModel.insertOne(vacancy, userId);
     const existingVacancy = await this.getVacancies({});
     return existingVacancy.find((dbVacancy) =>
-      Object.entries(vacancy).every(([key, value]) => dbVacancy[key] === value)
+      Object.entries(vacancy)
+        .filter(([, value]) => typeof value !== 'object')
+        .every(([key, value]) => dbVacancy[key] === value)
     );
   }
 
-  public async updateVacancies(vacancies: {
-    [key: string]: Partial<VacancyModel>;
-  }) {
+  public async updateVacancies(
+    vacancies: {
+      [key: string]: Partial<VacancyModel>;
+    },
+    userId?: string
+  ) {
     let updatedVacancies = Object.entries(vacancies).map(([id, vacancy]) =>
-      this.vacancyModel.updateOne(id, vacancy)
+      this.vacancyModel.updateOne(id, vacancy, userId)
     );
     const updatingResult = await Promise.allSettled(updatedVacancies);
     return Object.keys(vacancies).reduce((acc, id) => {

@@ -26,7 +26,8 @@ export const orderPut: OrdersPut = async (req, res, next) => {
   try {
     const result = await services.order.changeOrderStatus(
       req.params.id,
-      req.query.status
+      req.query.status,
+      req.user.id
     );
 
     res.json({ changedStatusOrder: result });

@@ -31,17 +31,19 @@ describe('Service.updateProducts', () => {
     jest.resetModules();
   });
 
-  test('when both elements updated, returns both IDs true', async () => {
+  test('when both elements updated with userId, returns both IDs true', async () => {
     // @ts-ignore for test purposes
     db.products.updateOne.mockImplementation((id) => id);
-    const result = await services.products.updateProducts(products);
-    Object.entries(products).forEach(([id, product], index) => {
-      expect(db.products.updateOne).toHaveBeenNthCalledWith(
-        index + 1,
-        id,
-        product
-      );
-    });
+    const result = await services.products.updateProducts(products, 'vasyaId');
+    Object.entries(products)
+      .filter(([, value]) => typeof value !== 'object')
+      .forEach(([id, product], index) => {
+        expect(db.products.updateOne).toHaveBeenNthCalledWith(
+          index + 1,
+          id,
+          product
+        );
+      });
     const expectedResult = {
       '1': true,
       '2': true

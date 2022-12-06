@@ -14,17 +14,22 @@ export class SalesService {
     return this.salesModel.findMany(query);
   }
 
-  public async addSale(sale: SaleModel) {
-    await this.salesModel.insertOne(sale);
+  public async addSale(sale: SaleModel, userId?: string) {
+    await this.salesModel.insertOne(sale, userId);
     const existingSale = await this.getSales({});
     return existingSale.find((dbSale) =>
-      Object.entries(sale).every(([key, value]) => dbSale[key] === value)
+      Object.entries(sale)
+        .filter(([, value]) => typeof value !== 'object')
+        .every(([key, value]) => dbSale[key] === value)
     );
   }
 
-  public async updateSales(sales: { [key: string]: Partial<SaleModel> }) {
+  public async updateSales(
+    sales: { [key: string]: Partial<SaleModel> },
+    userId?: string
+  ) {
     let updatedSales = Object.entries(sales).map(([id, sales]) =>
-      this.salesModel.updateOne(id, sales)
+      this.salesModel.updateOne(id, sales, userId)
     );
     const updatingResult = await Promise.allSettled(updatedSales);
     return Object.keys(sales).reduce((acc, id) => {

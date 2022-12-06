@@ -40,6 +40,7 @@ describe('Service.addLoginTimestamp', () => {
       loginDates: [1]
     };
     try {
+      // @ts-ignore for test purposes
       await services.users.addLoginTimestamp(user);
     } catch (e: any) {
       expect(e?.message).toMatch(

@@ -38,30 +38,31 @@ describe('route login', () => {
         password: 'mashina'
       }
     };
-    const user = {
+    const userTest = {
       ...req.body,
       id: 'id',
       role: 'admin'
     };
     // @ts-ignore for test purposes
-    services.users.getUser.mockImplementation(() => user);
+    services.users.getUser.mockImplementation(() => userTest);
     const parForRes = {
       token: 'token'
     };
     const parForJwt = [
       {
-        id: user.id,
-        role: user.role
+        id: userTest.id,
+        role: userTest.role
       },
       { expiresIn: 900 }
     ];
+    // @ts-ignore for test purposes
     await login(req, response, next);
 
     expect(console.log).toHaveBeenCalledWith(
       `${req.body.username} is trying to login ..`
     );
     expect(services.users.getUser).toHaveBeenCalledWith(req.body.username);
-    expect(services.users.addLoginTimestamp).toHaveBeenCalledWith(user);
+    expect(services.users.addLoginTimestamp).toHaveBeenCalledWith(userTest);
     expect(response.json).toHaveBeenCalledWith(parForRes);
     expect(jwt.sign).toHaveBeenCalledWith(
       parForJwt[0],
@@ -76,9 +77,10 @@ describe('route login', () => {
         password: 'mashina'
       }
     };
-    const user = undefined;
+    const userTest = undefined;
     // @ts-ignore for test purposes
-    services.users.getUser.mockImplementation(() => user);
+    services.users.getUser.mockImplementation(() => userTest);
+    // @ts-ignore for test purposes
     await login(req, response, next);
 
     expect(console.log).toHaveBeenCalledWith(

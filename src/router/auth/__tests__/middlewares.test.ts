@@ -86,13 +86,36 @@ describe('middlewares adminAuth ', () => {
     const token = req.headers.authorization.replace('Bearer ', '');
     // @ts-ignore for test purposes
     jwt.verify.mockImplementation(() => ({
+      id: '1',
       role: 'admin'
     }));
     // @ts-ignore for test purposes
     await adminAuth(req, response, next);
+    const newReq = { ...req, user: { id: '1', role: 'admin' } };
 
     expect(jwt.verify).toHaveBeenCalledWith(token, JWT_SECRET);
     expect(next).toHaveBeenCalled();
+    expect(req).toEqual(newReq);
+  });
+  test('when token is correct but userid is undefined and role is admin should go next', async () => {
+    const req = {
+      headers: {
+        authorization: 'Bearer 123'
+      }
+    };
+    const token = req.headers.authorization.replace('Bearer ', '');
+    // @ts-ignore for test purposes
+    jwt.verify.mockImplementation(() => ({
+      id: undefined,
+      role: 'admin'
+    }));
+    // @ts-ignore for test purposes
+    await adminAuth(req, response, next);
+    const newReq = { ...req, user: { id: undefined, role: 'admin' } };
+
+    expect(jwt.verify).toHaveBeenCalledWith(token, JWT_SECRET);
+    expect(next).toHaveBeenCalled();
+    expect(req).toEqual(newReq);
   });
   test('when token is invalid should return status 403 and message "Invalid Token"', async () => {
     const req = {

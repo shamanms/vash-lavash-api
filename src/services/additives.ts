@@ -14,21 +14,24 @@ export class AdditivesService {
     return this.additivesModel.findMany(query);
   }
 
-  public async addAdditive(additive: AdditiveModel) {
-    await this.additivesModel.insertOne(additive);
+  public async addAdditive(additive: AdditiveModel, userId?: string) {
+    await this.additivesModel.insertOne(additive, userId);
     const existingAdditive = await this.getAdditives({});
     return existingAdditive.find((dbAdditive) =>
-      Object.entries(additive).every(
-        ([key, value]) => dbAdditive[key] === value
-      )
+      Object.entries(additive)
+        .filter(([, value]) => typeof value !== 'object')
+        .every(([key, value]) => dbAdditive[key] === value)
     );
   }
 
-  public async updateAdditives(additives: {
-    [key: string]: Partial<AdditiveModel>;
-  }) {
+  public async updateAdditives(
+    additives: {
+      [key: string]: Partial<AdditiveModel>;
+    },
+    userId?: string
+  ) {
     let updatedAdditives = Object.entries(additives).map(([id, additive]) =>
-      this.additivesModel.updateOne(id, additive)
+      this.additivesModel.updateOne(id, additive, userId)
     );
     const updatingResult = await Promise.allSettled(updatedAdditives);
     return Object.keys(additives).reduce((acc, id) => {

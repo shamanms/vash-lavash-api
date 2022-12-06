@@ -24,7 +24,10 @@ export const productsGet: ProductsGet = async (req, res, next) => {
 
 export const productsPut: ProductsPut = async (req, res, next) => {
   try {
-    const result = await services.products.updateProducts(req.body);
+    const result = await services.products.updateProducts(
+      req.body,
+      req.user.id
+    );
 
     res.json(result);
   } catch (e) {
@@ -34,7 +37,7 @@ export const productsPut: ProductsPut = async (req, res, next) => {
 
 export const productsPost: ProductsPost = async (req, res, next) => {
   try {
-    const products = await services.products.addProducts(req.body);
+    const products = await services.products.addProducts(req.body, req.user.id);
 
     res.json(products);
   } catch (e) {

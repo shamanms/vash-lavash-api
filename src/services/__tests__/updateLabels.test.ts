@@ -23,13 +23,19 @@ describe('Service.updateLabels', () => {
     jest.resetModules();
   });
 
-  test('when both elements updated, returns both IDs true', async () => {
+  test('when both elements updated with userId, returns both IDs true', async () => {
     // @ts-ignore for test purposes
     db.labels.updateOne.mockImplementation((id) => id);
-    const result = await services.labels.updateLabels(labels);
-    Object.entries(labels).forEach(([id, label], index) => {
-      expect(db.labels.updateOne).toHaveBeenNthCalledWith(index + 1, id, label);
-    });
+    const result = await services.labels.updateLabels(labels, 'vasyaId');
+    Object.entries(labels)
+      .filter(([, value]) => typeof value !== 'object')
+      .forEach(([id, label], index) => {
+        expect(db.labels.updateOne).toHaveBeenNthCalledWith(
+          index + 1,
+          id,
+          label
+        );
+      });
     const expectedResult = {
       '1': true,
       '2': true

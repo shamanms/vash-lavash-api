@@ -3,7 +3,7 @@ import { Express, NextFunction, Response } from 'express';
 
 //TODO: move to shared package
 export interface Product {
-  [key: string]: string | number | boolean | object;
+  [key: string]: string | number | boolean | object | undefined;
   id: string;
   name: string;
   price: number;
@@ -13,6 +13,8 @@ export interface Product {
   isAvailable: boolean;
   additives: string[];
   labels: string[];
+  create: CreateInfo;
+  update?: UpdateInfo;
 }
 
 export interface OrderModel {
@@ -23,10 +25,11 @@ export interface OrderModel {
   items: OrderedProduct[];
   timestamp: number;
   receivingTime: number;
+  update?: UpdateInfo;
 }
 
 export interface VacancyModel {
-  [key: string]: string | undefined | boolean | number;
+  [key: string]: string | undefined | boolean | number | object;
   id?: string;
   position: string;
   requirements: string;
@@ -34,10 +37,12 @@ export interface VacancyModel {
   description: string;
   isAvailable: boolean;
   counter: number;
+  create: CreateInfo;
+  update?: UpdateInfo;
 }
 
 export interface UserModel {
-  id?: string;
+  id: string;
   username: string;
   password: string;
   firstName: string;
@@ -45,29 +50,45 @@ export interface UserModel {
   role: string;
   loginDates: number[];
 }
+
+interface UpdateInfo {
+  updatedBy: string;
+  updatedAt: number;
+}
+
+interface CreateInfo {
+  createdBy: string;
+  createdAt: number;
+}
 export interface SaleModel {
-  [key: string]: string | boolean;
+  [key: string]: string | boolean | object | undefined;
   id: string;
   name: string;
   img: string;
   isAvailable: boolean;
   description: string;
+  create: CreateInfo;
+  update?: UpdateInfo;
 }
 
 export interface AdditiveModel {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | object | undefined;
   id: string;
   name: string;
   price: number;
   img: string;
   isAvailable: boolean;
+  create: CreateInfo;
+  update?: UpdateInfo;
 }
 
 export interface LabelsModel {
-  [key: string]: string;
+  [key: string]: string | object | undefined;
   id: string;
   name: string;
   color: string;
+  create: CreateInfo;
+  update?: UpdateInfo;
 }
 
 export interface Additive extends Pick<AdditiveModel, 'id' | 'name' | 'price'> {
