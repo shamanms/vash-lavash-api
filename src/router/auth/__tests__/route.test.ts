@@ -53,7 +53,7 @@ describe('route login', () => {
         id: userTest.id,
         role: userTest.role
       },
-      { expiresIn: 900 }
+      { expiresIn: 9000 }
     ];
     // @ts-ignore for test purposes
     await login(req, response, next);

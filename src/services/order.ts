@@ -22,7 +22,8 @@ export class OrderService {
       orderStatus: OrderStatus.NOT_CONFIRMED,
       items: [],
       timestamp: Date.now(),
-      receivingTime: orderRequest.receivingTime
+      receivingTime: orderRequest.receivingTime,
+      delivery: orderRequest.delivery
     };
   }
 

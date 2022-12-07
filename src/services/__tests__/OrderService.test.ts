@@ -39,7 +39,8 @@ describe('Class OrderService', () => {
         }
       ],
       phone: 'abc',
-      receivingTime: 123
+      receivingTime: 123,
+      delivery: 'home'
     };
     const service = new OrderService(db.orders, db.products, db.additives);
     const expectedResult = {
@@ -48,7 +49,8 @@ describe('Class OrderService', () => {
       orderStatus: 'not_confirmed',
       items: [],
       timestamp: dateNow,
-      receivingTime: 123
+      receivingTime: 123,
+      delivery: 'home'
     };
 
     const result = service.buildOrder(orderRequest);
@@ -75,7 +77,8 @@ describe('Class OrderService', () => {
         }
       ],
       phone: 'abc',
-      receivingTime: 123
+      receivingTime: 123,
+      delivery: 'home'
     };
     const insertedProductDocument1 = {
       name: 'abc',
@@ -132,6 +135,7 @@ describe('Class OrderService', () => {
     expect(db.orders.insertOne).toHaveBeenCalledWith({
       phone: orderRequest.phone,
       totalPrice: 54,
+      delivery: orderRequest.delivery,
       orderStatus: 'not_confirmed',
       items: [
         {
@@ -174,7 +178,8 @@ describe('Class OrderService', () => {
         }
       ],
       phone: 'abc',
-      receivingTime: 123
+      receivingTime: 123,
+      delivery: null
     };
     db.products.findOneById
       // @ts-ignore for test purposes
@@ -199,7 +204,8 @@ describe('Class OrderService', () => {
         }
       ],
       phone: 'abc',
-      receivingTime: 123
+      receivingTime: 123,
+      delivery: null
     };
     db.products.findOneById
       // @ts-ignore for test purposes
