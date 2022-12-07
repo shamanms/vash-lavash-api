@@ -1,4 +1,5 @@
 import { Storage, GetSignedUrlConfig } from '@google-cloud/storage';
+import { StorageOptions } from '@google-cloud/storage/build/src/storage';
 import { FileExtensionType } from '../types';
 
 export async function generateUploadSignedUrl({
@@ -8,12 +9,32 @@ export async function generateUploadSignedUrl({
   itemId: string;
   fileExtension: FileExtensionType;
 }) {
-  const { PROJECT_ID, GCP_SERVICE_ACCOUNT_FILE, BUCKET_NAME } = process.env;
+  const {
+    PROJECT_ID,
+    SERVICE_ACCOUNT_PRIVATE_KEY,
+    SERVICE_ACCOUNT_EMAIL,
+    GCP_SERVICE_ACCOUNT_FILE,
+    BUCKET_NAME
+  } = process.env;
 
-  const storage = new Storage({
+  const storageConfig: StorageOptions = {
     projectId: PROJECT_ID,
-    keyFilename: GCP_SERVICE_ACCOUNT_FILE
-  });
+    credentials: {
+      private_key: SERVICE_ACCOUNT_PRIVATE_KEY,
+      client_email: SERVICE_ACCOUNT_EMAIL
+    }
+  };
+
+  if (GCP_SERVICE_ACCOUNT_FILE) {
+    console.log(
+      'generateUploadSignedUrl: receied GCP_SERVICE_ACCOUNT_FILE:',
+      GCP_SERVICE_ACCOUNT_FILE
+    );
+    delete storageConfig.credentials;
+    storageConfig.keyFilename = GCP_SERVICE_ACCOUNT_FILE;
+  }
+
+  const storage = new Storage(storageConfig);
 
   if (!BUCKET_NAME) {
     throw new Error('BUCKET_NAME is invalid');

@@ -6,6 +6,7 @@ import auth from './auth';
 import sales from './sales';
 import additives from './additives';
 import labels from './labels';
+import appConfig from './appConfig';
 
 const router = Router();
 
@@ -139,4 +140,12 @@ router.put(
   labels.routes.labelsPut
 );
 
+router.get('/appConfig', appConfig.routes.appConfigGet);
+
+router.put(
+  '/appConfig',
+  auth.middlewares.adminAuth,
+  appConfig.validation.setIsOrderingAvailablePut,
+  appConfig.routes.setIsOrderingAvailablePut
+);
 export default router;

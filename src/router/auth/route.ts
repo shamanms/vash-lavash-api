@@ -24,7 +24,7 @@ export const login: LoginRequest = async (req, res, next) => {
           },
           JWT_SECRET,
           {
-            expiresIn: 900 // sec
+            expiresIn: 9000 // sec
           }
         )
       });

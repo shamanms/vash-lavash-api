@@ -91,6 +91,10 @@ export interface LabelsModel {
   update?: UpdateInfo;
 }
 
+export interface AppConfigModel {
+  isOpen: boolean;
+}
+
 export interface Additive extends Pick<AdditiveModel, 'id' | 'name' | 'price'> {
   count: number;
 }
