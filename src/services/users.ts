@@ -11,9 +11,13 @@ export class UsersService {
 
   public async addLoginTimestamp(user: UserModel) {
     if (user?.id) {
-      return this.usersModel.updateOne(user.id, {
-        loginDates: [...user.loginDates, Date.now()]
-      });
+      return this.usersModel.updateOne(
+        user.id,
+        {
+          loginDates: [...user.loginDates, Date.now()]
+        },
+        user.id
+      );
     }
     new Error('UsersService.addLoginTimestamp:: invalid user id');
   }
