@@ -14,8 +14,8 @@ export class ProductsService {
     return this.productModel.findMany(query);
   }
 
-  public async addProducts(products: Product[]) {
-    await this.productModel.insertMany(products);
+  public async addProducts(products: Product[], userId?: string) {
+    await this.productModel.insertMany(products, userId);
     const existingProducts = await this.getProducts({});
     return products.map((product) =>
       existingProducts.find((dbProduct) =>
@@ -28,9 +28,12 @@ export class ProductsService {
     );
   }
 
-  public async updateProducts(products: { [key: string]: Partial<Product> }) {
+  public async updateProducts(
+    products: { [key: string]: Partial<Product> },
+    userId?: string
+  ) {
     let updatedProducts = Object.entries(products).map(([id, product]) =>
-      this.productModel.updateOne(id, product)
+      this.productModel.updateOne(id, product, userId)
     );
     const updatingResult = await Promise.allSettled(updatedProducts);
     return Object.keys(products).reduce((acc, id) => {

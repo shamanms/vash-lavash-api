@@ -23,17 +23,22 @@ describe('Service.updateAdditives', () => {
     jest.resetModules();
   });
 
-  test('when both elements updated, returns both IDs true', async () => {
+  test('when both elements updated with userId, returns both IDs true', async () => {
     // @ts-ignore for test purposes
     db.additives.updateOne.mockImplementation((id) => id);
-    const result = await services.additives.updateAdditives(additives);
-    Object.entries(additives).forEach(([id, additive], index) => {
-      expect(db.additives.updateOne).toHaveBeenNthCalledWith(
-        index + 1,
-        id,
-        additive
-      );
-    });
+    const result = await services.additives.updateAdditives(
+      additives,
+      'vasyaId'
+    );
+    Object.entries(additives)
+      .filter(([, value]) => typeof value !== 'object')
+      .forEach(([id, additive], index) => {
+        expect(db.additives.updateOne).toHaveBeenNthCalledWith(
+          index + 1,
+          id,
+          additive
+        );
+      });
     const expectedResult = {
       '1': true,
       '2': true

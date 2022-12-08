@@ -37,13 +37,24 @@ export class Model<T = DocumentData> {
     ) as CollectionReference<T>;
   }
 
-  public insertOne(data: T) {
-    return this.collection.add(data);
+  public insertOne(data: T, createdBy?: string) {
+    const newData = {
+      ...data,
+      createdBy: { createdBy, createdAt: Date.now() }
+    };
+    return this.collection.add(newData);
   }
 
-  public async insertMany(items: T[]) {
+  public async insertMany(items: T[], createdBy?: string) {
+    const newItems = items.map((item) => ({
+      ...item,
+      create: {
+        createdBy,
+        createdAt: Date.now()
+      }
+    }));
     const batch = this.firestore.batch();
-    items.forEach((item) => batch.set(this.collection.doc(), item));
+    newItems.forEach((item) => batch.set(this.collection.doc(), item));
 
     return batch.commit();
   }
@@ -74,8 +85,12 @@ export class Model<T = DocumentData> {
     return data;
   }
 
-  public async updateOne(id: string, data: Partial<T>) {
-    await this.collection.doc(id).update(data as UpdateData<T>);
+  public async updateOne(id: string, data: Partial<T>, updatedBy?: string) {
+    const newData = {
+      ...data,
+      update: { updatedBy, updatedAt: Date.now() }
+    };
+    await this.collection.doc(id).update(newData as unknown as UpdateData<T>);
 
     return id;
   }

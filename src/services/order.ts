@@ -90,8 +90,12 @@ export class OrderService {
     return this.orderModel.findMany();
   }
 
-  public async changeOrderStatus(orderId: string, orderStatus: OrderStatus) {
-    await this.orderModel.updateOne(orderId, { orderStatus });
+  public async changeOrderStatus(
+    orderId: string,
+    orderStatus: OrderStatus,
+    userId?: string
+  ) {
+    await this.orderModel.updateOne(orderId, { orderStatus }, userId);
 
     return orderId;
   }

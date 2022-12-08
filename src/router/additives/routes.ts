@@ -22,7 +22,10 @@ export const additivesGet: AdditivesGet = async (req, res, next) => {
 };
 export const additivesPut: AdditivesPut = async (req, res, next) => {
   try {
-    const result = await services.additives.updateAdditives(req.body);
+    const result = await services.additives.updateAdditives(
+      req.body,
+      req.user.id
+    );
 
     res.json(result);
   } catch (e) {
@@ -51,7 +54,10 @@ export const additiveGoogleImageUrlGet: AdditiveGoogleImageUrlGet = async (
 
 export const additivesPost: AdditivesPost = async (req, res, next) => {
   try {
-    const additive = await services.additives.addAdditive(req.body);
+    const additive = await services.additives.addAdditive(
+      req.body,
+      req.user.id
+    );
 
     res.json(additive);
   } catch (e) {

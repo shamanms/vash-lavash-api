@@ -9,5 +9,6 @@
     "outDir": "ts-built",
     "sourceMap": true,
     "strict": true
-  }
+  },
+  "typeRoots": ["@types", "./node_modules/@types"]
 }

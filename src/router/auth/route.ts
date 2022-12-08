@@ -20,9 +20,7 @@ export const login: LoginRequest = async (req, res, next) => {
         token: jwt.sign(
           {
             id: user.id,
-            role: user.role,
-            firstName: user.firstName,
-            lastName: user.lastName
+            role: user.role
           },
           JWT_SECRET,
           {

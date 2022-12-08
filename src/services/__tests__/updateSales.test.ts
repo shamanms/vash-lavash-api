@@ -23,13 +23,15 @@ describe('Service.updateSales', () => {
     jest.resetModules();
   });
 
-  test('when both elements updated, returns both IDs true', async () => {
+  test('when both elements updated with userId, returns both IDs true', async () => {
     // @ts-ignore for test purposes
     db.sales.updateOne.mockImplementation((id) => id);
-    const result = await services.sales.updateSales(sales);
-    Object.entries(sales).forEach(([id, sale], index) => {
-      expect(db.sales.updateOne).toHaveBeenNthCalledWith(index + 1, id, sale);
-    });
+    const result = await services.sales.updateSales(sales, 'vasyaId');
+    Object.entries(sales)
+      .filter(([, value]) => typeof value !== 'object')
+      .forEach(([id, sale], index) => {
+        expect(db.sales.updateOne).toHaveBeenNthCalledWith(index + 1, id, sale);
+      });
     const expectedResult = {
       '1': true,
       '2': true
