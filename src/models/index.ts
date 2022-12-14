@@ -98,7 +98,7 @@ export class Model<T = DocumentData> {
 
 export default {
   orders: new Model<OrderModel>('orders', firestore),
-  products: new Model<Product>('products', firestore),
+  products: new Model<Product>('productsProd', firestore),
   vacancies: new Model<VacancyModel>('vacancies', firestore),
   users: new Model<UserModel>('users', firestore),
   additives: new Model<AdditiveModel>('additives', firestore),
