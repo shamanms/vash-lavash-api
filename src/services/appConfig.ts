@@ -14,13 +14,16 @@ export class AppConfigService {
     throw new Error('AppConfigId is wrong');
   }
 
-  public async setIsOrderingAvailable(setOpen: Pick<AppConfigModel, 'isOpen'>) {
+  public async setIsOrderingAvailable(
+    setOpen: Pick<AppConfigModel, 'isOpen'>,
+    userId?: string
+  ) {
     if (this.configId) {
       console.log(
         'AppConfigService.setIsOrderingAvailable:: updating result:',
         setOpen
       );
-      await this.appConfig.updateOne(this.configId, setOpen);
+      await this.appConfig.updateOne(this.configId, setOpen, userId);
     } else {
       throw new Error('AppConfigId is wrong');
     }

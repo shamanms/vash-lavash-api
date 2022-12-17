@@ -17,7 +17,7 @@ export const setIsOrderingAvailablePut: SetIsOrderingAvailablePut = async (
 ) => {
   try {
     const isOpen = req.body;
-    await services.appConfig.setIsOrderingAvailable(isOpen);
+    await services.appConfig.setIsOrderingAvailable(isOpen, req?.user?.id);
 
     res.json({ status: 'OK' });
   } catch (e) {
