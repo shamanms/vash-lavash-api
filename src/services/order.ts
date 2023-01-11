@@ -81,7 +81,7 @@ export class OrderService {
     await this.composeOrderItems(order, orderRequest);
     this.countOrderPrice(order);
 
-    const { id } = await this.orderModel.insertOne(order);
+    const { id } = await this.orderModel.insertOne(order, 'user');
 
     return id;
   }
