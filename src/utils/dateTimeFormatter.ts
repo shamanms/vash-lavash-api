@@ -9,11 +9,18 @@ const timeFormat: Intl.DateTimeFormatOptions = {
   minute: 'numeric'
 };
 
+const defaultTimeZone = 'Europe/Kiev';
+
 export const dateTimeFormatter = (date: number) =>
   new Intl.DateTimeFormat('en-GB', {
     ...dateFormat,
     ...timeFormat,
-    timeZone: 'Europe/Kiev'
+    timeZone: defaultTimeZone
   })
     .format(date)
     .replace(/,/, '');
+
+export const getDateWithTimezone = (
+  timestamp: number,
+  timeZone = defaultTimeZone
+) => new Date(new Date(timestamp).toLocaleString('en-US', { timeZone }));

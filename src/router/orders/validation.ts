@@ -4,6 +4,7 @@ import { OrdersPost, OrdersPut } from './types';
 import { OrderStatus } from '../../types';
 import { isArrayOfObjects, isObject } from '../../utils';
 import db from '../../models';
+import { getDateWithTimezone } from '../../utils/dateTimeFormatter';
 
 export const ordersPost: OrdersPost = async function (req, res, next) {
   try {
@@ -35,8 +36,8 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
       throw new ValidationError('Invalid date format');
     }
 
-    const receivingDate = new Date(order.receivingTime);
-    const nowDate = new Date();
+    const receivingDate = getDateWithTimezone(order.receivingTime);
+    const nowDate = getDateWithTimezone(Date.now());
 
     if (
       receivingDate.getDay() < nowDate.getDay() ||
