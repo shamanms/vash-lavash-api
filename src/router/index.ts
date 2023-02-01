@@ -7,6 +7,7 @@ import sales from './sales';
 import additives from './additives';
 import labels from './labels';
 import appConfig from './appConfig';
+import categories from './categories';
 
 const router = Router();
 
@@ -148,4 +149,19 @@ router.put(
   appConfig.validation.setIsOrderingAvailablePut,
   appConfig.routes.setIsOrderingAvailablePut
 );
+
+router.get('/categories', categories.routes.categoriesGet);
+
+router.post(
+  '/categories',
+  auth.middlewares.adminAuth,
+  categories.routes.categoryPost
+);
+
+router.put(
+  '/categories/:categoryId',
+  auth.middlewares.adminAuth,
+  categories.routes.categoryPut
+);
+
 export default router;

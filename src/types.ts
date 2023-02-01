@@ -149,3 +149,9 @@ export enum OrderStatus {
 }
 
 export type FileExtensionType = 'jpeg' | 'jpg';
+
+export interface CategoryModel {
+  id?: string;
+  name: string;
+  order: number;
+}

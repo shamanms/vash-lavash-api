@@ -7,6 +7,7 @@ import { AdditivesService } from './additives';
 import { SalesService } from './sales';
 import { LabelsService } from './labels';
 import { AppConfigService } from './appConfig';
+import { Categories } from './categories';
 
 export default {
   order: new OrderService(db.orders, db.products, db.additives),
@@ -16,5 +17,9 @@ export default {
   sales: new SalesService(db.sales),
   additives: new AdditivesService(db.additives),
   labels: new LabelsService(db.labels),
-  appConfig: new AppConfigService(db.appConfig, process.env.APP_CONFIG_ID || '')
+  appConfig: new AppConfigService(
+    db.appConfig,
+    process.env.APP_CONFIG_ID || ''
+  ),
+  categories: new Categories(db.categories)
 };

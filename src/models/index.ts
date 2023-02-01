@@ -12,7 +12,8 @@ import {
   SaleModel,
   AppConfigModel,
   UserModel,
-  VacancyModel
+  VacancyModel,
+  CategoryModel
 } from '../types';
 import { OrderModel } from '../types';
 
@@ -98,11 +99,12 @@ export class Model<T = DocumentData> {
 
 export default {
   orders: new Model<OrderModel>('orders', firestore),
-  products: new Model<Product>('productsProd', firestore),
+  products: new Model<Product>('products', firestore),
   vacancies: new Model<VacancyModel>('vacancies', firestore),
   users: new Model<UserModel>('users', firestore),
   additives: new Model<AdditiveModel>('additives', firestore),
   sales: new Model<SaleModel>('sales', firestore),
   labels: new Model<LabelsModel>('labels', firestore),
-  appConfig: new Model<AppConfigModel>('appConfig', firestore)
+  appConfig: new Model<AppConfigModel>('appConfig', firestore),
+  categories: new Model<CategoryModel>('categories', firestore)
 };
