@@ -47,7 +47,11 @@ describe('AppConfigService.setIsOrderingAvailable', () => {
     const service = new AppConfigService(db.appConfig, APP_CONFIG_ID);
     const result = await service.setIsOrderingAvailable(param);
 
-    expect(db.appConfig.updateOne).toHaveBeenCalledWith(APP_CONFIG_ID, param);
+    expect(db.appConfig.updateOne).toHaveBeenCalledWith(
+      APP_CONFIG_ID,
+      param,
+      undefined
+    );
     expect(console.log).toHaveBeenCalled();
     expect(result).toEqual(undefined);
   });
@@ -58,7 +62,11 @@ describe('AppConfigService.setIsOrderingAvailable', () => {
     const service = new AppConfigService(db.appConfig, APP_CONFIG_ID);
     const result = await service.setIsOrderingAvailable(param);
 
-    expect(db.appConfig.updateOne).toHaveBeenCalledWith(APP_CONFIG_ID, param);
+    expect(db.appConfig.updateOne).toHaveBeenCalledWith(
+      APP_CONFIG_ID,
+      param,
+      undefined
+    );
     expect(console.log).toHaveBeenCalled();
     expect(result).toEqual(undefined);
   });

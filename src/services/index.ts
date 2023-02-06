@@ -8,6 +8,7 @@ import { SalesService } from './sales';
 import { LabelsService } from './labels';
 import { AppConfigService } from './appConfig';
 import { Categories } from './categories';
+import { ComboMenus } from './comboMenus';
 
 export default {
   order: new OrderService(db.orders, db.products, db.additives),
@@ -21,5 +22,6 @@ export default {
     db.appConfig,
     process.env.APP_CONFIG_ID || ''
   ),
-  categories: new Categories(db.categories)
+  categories: new Categories(db.categories),
+  comboMenus: new ComboMenus(db.comboMenus)
 };

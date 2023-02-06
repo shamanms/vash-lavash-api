@@ -8,6 +8,7 @@ import additives from './additives';
 import labels from './labels';
 import appConfig from './appConfig';
 import categories from './categories';
+import comboMenus from './comboMenus';
 
 const router = Router();
 
@@ -162,6 +163,22 @@ router.put(
   '/categories/:categoryId',
   auth.middlewares.adminAuth,
   categories.routes.categoryPut
+);
+
+router.get('/comboMenus', comboMenus.routes.comboMenusGet);
+
+router.put(
+  '/comboMenus',
+  auth.middlewares.adminAuth,
+  comboMenus.validation.comboMenusPut,
+  comboMenus.routes.comboMenusPut
+);
+
+router.post(
+  '/comboMenus',
+  auth.middlewares.adminAuth,
+  comboMenus.validation.comboMenusPost,
+  comboMenus.routes.comboMenusPost
 );
 
 export default router;

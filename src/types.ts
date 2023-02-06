@@ -96,6 +96,18 @@ export interface AppConfigModel {
   isOpen: boolean;
 }
 
+export interface ComboMenuModel {
+  [key: string]: string | boolean | object | undefined;
+  id?: string;
+  name: string;
+  steps: {
+    step: number;
+    products: string[];
+  };
+  isAvailable: boolean;
+  update?: UpdateInfo;
+}
+
 export interface Additive extends Pick<AdditiveModel, 'id' | 'name' | 'price'> {
   count: number;
 }

@@ -13,7 +13,8 @@ import {
   AppConfigModel,
   UserModel,
   VacancyModel,
-  CategoryModel
+  CategoryModel,
+  ComboMenuModel
 } from '../types';
 import { OrderModel } from '../types';
 
@@ -106,5 +107,6 @@ export default {
   sales: new Model<SaleModel>('sales', firestore),
   labels: new Model<LabelsModel>('labels', firestore),
   appConfig: new Model<AppConfigModel>('appConfig', firestore),
-  categories: new Model<CategoryModel>('categories', firestore)
+  categories: new Model<CategoryModel>('categories', firestore),
+  comboMenus: new Model<ComboMenuModel>('comboMenus', firestore)
 };

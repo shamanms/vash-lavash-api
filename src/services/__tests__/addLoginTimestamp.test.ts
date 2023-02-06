@@ -25,9 +25,13 @@ describe('Service.addLoginTimestamp', () => {
     };
     await services.users.addLoginTimestamp(user);
 
-    expect(db.users.updateOne).toHaveBeenCalledWith(user.id, {
-      loginDates: [1, dateNow]
-    });
+    expect(db.users.updateOne).toHaveBeenCalledWith(
+      user.id,
+      {
+        loginDates: [1, dateNow]
+      },
+      user.id
+    );
   });
   test('when user id is invalid should return "UsersService.addLoginTimestamp:: invalid user id"', async () => {
     const user = {

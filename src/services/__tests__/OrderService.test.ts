@@ -132,40 +132,43 @@ describe('Class OrderService', () => {
     expect(db.additives.findOneById).toHaveBeenCalledTimes(2);
     expect(db.additives.findOneById).toHaveBeenNthCalledWith(1, 'idOne');
     expect(db.additives.findOneById).toHaveBeenNthCalledWith(2, 'idTwo');
-    expect(db.orders.insertOne).toHaveBeenCalledWith({
-      phone: orderRequest.phone,
-      totalPrice: 54,
-      delivery: orderRequest.delivery,
-      orderStatus: 'not_confirmed',
-      items: [
-        {
-          name: 'abc',
-          price: 10,
-          id: '123',
-          additives: [{ name: 'cba', price: 1, count: 2, id: 'idOne' }]
-        },
-        {
-          name: 'abc',
-          price: 10,
-          id: '123',
-          additives: []
-        },
-        {
-          name: 'abc',
-          price: 10,
-          id: '123',
-          additives: []
-        },
-        {
-          name: 'zxc',
-          price: 20,
-          id: '456',
-          additives: [{ name: 'cxz', price: 2, count: 1, id: 'idTwo' }]
-        }
-      ],
-      timestamp: dateNow,
-      receivingTime: 123
-    });
+    expect(db.orders.insertOne).toHaveBeenCalledWith(
+      {
+        phone: orderRequest.phone,
+        totalPrice: 54,
+        delivery: orderRequest.delivery,
+        orderStatus: 'not_confirmed',
+        items: [
+          {
+            name: 'abc',
+            price: 10,
+            id: '123',
+            additives: [{ name: 'cba', price: 1, count: 2, id: 'idOne' }]
+          },
+          {
+            name: 'abc',
+            price: 10,
+            id: '123',
+            additives: []
+          },
+          {
+            name: 'abc',
+            price: 10,
+            id: '123',
+            additives: []
+          },
+          {
+            name: 'zxc',
+            price: 20,
+            id: '456',
+            additives: [{ name: 'cxz', price: 2, count: 1, id: 'idTwo' }]
+          }
+        ],
+        timestamp: dateNow,
+        receivingTime: 123
+      },
+      'user'
+    );
   });
   test('OrderService addOrder() should throw error', async () => {
     const orderRequest = {
