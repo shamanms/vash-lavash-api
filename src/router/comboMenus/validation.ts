@@ -1,6 +1,6 @@
 import { ValidationError } from '../../models/errors';
 import { ComboMenusPost, ComboMenusGet, ComboMenusPut } from './types';
-import { isObject } from '../../utils';
+import { isArrayOfObjects, isObject } from '../../utils';
 
 export const comboMenusGet: ComboMenusGet = function (req, res, next) {
   const { isAvailable } = req.query;
@@ -29,15 +29,19 @@ export const comboMenusPost: ComboMenusPost = function (req, res, next) {
     throw new ValidationError('Invalid request');
   }
 
-  if (!Array.isArray(comboMenu.steps.products)) {
+  if (!Array.isArray(comboMenu.steps)) {
     throw new ValidationError('Invalid request');
   }
-
-  if (comboMenu.steps.products.length < 1) {
-    throw new ValidationError('Incorrect products');
+  if (!isArrayOfObjects(comboMenu.steps)) {
+    throw new ValidationError('Invalid request');
   }
-  if (!comboMenu.steps.products.every((value) => typeof value === 'string')) {
-    throw new ValidationError('Incorrect products id');
+  for (const steps of comboMenu.steps) {
+    if (steps.products.length < 1) {
+      throw new ValidationError('Incorrect products');
+    }
+    if (!steps.products.every((value) => typeof value === 'string')) {
+      throw new ValidationError('Incorrect products id');
+    }
   }
   const requiredKeys: { [key: string]: string } = {
     name: 'string',

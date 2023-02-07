@@ -103,7 +103,7 @@ export interface ComboMenuModel {
   steps: {
     step: number;
     products: string[];
-  };
+  }[];
   isAvailable: boolean;
   update?: UpdateInfo;
 }

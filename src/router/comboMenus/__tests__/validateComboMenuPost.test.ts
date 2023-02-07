@@ -31,7 +31,7 @@ describe('comboMenusPost', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when products is not array should return "Invalid request"', () => {
+  test('when steps is not array should return "Invalid request"', () => {
     const req = {
       body: {
         steps: {
@@ -49,13 +49,30 @@ describe('comboMenusPost', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
+  test('when steps is array but value not object should return "Invalid request"', () => {
+    const req = {
+      body: {
+        steps: [1, 2]
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      comboMenusPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid request');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
   test('when products is empty array should return "Incorrect products"', () => {
     const req = {
       body: {
-        steps: {
-          step: 1,
-          products: []
-        }
+        steps: [
+          {
+            step: 1,
+            products: []
+          }
+        ]
       }
     };
     try {
@@ -70,10 +87,12 @@ describe('comboMenusPost', () => {
   test('when products value not string is empty array should return "Incorrect products id"', () => {
     const req = {
       body: {
-        steps: {
-          step: 1,
-          products: [1, 2]
-        }
+        steps: [
+          {
+            step: 1,
+            products: [1, 2]
+          }
+        ]
       }
     };
     try {
@@ -88,10 +107,12 @@ describe('comboMenusPost', () => {
   test('when have not required type value should return "Incorrect shape comboMenu"', () => {
     const req = {
       body: {
-        steps: {
-          step: 1,
-          products: ['bulka', 'soup']
-        }
+        steps: [
+          {
+            step: 1,
+            products: ['bulka', 'soup']
+          }
+        ]
       }
     };
     try {
@@ -107,10 +128,12 @@ describe('comboMenusPost', () => {
     const req = {
       body: {
         name: 'string',
-        steps: {
-          step: 1,
-          products: ['bulka', 'soup']
-        },
+        steps: [
+          {
+            step: 1,
+            products: ['bulka', 'soup']
+          }
+        ],
         isAvailable: false
       }
     };
