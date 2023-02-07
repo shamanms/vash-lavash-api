@@ -97,7 +97,7 @@ export interface AppConfigModel {
 }
 
 interface ComboMenuSteps {
-  step: string;
+  stepName: string;
   products: string[];
 }
 
