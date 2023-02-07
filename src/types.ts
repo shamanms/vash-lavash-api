@@ -96,14 +96,16 @@ export interface AppConfigModel {
   isOpen: boolean;
 }
 
+interface ComboMenuSteps {
+  step: number;
+  products: string[];
+}
+
 export interface ComboMenuModel {
   [key: string]: string | boolean | object | undefined;
   id?: string;
   name: string;
-  steps: {
-    step: number;
-    products: string[];
-  }[];
+  steps: ComboMenuSteps[];
   isAvailable: boolean;
   update?: UpdateInfo;
 }
