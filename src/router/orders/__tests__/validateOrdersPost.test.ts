@@ -282,7 +282,7 @@ describe('ordersPost', () => {
           }
         ],
         phone: '(000) 465-45-23',
-        receivingTime: new Date().setHours(9, 59, 59)
+        receivingTime: new Date().setHours(8, 59, 50)
       }
     };
 
@@ -314,7 +314,7 @@ describe('ordersPost', () => {
         phone: '(000) 465-45-23',
         receivingTime: new Date(
           new Date().setDate(new Date().getDate() + 1)
-        ).setHours(9, 59, 59)
+        ).setHours(8, 59, 50)
       }
     };
 
