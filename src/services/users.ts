@@ -9,8 +9,20 @@ export class UsersService {
     return users[0];
   }
 
-  public async getUserById(id: string) {
-    return this.usersModel.findOneById(id);
+  public async getUserById(id: string, projection?: (keyof UserModel)[]) {
+    const user = await this.usersModel.findOneById(id);
+
+    if (user && Array.isArray(projection)) {
+      return projection.reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: user[key]
+        }),
+        {} as Partial<UserModel>
+      );
+    }
+
+    return user;
   }
 
   public async addLoginTimestamp(user: UserModel) {
