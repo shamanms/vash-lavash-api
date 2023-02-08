@@ -8,10 +8,13 @@ import additives from './additives';
 import labels from './labels';
 import appConfig from './appConfig';
 import categories from './categories';
+import users from './users';
 
 const router = Router();
 
 router.post('/login', auth.validation.loginPost, auth.routes.login);
+
+router.get('/user', auth.middlewares.adminAuth, users.routes.getUser);
 
 router.get(
   '/products',

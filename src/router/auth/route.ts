@@ -8,7 +8,7 @@ export const login: LoginRequest = async (req, res, next) => {
     const { JWT_SECRET } = process.env;
     console.log(`${username} is trying to login ..`);
 
-    const user = await services.users.getUser(username);
+    const user = await services.users.getUserByName(username);
 
     if (
       username === user?.username &&

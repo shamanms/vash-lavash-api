@@ -4,9 +4,13 @@ import { UserModel } from '../types';
 export class UsersService {
   constructor(private readonly usersModel: Model<UserModel>) {}
 
-  public async getUser(username: string) {
+  public async getUserByName(username: string) {
     const users = await this.usersModel.findMany(['username', '==', username]);
     return users[0];
+  }
+
+  public async getUserById(id: string) {
+    return this.usersModel.findOneById(id);
   }
 
   public async addLoginTimestamp(user: UserModel) {

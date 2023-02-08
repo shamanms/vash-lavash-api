@@ -44,7 +44,7 @@ describe('route login', () => {
       role: 'admin'
     };
     // @ts-ignore for test purposes
-    services.users.getUser.mockImplementation(() => userTest);
+    services.users.getUserByName.mockImplementation(() => userTest);
     const parForRes = {
       token: 'token'
     };
@@ -61,7 +61,9 @@ describe('route login', () => {
     expect(console.log).toHaveBeenCalledWith(
       `${req.body.username} is trying to login ..`
     );
-    expect(services.users.getUser).toHaveBeenCalledWith(req.body.username);
+    expect(services.users.getUserByName).toHaveBeenCalledWith(
+      req.body.username
+    );
     expect(services.users.addLoginTimestamp).toHaveBeenCalledWith(userTest);
     expect(response.json).toHaveBeenCalledWith(parForRes);
     expect(jwt.sign).toHaveBeenCalledWith(
@@ -79,7 +81,7 @@ describe('route login', () => {
     };
     const userTest = undefined;
     // @ts-ignore for test purposes
-    services.users.getUser.mockImplementation(() => userTest);
+    services.users.getUserByName.mockImplementation(() => userTest);
     // @ts-ignore for test purposes
     await login(req, response, next);
 
