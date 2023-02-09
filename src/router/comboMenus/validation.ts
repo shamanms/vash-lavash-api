@@ -35,6 +35,9 @@ export const comboMenusPost: ComboMenusPost = function (req, res, next) {
   if (!isArrayOfObjects(comboMenu.steps)) {
     throw new ValidationError('Invalid request');
   }
+  if (comboMenu.steps.length <= 0) {
+    throw new ValidationError('Invalid request');
+  }
   for (const steps of comboMenu.steps) {
     if (!steps.products.every((value) => typeof value === 'string')) {
       throw new ValidationError('Incorrect products id');

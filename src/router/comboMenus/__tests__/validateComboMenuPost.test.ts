@@ -64,6 +64,21 @@ describe('comboMenusPost', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
+  test('when steps is empty array should return "Invalid request"', () => {
+    const req = {
+      body: {
+        steps: []
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      comboMenusPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Invalid request');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
   test('when products value not string is empty array should return "Incorrect products id"', () => {
     const req = {
       body: {
