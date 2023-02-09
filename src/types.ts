@@ -102,9 +102,10 @@ interface ComboMenuSteps {
 }
 
 export interface ComboMenuModel {
-  [key: string]: string | boolean | object | undefined;
+  [key: string]: string | boolean | object | number | undefined;
   id?: string;
   name: string;
+  price: number;
   steps: ComboMenuSteps[];
   isAvailable: boolean;
   update?: UpdateInfo;
