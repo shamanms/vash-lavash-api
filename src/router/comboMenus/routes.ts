@@ -1,5 +1,11 @@
-import { ComboMenusGet, ComboMenusPost, ComboMenusPut } from './types';
+import {
+  ComboMenuGoogleImageUrlGet,
+  ComboMenusGet,
+  ComboMenusPost,
+  ComboMenusPut
+} from './types';
 import services from '../../services';
+import { generateUploadSignedUrl } from '../../services/imageUploader';
 
 export const comboMenusGet: ComboMenusGet = async (req, res, next) => {
   try {
@@ -35,6 +41,25 @@ export const comboMenusPost: ComboMenusPost = async (req, res, next) => {
     );
 
     res.json(comboMenu);
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const comboMenuGoogleImageUrlGet: ComboMenuGoogleImageUrlGet = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const comboMenuId = req.params?.id;
+    const fileExtension = req.query?.fileExtension;
+    const url = await generateUploadSignedUrl({
+      itemId: comboMenuId,
+      fileExtension
+    });
+
+    res.json({ url });
   } catch (e) {
     next(e);
   }

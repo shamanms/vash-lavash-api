@@ -184,4 +184,11 @@ router.post(
   comboMenus.routes.comboMenusPost
 );
 
+router.get(
+  '/comboMenus/:id/image',
+  auth.middlewares.adminAuth,
+  comboMenus.validation.comboMenuGoogleImageUrlGet,
+  comboMenus.routes.comboMenuGoogleImageUrlGet
+);
+
 export default router;

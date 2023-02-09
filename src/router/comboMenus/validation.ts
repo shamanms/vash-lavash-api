@@ -1,5 +1,10 @@
 import { ValidationError } from '../../models/errors';
-import { ComboMenusPost, ComboMenusGet, ComboMenusPut } from './types';
+import {
+  ComboMenusPost,
+  ComboMenusGet,
+  ComboMenusPut,
+  ComboMenuGoogleImageUrlGet
+} from './types';
 import { isArrayOfObjects, isObject } from '../../utils';
 
 export const comboMenusGet: ComboMenusGet = function (req, res, next) {
@@ -56,5 +61,22 @@ export const comboMenusPost: ComboMenusPost = function (req, res, next) {
       throw new ValidationError('Incorrect shape comboMenu');
     }
   });
+  next();
+};
+
+export const comboMenuGoogleImageUrlGet: ComboMenuGoogleImageUrlGet = (
+  req,
+  res,
+  next
+) => {
+  const comboMenuId = req.params.id;
+  if (comboMenuId.length < 4) {
+    throw new ValidationError('Invalid sale id');
+  }
+
+  if (!['jpeg', 'jpg'].includes(req.query.fileExtension)) {
+    throw new ValidationError('Incorrect file extension');
+  }
+
   next();
 };
