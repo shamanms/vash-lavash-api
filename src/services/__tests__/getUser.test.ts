@@ -13,7 +13,7 @@ describe('Service.getUser', () => {
   });
   test('when req correct should call findMany with username and return username from array', async () => {
     const username = 'vasya';
-    const result = await services.users.getUser(username);
+    const result = await services.users.getUserByName(username);
     expect(db.users.findMany).toHaveBeenCalledWith([
       'username',
       '==',

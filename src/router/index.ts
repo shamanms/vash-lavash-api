@@ -8,11 +8,14 @@ import additives from './additives';
 import labels from './labels';
 import appConfig from './appConfig';
 import categories from './categories';
+import users from './users';
 import comboMenus from './comboMenus';
 
 const router = Router();
 
 router.post('/login', auth.validation.loginPost, auth.routes.login);
+
+router.get('/user', auth.middlewares.adminAuth, users.routes.getUser);
 
 router.get(
   '/products',
