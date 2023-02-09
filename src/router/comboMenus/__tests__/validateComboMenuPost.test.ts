@@ -129,7 +129,9 @@ describe('comboMenusPost', () => {
             products: ['bulka', 'soup']
           }
         ],
-        isAvailable: false
+        isAvailable: false,
+        price: 10,
+        img: 'img.jpg'
       }
     };
     // @ts-ignore for test purposes

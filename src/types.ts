@@ -105,6 +105,7 @@ export interface ComboMenuModel {
   [key: string]: string | boolean | object | number | undefined;
   id?: string;
   name: string;
+  img: string;
   price: number;
   steps: ComboMenuSteps[];
   isAvailable: boolean;
