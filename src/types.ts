@@ -108,6 +108,7 @@ export interface ComboMenuModel {
   img: string;
   price: number;
   steps: ComboMenuSteps[];
+  description: string;
   isAvailable: boolean;
   update?: UpdateInfo;
 }

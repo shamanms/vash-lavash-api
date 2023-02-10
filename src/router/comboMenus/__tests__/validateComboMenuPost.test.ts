@@ -131,7 +131,8 @@ describe('comboMenusPost', () => {
         ],
         isAvailable: false,
         price: 10,
-        img: 'img.jpg'
+        img: 'img.jpg',
+        description: ''
       }
     };
     // @ts-ignore for test purposes

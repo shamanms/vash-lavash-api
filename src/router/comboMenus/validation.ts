@@ -53,7 +53,8 @@ export const comboMenusPost: ComboMenusPost = function (req, res, next) {
     isAvailable: 'boolean',
     img: 'string',
     price: 'number',
-    steps: 'object'
+    steps: 'object',
+    description: 'string'
   };
 
   Object.keys(requiredKeys).forEach((key) => {
