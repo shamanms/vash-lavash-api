@@ -23,6 +23,7 @@ export interface OrderModel {
   totalPrice: number;
   orderStatus: OrderStatus;
   items: OrderedProduct[];
+  comboMenus: OrderedComboMenu[];
   timestamp: number;
   receivingTime: number;
   update?: UpdateInfo;
@@ -113,23 +114,33 @@ export interface ComboMenuModel {
   update?: UpdateInfo;
 }
 
-export interface Additive extends Pick<AdditiveModel, 'id' | 'name' | 'price'> {
+export interface OrderedAdditive
+  extends Pick<AdditiveModel, 'id' | 'name' | 'price'> {
   count: number;
 }
 
 export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
-  additives: Additive[];
+  additives: OrderedAdditive[];
 }
 
+export interface OrderedComboMenu
+  extends Pick<ComboMenuModel, 'id' | 'name' | 'price'> {
+  products: Pick<Product, 'id' | 'name' | 'price'>[];
+}
 export interface OrderItem {
   productId: string;
   additives?: {
     [key: string]: number;
   };
 }
+export interface OrderComboMenu {
+  comboMenuId: string;
+  products: string[];
+}
 export interface OrderRequest
   extends Pick<OrderModel, 'phone' | 'receivingTime' | 'delivery'> {
   items: OrderItem[];
+  comboMenus?: OrderComboMenu[];
 }
 
 export interface TypedRequestBody<T> extends Express.Request {

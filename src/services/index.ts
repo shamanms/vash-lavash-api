@@ -11,7 +11,7 @@ import { Categories } from './categories';
 import { ComboMenus } from './comboMenus';
 
 export default {
-  order: new OrderService(db.orders, db.products, db.additives),
+  order: new OrderService(db.orders, db.products, db.additives, db.comboMenus),
   products: new ProductsService(db.products),
   vacancies: new VacancyService(db.vacancies),
   users: new UsersService(db.users),

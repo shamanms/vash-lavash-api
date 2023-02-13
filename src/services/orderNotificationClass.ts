@@ -1,5 +1,10 @@
 import { Telegram } from 'telegraf';
-import { Additive, OrderModel, OrderStatus } from '../types';
+import {
+  OrderedAdditive,
+  OrderModel,
+  OrderStatus,
+  OrderedComboMenu
+} from '../types';
 import { dateTimeFormatter } from '../utils/dateTimeFormatter';
 
 export class OrderNotification {
@@ -9,7 +14,7 @@ export class OrderNotification {
     private groupId: string
   ) {}
 
-  private composeAdditives(additives: Additive[]) {
+  private composeAdditives(additives: OrderedAdditive[]) {
     if (additives?.length) {
       return `
     Добавки:
@@ -21,10 +26,34 @@ export class OrderNotification {
     return '';
   }
 
+  private composeComboMenus(comboMenus: OrderedComboMenu[]) {
+    if (comboMenus?.length) {
+      return `
+    Комбо меню:
+      ${comboMenus
+        .map(
+          (comboMenu) =>
+            `${comboMenu.name}: ${comboMenu.products.map(
+              (product) => product.name
+            )};`
+        )
+        .join('\n      ')}`;
+    }
+
+    return '';
+  }
+
   private composeMessage() {
     const { API_URL } = process.env;
-    const { phone, totalPrice, items, id, receivingTime, delivery } =
-      this.order;
+    const {
+      phone,
+      totalPrice,
+      items,
+      id,
+      receivingTime,
+      delivery,
+      comboMenus
+    } = this.order;
     const confirmedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.CONFIRMED}`;
     const completedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.COMPLETED}`;
 
@@ -36,6 +65,7 @@ Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
   ${items
     .map((item) => `${item.name}${this.composeAdditives(item.additives)}`)
     .join('\n  ')}
+${comboMenus.length > 0 ? `${this.composeComboMenus(comboMenus)}` : ''}
 Заказ оформлено на час:
   ${dateTimeFormatter(receivingTime)}
 Спосіб отримання:

@@ -4,7 +4,8 @@ import {
   OrderModel,
   OrderRequest,
   OrderStatus,
-  AdditiveModel
+  AdditiveModel,
+  ComboMenuModel
 } from '../types';
 import { ValidationError } from '../models/errors';
 
@@ -12,7 +13,8 @@ export class OrderService {
   constructor(
     private readonly orderModel: Model<OrderModel>,
     private readonly productModel: Model<Product>,
-    private readonly additiveModel: Model<AdditiveModel>
+    private readonly additiveModel: Model<AdditiveModel>,
+    private readonly comboMenuModel: Model<ComboMenuModel>
   ) {}
 
   public buildOrder(orderRequest: OrderRequest): OrderModel {
@@ -21,6 +23,7 @@ export class OrderService {
       totalPrice: 0,
       orderStatus: OrderStatus.NOT_CONFIRMED,
       items: [],
+      comboMenus: [],
       timestamp: Date.now(),
       receivingTime: orderRequest.receivingTime,
       delivery: orderRequest.delivery
@@ -67,18 +70,67 @@ export class OrderService {
     }
   }
 
+  private async composeOrderComboMenus(
+    order: OrderModel,
+    orderRequest: OrderRequest
+  ) {
+    if (orderRequest.comboMenus) {
+      for (const orderComboMenu of orderRequest.comboMenus) {
+        const comboMenu = await this.comboMenuModel.findOneById(
+          orderComboMenu.comboMenuId
+        );
+
+        const products = [];
+
+        for (const productId of orderComboMenu.products) {
+          const product = await this.productModel.findOneById(productId);
+
+          if (product) {
+            products.push({
+              id: productId,
+              name: product.name,
+              price: product.price
+            });
+          } else {
+            throw new ValidationError(
+              `Product with id: ${productId} not found`
+            );
+          }
+        }
+        if (comboMenu) {
+          order.comboMenus.push({
+            id: orderComboMenu.comboMenuId,
+            name: comboMenu.name,
+            price: comboMenu.price,
+            products: products
+          });
+        } else {
+          throw new ValidationError(
+            `ComboMenu with id: ${orderComboMenu.comboMenuId} not found`
+          );
+        }
+      }
+    }
+  }
+
   private countOrderPrice(order: OrderModel) {
+    const comboMenusPrice = order.comboMenus.reduce((sum, { price }) => {
+      return sum + price;
+    }, 0);
     order.totalPrice = order.items.reduce((sum, { price, additives }) => {
       const additivesTotalPrice = additives.reduce((sum, { count, price }) => {
         return sum + price * count;
       }, 0);
       return sum + price + additivesTotalPrice;
-    }, order.totalPrice);
+    }, order.totalPrice + comboMenusPrice);
   }
 
   public async addOrder(orderRequest: OrderRequest): Promise<string> {
     const order = this.buildOrder(orderRequest);
     await this.composeOrderItems(order, orderRequest);
+    if (orderRequest.comboMenus) {
+      await this.composeOrderComboMenus(order, orderRequest);
+    }
     this.countOrderPrice(order);
 
     const { id } = await this.orderModel.insertOne(order, 'user');
