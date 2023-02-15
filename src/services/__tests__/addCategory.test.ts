@@ -12,8 +12,8 @@ const category = {
   name: 'someName',
   order: 1,
   additionalItems: [
-    { type: AdditionalItemType.additives, itemId: 'someItemId1' },
-    { type: AdditionalItemType.products, itemId: 'someItemId2' }
+    { type: AdditionalItemType.comboMenu, itemId: 'someItemId1' },
+    { type: AdditionalItemType.sales, itemId: 'someItemId2' }
   ]
 };
 
