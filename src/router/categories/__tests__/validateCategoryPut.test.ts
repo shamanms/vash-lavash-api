@@ -1,9 +1,9 @@
-import { comboMenusPut } from '../validation';
+import { categoryPut } from '../validation';
 import { ValidationError } from '../../../models/errors';
 
 const res = {};
 const next = jest.fn();
-describe('comboMenusPut', () => {
+describe('categoryPut', () => {
   beforeEach(() => {
     jest.resetModules();
   });
@@ -11,7 +11,7 @@ describe('comboMenusPut', () => {
     const req = {};
     try {
       // @ts-ignore for test purposes
-      comboMenusPut(req, res, next);
+      categoryPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
@@ -22,7 +22,7 @@ describe('comboMenusPut', () => {
     const req: unknown[] = [];
     try {
       // @ts-ignore for test purposes
-      comboMenusPut(req, res, next);
+      categoryPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
@@ -35,35 +35,35 @@ describe('comboMenusPut', () => {
     };
     try {
       // @ts-ignore for test purposes
-      comboMenusPut(req, res, next);
+      categoryPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when req.body is empty object should return "ComboMenu not passed"', () => {
+  test('when req.body is empty object should return "Category not passed"', () => {
     const req = {
       body: {}
     };
     try {
       // @ts-ignore for test purposes
-      comboMenusPut(req, res, next);
+      categoryPut(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('ComboMenu not passed');
+      expect(e?.message).toMatch('Category not passed');
       expect(next).not.toHaveBeenCalled();
     }
   });
   test('when request is valid should go next', () => {
     const req = {
       body: {
-        step: 1,
-        products: ['bulka', 'soup']
+        name: 'someName',
+        order: 1
       }
     };
     // @ts-ignore for test purposes
-    comboMenusPut(req, res, next);
+    categoryPut(req, res, next);
     expect(next).toHaveBeenCalled();
   });
 });

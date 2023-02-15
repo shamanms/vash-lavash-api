@@ -1,9 +1,9 @@
-import { comboMenusPost } from '../validation';
+import { categoryPost } from '../validation';
 import { ValidationError } from '../../../models/errors';
 
 const res = {};
 const next = jest.fn();
-describe('comboMenusPost', () => {
+describe('categoryPost', () => {
   beforeEach(() => {
     jest.resetModules();
   });
@@ -11,7 +11,7 @@ describe('comboMenusPost', () => {
     const req = {};
     try {
       // @ts-ignore for test purposes
-      comboMenusPost(req, res, next);
+      categoryPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
@@ -24,119 +24,141 @@ describe('comboMenusPost', () => {
     };
     try {
       // @ts-ignore for test purposes
-      comboMenusPost(req, res, next);
+      categoryPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when steps is not array should return "Invalid request"', () => {
+  test('when additionalItems is not array should return "Invalid request"', () => {
     const req = {
       body: {
-        steps: {
-          step: 1,
-          products: {}
+        additionalItems: {
+          type: 'someType',
+          itemId: 1
         }
       }
     };
     try {
       // @ts-ignore for test purposes
-      comboMenusPost(req, res, next);
+      categoryPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when steps is array but value not object should return "Invalid request"', () => {
+  test('when additionalItems is array but value not object should return "Invalid request"', () => {
     const req = {
       body: {
-        steps: [1, 2]
+        additionalItems: [1, 2]
       }
     };
     try {
       // @ts-ignore for test purposes
-      comboMenusPost(req, res, next);
+      categoryPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when steps is empty array should return "Invalid request"', () => {
+  test('when additionalItems is empty array should return "Invalid request"', () => {
     const req = {
       body: {
-        steps: []
+        additionalItems: []
       }
     };
     try {
       // @ts-ignore for test purposes
-      comboMenusPost(req, res, next);
+      categoryPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Invalid request');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when products value not string array should return "Incorrect products id"', () => {
+  test('when have not required type value should return "Incorrect shape category"', () => {
     const req = {
       body: {
-        steps: [
+        additionalItems: [
           {
-            step: 1,
-            products: [1, 2]
+            type: 1
           }
-        ]
+        ],
+        name: 1,
+        order: 'someString'
       }
     };
     try {
       // @ts-ignore for test purposes
-      comboMenusPost(req, res, next);
+      categoryPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Incorrect products id');
+      expect(e?.message).toMatch('Incorrect shape category');
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when have not required type value should return "Incorrect shape comboMenu"', () => {
+  test('when itemId value not string should return "Incorrect item id"', () => {
     const req = {
       body: {
-        steps: [
+        additionalItems: [
           {
-            step: 1,
-            products: ['bulka', 'soup']
+            type: 1,
+            itemId: 2
           }
-        ]
+        ],
+        name: 'someName',
+        order: 1
       }
     };
     try {
       // @ts-ignore for test purposes
-      comboMenusPost(req, res, next);
+      categoryPost(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Incorrect shape comboMenu');
+      expect(e?.message).toMatch('Incorrect item id');
+      expect(next).not.toHaveBeenCalled();
+    }
+  });
+  test('when type value not additionalItemTypes should return "Incorrect type item"', () => {
+    const req = {
+      body: {
+        additionalItems: [
+          {
+            type: 1,
+            itemId: 'someId'
+          }
+        ],
+        name: 'someName',
+        order: 1
+      }
+    };
+    try {
+      // @ts-ignore for test purposes
+      categoryPost(req, res, next);
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(ValidationError);
+      expect(e?.message).toMatch('Incorrect type item');
       expect(next).not.toHaveBeenCalled();
     }
   });
   test('when request is valid should go next', () => {
     const req = {
       body: {
-        name: 'string',
-        steps: [
+        additionalItems: [
           {
-            step: 1,
-            products: ['bulka', 'soup']
+            type: 'products',
+            itemId: 'someId'
           }
         ],
-        isAvailable: false,
-        price: 10,
-        img: 'img.jpg',
-        description: ''
+        name: 'someName',
+        order: 1
       }
     };
     // @ts-ignore for test purposes
-    comboMenusPost(req, res, next);
+    categoryPost(req, res, next);
     expect(next).toHaveBeenCalled();
   });
 });

@@ -23,8 +23,8 @@ export const salesPut: SalesPut = function (req, res, next) {
     throw new ValidationError('Sale not passed');
   }
 
-  Object.values(sales).forEach((product) => {
-    if (!isObject(product)) {
+  Object.values(sales).forEach((sale) => {
+    if (!isObject(sale)) {
       throw new ValidationError('Incorrect sales');
     }
   });

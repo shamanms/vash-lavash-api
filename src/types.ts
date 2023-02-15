@@ -178,8 +178,21 @@ export enum OrderStatus {
 
 export type FileExtensionType = 'jpeg' | 'jpg';
 
+export enum AdditionalItemType {
+  products = 'products',
+  additives = 'additives',
+  sales = 'sales'
+}
+
+export interface AdditionalItem {
+  type: AdditionalItemType;
+  itemId: string;
+}
+
 export interface CategoryModel {
+  [key: string]: string | object | number | undefined;
   id?: string;
   name: string;
   order: number;
+  additionalItems: AdditionalItem[];
 }

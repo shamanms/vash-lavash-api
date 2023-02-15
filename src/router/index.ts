@@ -159,12 +159,14 @@ router.get('/categories', categories.routes.categoriesGet);
 router.post(
   '/categories',
   auth.middlewares.adminAuth,
+  categories.validation.categoryPost,
   categories.routes.categoryPost
 );
 
 router.put(
   '/categories/:categoryId',
   auth.middlewares.adminAuth,
+  categories.validation.categoryPut,
   categories.routes.categoryPut
 );
 

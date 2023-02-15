@@ -24,6 +24,10 @@ export const comboMenusPut: ComboMenusPut = function (req, res, next) {
     throw new ValidationError('Invalid request');
   }
 
+  if (Object.keys(comboMenu).length < 1) {
+    throw new ValidationError('ComboMenu not passed');
+  }
+
   next();
 };
 
