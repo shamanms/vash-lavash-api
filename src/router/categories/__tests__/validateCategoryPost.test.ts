@@ -149,7 +149,7 @@ describe('categoryPost', () => {
       body: {
         additionalItems: [
           {
-            type: 'products',
+            type: 'comboMenu',
             itemId: 'someId'
           }
         ],

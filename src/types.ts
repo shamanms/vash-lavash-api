@@ -179,8 +179,7 @@ export enum OrderStatus {
 export type FileExtensionType = 'jpeg' | 'jpg';
 
 export enum AdditionalItemType {
-  products = 'products',
-  additives = 'additives',
+  comboMenu = 'comboMenu',
   sales = 'sales'
 }
 
