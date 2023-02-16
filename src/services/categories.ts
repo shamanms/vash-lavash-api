@@ -9,7 +9,13 @@ export class Categories {
   }
 
   public async addCategory(category: CategoryModel, userId?: string) {
-    return await this.categoryModel.insertOne(category, userId);
+    await this.categoryModel.insertOne(category, userId);
+    const existingCategory = await this.getCategories();
+    return existingCategory.find((dbCategory) =>
+      Object.entries(category)
+        .filter(([, value]) => typeof value !== 'object')
+        .every(([key, value]) => dbCategory[key] === value)
+    );
   }
 
   public async updateCategory(

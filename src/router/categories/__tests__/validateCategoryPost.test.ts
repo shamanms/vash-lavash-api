@@ -49,36 +49,6 @@ describe('categoryPost', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when additionalItems is array but value not object should return "Invalid request"', () => {
-    const req = {
-      body: {
-        additionalItems: [1, 2]
-      }
-    };
-    try {
-      // @ts-ignore for test purposes
-      categoryPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid request');
-      expect(next).not.toHaveBeenCalled();
-    }
-  });
-  test('when additionalItems is empty array should return "Invalid request"', () => {
-    const req = {
-      body: {
-        additionalItems: []
-      }
-    };
-    try {
-      // @ts-ignore for test purposes
-      categoryPost(req, res, next);
-    } catch (e: any) {
-      expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid request');
-      expect(next).not.toHaveBeenCalled();
-    }
-  });
   test('when have not required type value should return "Incorrect shape category"', () => {
     const req = {
       body: {

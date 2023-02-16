@@ -27,12 +27,6 @@ export const categoryPost: CategoryPost = function (req, res, next) {
   if (!Array.isArray(category.additionalItems)) {
     throw new ValidationError('Invalid request');
   }
-  if (!isArrayOfObjects(category.additionalItems)) {
-    throw new ValidationError('Invalid request');
-  }
-  if (category.additionalItems.length <= 0) {
-    throw new ValidationError('Invalid request');
-  }
 
   const requiredKeys: { [key: string]: string } = {
     name: 'string',
