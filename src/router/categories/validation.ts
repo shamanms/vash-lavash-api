@@ -1,5 +1,5 @@
 import { CategoryPost, CategoryPut } from './types';
-import { isArrayOfObjects, isObject } from '../../utils';
+import {  isObject } from '../../utils';
 import { ValidationError } from '../../models/errors';
 import { AdditionalItemType } from '../../types';
 
