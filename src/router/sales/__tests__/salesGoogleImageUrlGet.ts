@@ -25,7 +25,7 @@ describe('validation salesGoogleImageUrlGet', () => {
       expect(next).not.toHaveBeenCalled();
     }
   });
-  test('when fileExtension is not jpeg or jpg should return "Incorrect file extension"', () => {
+  test('when fileExtension is not jpeg or jpg or png, should return "Incorrect file extension"', () => {
     const req = {
       params: {
         id: '12345'

@@ -74,7 +74,7 @@ export const additiveGoogleImageUrlGet: AdditiveGoogleImageUrlGet = (
     throw new ValidationError('Invalid additive id');
   }
 
-  if (!['jpeg', 'jpg'].includes(req.query.fileExtension)) {
+  if (!['jpeg', 'jpg', 'png'].includes(req.query.fileExtension)) {
     throw new ValidationError('Incorrect file extension');
   }
 

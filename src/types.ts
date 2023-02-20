@@ -176,7 +176,7 @@ export enum OrderStatus {
   COMPLETED = 'completed'
 }
 
-export type FileExtensionType = 'jpeg' | 'jpg';
+export type FileExtensionType = 'jpeg' | 'jpg' | 'png';
 
 export enum AdditionalItemType {
   comboMenu = 'comboMenu',

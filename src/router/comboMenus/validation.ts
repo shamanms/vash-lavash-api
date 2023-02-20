@@ -79,7 +79,7 @@ export const comboMenuGoogleImageUrlGet: ComboMenuGoogleImageUrlGet = (
     throw new ValidationError('Invalid sale id');
   }
 
-  if (!['jpeg', 'jpg'].includes(req.query.fileExtension)) {
+  if (!['jpeg', 'jpg', 'png'].includes(req.query.fileExtension)) {
     throw new ValidationError('Incorrect file extension');
   }
 
