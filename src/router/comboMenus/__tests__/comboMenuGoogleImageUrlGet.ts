@@ -1,13 +1,13 @@
-import { additiveGoogleImageUrlGet } from '../validation';
+import { comboMenuGoogleImageUrlGet } from '../validation';
 import { ValidationError } from '../../../models/errors';
 
 const res = {};
 const next = jest.fn();
-describe('validation additiveGoogleImageUrlGet', () => {
+describe('validation comboMenuGoogleImageUrlGet', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  test('when id.length < 4 should return "Invalid additive id"', () => {
+  test('when id.length < 4 should return "Invalid sale id"', () => {
     const req = {
       params: {
         id: '123'
@@ -18,10 +18,10 @@ describe('validation additiveGoogleImageUrlGet', () => {
     };
     try {
       // @ts-ignore for test purposes
-      additiveGoogleImageUrlGet(req, res, next);
+      comboMenuGoogleImageUrlGet(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
-      expect(e?.message).toMatch('Invalid additive id');
+      expect(e?.message).toMatch('Invalid sale id');
       expect(next).not.toHaveBeenCalled();
     }
   });
@@ -36,7 +36,7 @@ describe('validation additiveGoogleImageUrlGet', () => {
     };
     try {
       // @ts-ignore for test purposes
-      additiveGoogleImageUrlGet(req, res, next);
+      comboMenuGoogleImageUrlGet(req, res, next);
     } catch (e: any) {
       expect(e).toBeInstanceOf(ValidationError);
       expect(e?.message).toMatch('Incorrect file extension');
@@ -54,7 +54,7 @@ describe('validation additiveGoogleImageUrlGet', () => {
     };
     try {
       // @ts-ignore for test purposes
-      additiveGoogleImageUrlGet(req, res, next);
+      comboMenuGoogleImageUrlGet(req, res, next);
     } catch (e: any) {
       expect(next).toHaveBeenCalled();
     }
@@ -70,7 +70,7 @@ describe('validation additiveGoogleImageUrlGet', () => {
     };
     try {
       // @ts-ignore for test purposes
-      additiveGoogleImageUrlGet(req, res, next);
+      comboMenuGoogleImageUrlGet(req, res, next);
     } catch (e: any) {
       expect(next).toHaveBeenCalled();
     }

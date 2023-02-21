@@ -9,6 +9,7 @@ import labels from './labels';
 import appConfig from './appConfig';
 import categories from './categories';
 import users from './users';
+import comboMenus from './comboMenus';
 
 const router = Router();
 
@@ -158,13 +159,38 @@ router.get('/categories', categories.routes.categoriesGet);
 router.post(
   '/categories',
   auth.middlewares.adminAuth,
+  categories.validation.categoryPost,
   categories.routes.categoryPost
 );
 
 router.put(
   '/categories/:categoryId',
   auth.middlewares.adminAuth,
+  categories.validation.categoryPut,
   categories.routes.categoryPut
+);
+
+router.get('/comboMenus', comboMenus.routes.comboMenusGet);
+
+router.put(
+  '/comboMenus',
+  auth.middlewares.adminAuth,
+  comboMenus.validation.comboMenusPut,
+  comboMenus.routes.comboMenusPut
+);
+
+router.post(
+  '/comboMenus',
+  auth.middlewares.adminAuth,
+  comboMenus.validation.comboMenusPost,
+  comboMenus.routes.comboMenusPost
+);
+
+router.get(
+  '/comboMenus/:id/image',
+  auth.middlewares.adminAuth,
+  comboMenus.validation.comboMenuGoogleImageUrlGet,
+  comboMenus.routes.comboMenuGoogleImageUrlGet
 );
 
 export default router;

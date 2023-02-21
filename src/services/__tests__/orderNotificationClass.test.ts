@@ -59,6 +59,26 @@ let order: OrderModel = {
       ]
     }
   ],
+  comboMenus: [
+    {
+      name: 'comboMenuName1',
+      id: '111',
+      price: 100,
+      products: [
+        { id: '123', price: 10, name: 'comboMenuProduct1' },
+        { id: '321', price: 10, name: 'comboMenuProduct2' }
+      ]
+    },
+    {
+      name: 'comboMenuName2',
+      id: '222',
+      price: 100,
+      products: [
+        { id: '123', price: 10, name: 'comboMenuProduct12' },
+        { id: '321', price: 10, name: 'comboMenuProduct22' }
+      ]
+    }
+  ],
   timestamp: Date.now(),
   receivingTime: new Date().setHours(12, 10, 15)
 };
@@ -78,6 +98,10 @@ Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
     Добавки:
       ${order.items[2].additives[0].name}: ${order.items[2].additives[0].count}шт;
       ${order.items[2].additives[1].name}: ${order.items[2].additives[1].count}шт;
+
+    Комбо меню:
+      ${order.comboMenus[0].name}: ${order.comboMenus[0].products[0].name},${order.comboMenus[0].products[1].name};
+      ${order.comboMenus[1].name}: ${order.comboMenus[1].products[0].name},${order.comboMenus[1].products[1].name};
 Заказ оформлено на час:
   ${dateTimeFormatter(order.receivingTime)}
 Спосіб отримання:
@@ -128,6 +152,7 @@ describe('Class orderNotification', () => {
           additives: []
         }
       ],
+      comboMenus: [],
       timestamp: Date.now(),
       receivingTime: new Date().setHours(12, 10, 15)
     };
@@ -138,6 +163,7 @@ Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
 <b>Товари:</b>
   ${order.items[0].name}
+
 Заказ оформлено на час:
   ${dateTimeFormatter(order.receivingTime)}
 Спосіб отримання:
