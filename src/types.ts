@@ -50,6 +50,7 @@ export interface UserModel {
   firstName: string;
   lastName: string;
   role: string;
+  isActive: boolean;
   loginDates: number[];
 }
 

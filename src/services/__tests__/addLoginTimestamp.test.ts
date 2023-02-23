@@ -21,6 +21,7 @@ describe('Service.addLoginTimestamp', () => {
       username: 'pete',
       password: '123',
       role: 'user',
+      isActive: true,
       loginDates: [1]
     };
     await services.users.addLoginTimestamp(user);
