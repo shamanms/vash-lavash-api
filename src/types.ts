@@ -112,6 +112,7 @@ export interface ComboMenuModel {
   steps: ComboMenuSteps[];
   description: string;
   isAvailable: boolean;
+  isConstructor: boolean;
   update?: UpdateInfo;
 }
 
@@ -126,7 +127,9 @@ export interface OrderedProduct extends Pick<Product, 'id' | 'name' | 'price'> {
 
 export interface OrderedComboMenu
   extends Pick<ComboMenuModel, 'id' | 'name' | 'price'> {
-  products: Pick<Product, 'id' | 'name' | 'price'>[];
+  products:
+    | Pick<Product, 'id' | 'name' | 'price'>[]
+    | Pick<AdditiveModel, 'id' | 'name' | 'price'>[];
 }
 export interface OrderItem {
   productId: string;
@@ -136,6 +139,7 @@ export interface OrderItem {
 }
 export interface OrderComboMenu {
   comboMenuId: string;
+  isConstructor: boolean;
   products: string[];
 }
 export interface OrderRequest

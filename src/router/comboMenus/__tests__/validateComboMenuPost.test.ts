@@ -132,7 +132,8 @@ describe('comboMenusPost', () => {
         isAvailable: false,
         price: 10,
         img: 'img.jpg',
-        description: ''
+        description: '',
+        isConstructor: false
       }
     };
     // @ts-ignore for test purposes

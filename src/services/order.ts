@@ -83,25 +83,46 @@ export class OrderService {
         const products = [];
 
         for (const productId of orderComboMenu.products) {
-          const product = await this.productModel.findOneById(productId);
-
-          if (product) {
-            products.push({
-              id: productId,
-              name: product.name,
-              price: product.price
-            });
+          if (orderComboMenu.isConstructor) {
+            const additive = await this.additiveModel.findOneById(productId);
+            if (additive) {
+              products.push({
+                id: productId,
+                name: additive.name,
+                price: additive.price
+              });
+            } else {
+              throw new ValidationError(
+                `Additive with id: ${productId} not found`
+              );
+            }
           } else {
-            throw new ValidationError(
-              `Product with id: ${productId} not found`
-            );
+            const product = await this.productModel.findOneById(productId);
+
+            if (product) {
+              products.push({
+                id: productId,
+                name: product.name,
+                price: product.price
+              });
+            } else {
+              throw new ValidationError(
+                `Product with id: ${productId} not found`
+              );
+            }
           }
         }
+
         if (comboMenu) {
           order.comboMenus.push({
             id: orderComboMenu.comboMenuId,
             name: comboMenu.name,
-            price: comboMenu.price,
+            price: comboMenu.isConstructor
+              ? products.reduce((acc, { price }) => {
+                  acc += price;
+                  return acc;
+                }, 0)
+              : comboMenu.price,
             products: products
           });
         } else {

@@ -10,13 +10,23 @@ const dbComboMenus = [
     name: 'obed',
     steps: { step: 1, products: ['id1', 'id2'] },
     isAvailable: false,
+    isConstructor: false,
     create: { createdBy: 'vasyaId', createdAt: dateNow }
   },
   {
     id: '2',
-    name: 'pizza',
+    name: 'fast food',
     steps: { step: 1, products: ['id1', 'id2'] },
     isAvailable: false,
+    isConstructor: false,
+    create: { createdBy: undefined, createdAt: dateNow }
+  },
+  {
+    id: '3',
+    name: 'pizza',
+    steps: { step: 2, products: ['id1', 'id2'] },
+    isAvailable: false,
+    isConstructor: true,
     create: { createdBy: undefined, createdAt: dateNow }
   }
 ];
@@ -37,7 +47,8 @@ describe('Service.addComboMenus', () => {
     const comboMenu: Omit<ComboMenuModel, 'id'> = {
       name: 'obed',
       steps: { step: 1, products: ['id1', 'id2'] },
-      isAvailable: false
+      isAvailable: false,
+      isConstructor: false
     };
     // @ts-ignore for test purposes
     const result = await services.comboMenus.addComboMenu(comboMenu, 'vasyaId');
@@ -47,9 +58,10 @@ describe('Service.addComboMenus', () => {
   });
   test('when called with comboMenu, and without userId should add comboMenu with createInfo with time and return with id', async () => {
     const comboMenu: Omit<ComboMenuModel, 'id'> = {
-      name: 'pizza',
+      name: 'fast food',
       steps: { step: 1, products: ['id1', 'id2'] },
-      isAvailable: false
+      isAvailable: false,
+      isConstructor: false
     };
 
     // @ts-ignore for test purposes
@@ -57,5 +69,19 @@ describe('Service.addComboMenus', () => {
     expect(db.comboMenus.insertOne).toHaveBeenCalledWith(comboMenu, undefined);
     expect(db.comboMenus.findMany).toHaveBeenCalled();
     expect(result).toEqual(dbComboMenus[1]);
+  });
+  test('when called with comboMenu, and without userId should add comboMenu with createInfo with time and return with id', async () => {
+    const comboMenu: Omit<ComboMenuModel, 'id'> = {
+      name: 'pizza',
+      steps: { step: 2, products: ['id1', 'id2'] },
+      isAvailable: false,
+      isConstructor: true
+    };
+
+    // @ts-ignore for test purposes
+    const result = await services.comboMenus.addComboMenu(comboMenu);
+    expect(db.comboMenus.insertOne).toHaveBeenCalledWith(comboMenu, undefined);
+    expect(db.comboMenus.findMany).toHaveBeenCalled();
+    expect(result).toEqual(dbComboMenus[2]);
   });
 });
