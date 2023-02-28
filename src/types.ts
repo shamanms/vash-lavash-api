@@ -100,6 +100,7 @@ export interface AppConfigModel {
 
 interface ComboMenuSteps {
   stepName: string;
+  multiProducts: boolean;
   products: string[];
 }
 

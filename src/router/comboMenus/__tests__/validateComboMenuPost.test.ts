@@ -85,6 +85,7 @@ describe('comboMenusPost', () => {
         steps: [
           {
             step: 1,
+            multiProducts: false,
             products: [1, 2]
           }
         ]
@@ -105,6 +106,7 @@ describe('comboMenusPost', () => {
         steps: [
           {
             step: 1,
+            multiProducts: true,
             products: ['bulka', 'soup']
           }
         ]
@@ -126,6 +128,7 @@ describe('comboMenusPost', () => {
         steps: [
           {
             step: 1,
+            multiProducts: false,
             products: ['bulka', 'soup']
           }
         ],
