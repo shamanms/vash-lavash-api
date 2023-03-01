@@ -22,7 +22,7 @@ export const ordersPost: OrdersPost = async function (req, res, next) {
       throw new ValidationError('Invalid order items');
     }
 
-    if (order.items.length < 1) {
+    if (order.items.length < 1 && !order.comboMenus) {
       throw new ValidationError('Invalid order');
     }
 

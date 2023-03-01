@@ -99,9 +99,9 @@ Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
       ${order.items[2].additives[0].name}: ${order.items[2].additives[0].count}шт;
       ${order.items[2].additives[1].name}: ${order.items[2].additives[1].count}шт;
 
-    Комбо меню:
-      ${order.comboMenus[0].name}: ${order.comboMenus[0].products[0].name},${order.comboMenus[0].products[1].name};
-      ${order.comboMenus[1].name}: ${order.comboMenus[1].products[0].name},${order.comboMenus[1].products[1].name};
+<b>Комбо меню:</b>
+  ${order.comboMenus[0].name}: ${order.comboMenus[0].products[0].name},${order.comboMenus[0].products[1].name};
+  ${order.comboMenus[1].name}: ${order.comboMenus[1].products[0].name},${order.comboMenus[1].products[1].name};
 Заказ оформлено на час:
   ${dateTimeFormatter(order.receivingTime)}
 Спосіб отримання:
