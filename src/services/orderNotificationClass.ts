@@ -29,15 +29,15 @@ export class OrderNotification {
   private composeComboMenus(comboMenus: OrderedComboMenu[]) {
     if (comboMenus?.length) {
       return `
-    Комбо меню:
-      ${comboMenus
-        .map(
-          (comboMenu) =>
-            `${comboMenu.name}: ${comboMenu.products.map(
-              (product) => product.name
-            )};`
-        )
-        .join('\n      ')}`;
+<b>Комбо меню:</b>
+  ${comboMenus
+    .map(
+      (comboMenu) =>
+        `${comboMenu.name}: ${comboMenu.products.map(
+          (product) => product.name
+        )};`
+    )
+    .join('\n  ')}`;
     }
 
     return '';
@@ -61,10 +61,14 @@ export class OrderNotification {
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
 Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
 Сума: ${totalPrice}UAH
-<b>Товари:</b>
+${
+  items.length > 0
+    ? `<b>Товари:</b>
   ${items
     .map((item) => `${item.name}${this.composeAdditives(item.additives)}`)
-    .join('\n  ')}
+    .join('\n  ')}`
+    : ''
+}
 ${comboMenus.length > 0 ? `${this.composeComboMenus(comboMenus)}` : ''}
 Заказ оформлено на час:
   ${dateTimeFormatter(receivingTime)}

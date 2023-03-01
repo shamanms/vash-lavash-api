@@ -55,6 +55,7 @@ export const comboMenusPost: ComboMenusPost = function (req, res, next) {
   const requiredKeys: { [key: string]: string } = {
     name: 'string',
     isAvailable: 'boolean',
+    isConstructor: 'boolean',
     img: 'string',
     price: 'number',
     steps: 'object',

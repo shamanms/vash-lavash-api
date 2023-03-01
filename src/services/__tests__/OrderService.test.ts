@@ -85,15 +85,28 @@ describe('Class OrderService', () => {
           }
         }
       ],
-      comboMenus: [{ comboMenuId: '555', products: ['111', '222'] }],
+      comboMenus: [
+        { comboMenuId: '555', isConstructor: false, products: ['111', '222'] },
+        {
+          comboMenuId: '666',
+          isConstructor: true,
+          products: ['idOne', 'idTwo']
+        }
+      ],
       phone: 'abc',
       receivingTime: 123,
       delivery: 'home'
     };
 
-    const insertedComboMenuDocument = {
+    const insertedComboMenuDocument1 = {
       name: 'comboMenuName',
-      price: 100
+      price: 100,
+      isConstructor: false
+    };
+    const insertedComboMenuDocument2 = {
+      name: 'constructorPizza',
+      price: 0,
+      isConstructor: true
     };
     const insertedProductDocument1 = {
       name: 'abc',
@@ -138,11 +151,13 @@ describe('Class OrderService', () => {
     db.additives.findOneById
       // @ts-ignore for test purposes
       .mockImplementationOnce(() => insertedAdditiveDocument1)
+      .mockImplementationOnce(() => insertedAdditiveDocument2)
+      .mockImplementationOnce(() => insertedAdditiveDocument1)
       .mockImplementationOnce(() => insertedAdditiveDocument2);
-    // @ts-ignore for test purposes
-    db.comboMenus.findOneById.mockImplementation(
-      () => insertedComboMenuDocument
-    );
+    db.comboMenus.findOneById
+      // @ts-ignore for test purposes
+      .mockImplementationOnce(() => insertedComboMenuDocument1)
+      .mockImplementationOnce(() => insertedComboMenuDocument2);
 
     const id = { id: '33' };
     // @ts-ignore for test purposes
@@ -164,14 +179,17 @@ describe('Class OrderService', () => {
     expect(db.products.findOneById).toHaveBeenNthCalledWith(2, '123');
     expect(db.products.findOneById).toHaveBeenNthCalledWith(3, '123');
     expect(db.products.findOneById).toHaveBeenNthCalledWith(4, '456');
-    expect(db.additives.findOneById).toHaveBeenCalledTimes(2);
+    expect(db.additives.findOneById).toHaveBeenCalledTimes(4);
     expect(db.additives.findOneById).toHaveBeenNthCalledWith(1, 'idOne');
     expect(db.additives.findOneById).toHaveBeenNthCalledWith(2, 'idTwo');
-    expect(db.comboMenus.findOneById).toHaveBeenCalledWith('555');
+    expect(db.comboMenus.findOneById).toHaveBeenNthCalledWith(1, '555');
+    expect(db.comboMenus.findOneById).toHaveBeenNthCalledWith(2, '666');
+    expect(db.additives.findOneById).toHaveBeenNthCalledWith(3, 'idOne');
+    expect(db.additives.findOneById).toHaveBeenNthCalledWith(4, 'idTwo');
     expect(db.orders.insertOne).toHaveBeenCalledWith(
       {
         phone: orderRequest.phone,
-        totalPrice: 154,
+        totalPrice: 157,
         delivery: orderRequest.delivery,
         orderStatus: 'not_confirmed',
         items: [
@@ -208,6 +226,15 @@ describe('Class OrderService', () => {
             products: [
               { id: '111', name: 'comboMenuProduct1', price: 10 },
               { id: '222', name: 'comboMenuProduct2', price: 10 }
+            ]
+          },
+          {
+            id: '666',
+            name: 'constructorPizza',
+            price: 3,
+            products: [
+              { id: 'idOne', name: 'cba', price: 1 },
+              { id: 'idTwo', name: 'cxz', price: 2 }
             ]
           }
         ],
@@ -291,7 +318,9 @@ describe('Class OrderService', () => {
           }
         }
       ],
-      comboMenus: [{ comboMenuId: 'id', products: ['123'] }],
+      comboMenus: [
+        { comboMenuId: 'id', isConstructor: false, products: ['123'] }
+      ],
       phone: 'abc',
       receivingTime: 123,
       delivery: null
@@ -334,7 +363,9 @@ describe('Class OrderService', () => {
           }
         }
       ],
-      comboMenus: [{ comboMenuId: 'id', products: ['333'] }],
+      comboMenus: [
+        { comboMenuId: 'id', isConstructor: false, products: ['333'] }
+      ],
       phone: 'abc',
       receivingTime: 123,
       delivery: null
@@ -349,6 +380,7 @@ describe('Class OrderService', () => {
     };
     const insertedComboMenuDocument = {
       name: 'comboMenuName',
+      isConstructor: false,
       price: 100
     };
     db.products.findOneById
@@ -371,6 +403,59 @@ describe('Class OrderService', () => {
       await service.addOrder(orderRequest);
     } catch (e: any) {
       expect(e?.message).toMatch(`Product with id: 333 not found`);
+    }
+  });
+  test('OrderService addOrder() should throw error "Additive with id: 333 not found"', async () => {
+    const orderRequest = {
+      items: [
+        {
+          productId: '123',
+          additives: {
+            idOne: 1
+          }
+        }
+      ],
+      comboMenus: [
+        { comboMenuId: 'id', isConstructor: true, products: ['333'] }
+      ],
+      phone: 'abc',
+      receivingTime: 123,
+      delivery: null
+    };
+    const insertedAdditiveDocument = {
+      name: 'cba',
+      price: 1
+    };
+    const insertedProductDocument = {
+      name: 'abc',
+      price: 10
+    };
+    const insertedComboMenuDocument = {
+      name: 'comboMenuName',
+      isConstructor: false,
+      price: 0
+    };
+    db.products.findOneById
+      // @ts-ignore for test purposes
+      .mockImplementationOnce(() => insertedProductDocument);
+    db.additives.findOneById
+      // @ts-ignore for test purposes
+      .mockImplementationOnce(() => insertedAdditiveDocument)
+      .mockImplementationOnce(() => undefined);
+    // @ts-ignore for test purposes
+    db.comboMenus.findOneById.mockImplementation(
+      () => insertedComboMenuDocument
+    );
+    const service = new OrderService(
+      db.orders,
+      db.products,
+      db.additives,
+      db.comboMenus
+    );
+    try {
+      await service.addOrder(orderRequest);
+    } catch (e: any) {
+      expect(e?.message).toMatch(`Additive with id: 333 not found`);
     }
   });
   test('OrderService getOrder() should called', async () => {

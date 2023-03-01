@@ -84,7 +84,8 @@ describe('comboMenusPost', () => {
       body: {
         steps: [
           {
-            step: 1,
+            stepName: 'one',
+            multiProducts: false,
             products: [1, 2]
           }
         ]
@@ -104,7 +105,8 @@ describe('comboMenusPost', () => {
       body: {
         steps: [
           {
-            step: 1,
+            stepName: 'one',
+            multiProducts: true,
             products: ['bulka', 'soup']
           }
         ]
@@ -125,14 +127,16 @@ describe('comboMenusPost', () => {
         name: 'string',
         steps: [
           {
-            step: 1,
+            stepName: 'one',
+            multiProducts: false,
             products: ['bulka', 'soup']
           }
         ],
         isAvailable: false,
         price: 10,
         img: 'img.jpg',
-        description: ''
+        description: '',
+        isConstructor: false
       }
     };
     // @ts-ignore for test purposes
