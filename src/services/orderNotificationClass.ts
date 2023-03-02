@@ -33,9 +33,8 @@ export class OrderNotification {
   ${comboMenus
     .map(
       (comboMenu) =>
-        `${comboMenu.name}: ${comboMenu.products.map(
-          (product) => product.name
-        )};`
+        `${comboMenu.name}: 
+    ${comboMenu.products.map((product) => product.name)};`
     )
     .join('\n  ')}`;
     }

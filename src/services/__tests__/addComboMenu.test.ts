@@ -8,7 +8,14 @@ const dbComboMenus = [
   {
     id: '1',
     name: 'obed',
-    steps: { stepName: 'one', multiProducts: false, products: ['id1', 'id2'] },
+    steps: {
+      stepName: 'one',
+      multiProducts: false,
+      multiOneProduct: false,
+      maxProducts: null,
+      products: ['id1', 'id2']
+    },
+    fixedPrice: true,
     isAvailable: false,
     isConstructor: false,
     create: { createdBy: 'vasyaId', createdAt: dateNow }
@@ -16,16 +23,30 @@ const dbComboMenus = [
   {
     id: '2',
     name: 'fast food',
-    steps: { stepName: 'one', multiProducts: false, products: ['id1', 'id2'] },
+    steps: {
+      stepName: 'one',
+      multiProducts: false,
+      multiOneProduct: false,
+      maxProducts: null,
+      products: ['id1', 'id2']
+    },
     isAvailable: false,
+    fixedPrice: true,
     isConstructor: false,
     create: { createdBy: undefined, createdAt: dateNow }
   },
   {
     id: '3',
     name: 'pizza',
-    steps: { stepName: 'one', multiProducts: true, products: ['id1', 'id2'] },
+    steps: {
+      stepName: 'one',
+      multiProducts: true,
+      multiOneProduct: true,
+      maxProducts: null,
+      products: ['id1', 'id2']
+    },
     isAvailable: false,
+    fixedPrice: false,
     isConstructor: true,
     create: { createdBy: undefined, createdAt: dateNow }
   }
@@ -49,8 +70,11 @@ describe('Service.addComboMenus', () => {
       steps: {
         stepName: 'one',
         multiProducts: false,
+        multiOneProduct: false,
+        maxProducts: null,
         products: ['id1', 'id2']
       },
+      fixedPrice: true,
       isAvailable: false,
       isConstructor: false
     };
@@ -66,9 +90,12 @@ describe('Service.addComboMenus', () => {
       steps: {
         stepName: 'one',
         multiProducts: false,
+        multiOneProduct: false,
+        maxProducts: null,
         products: ['id1', 'id2']
       },
       isAvailable: false,
+      fixedPrice: true,
       isConstructor: false
     };
 
@@ -81,8 +108,15 @@ describe('Service.addComboMenus', () => {
   test('when called with comboMenu, and without userId should add comboMenu with createInfo with time and return with id', async () => {
     const comboMenu: Omit<ComboMenuModel, 'id'> = {
       name: 'pizza',
-      steps: { stepName: 'one', multiProducts: true, products: ['id1', 'id2'] },
+      steps: {
+        stepName: 'one',
+        multiProducts: true,
+        multiOneProduct: true,
+        maxProducts: null,
+        products: ['id1', 'id2']
+      },
       isAvailable: false,
+      fixedPrice: false,
       isConstructor: true
     };
 

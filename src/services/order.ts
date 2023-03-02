@@ -114,15 +114,15 @@ export class OrderService {
         }
 
         if (comboMenu) {
+          const newPriceComboMenu = products.reduce((acc, { price }) => {
+            acc += price;
+            return acc;
+          }, 0);
+
           order.comboMenus.push({
             id: orderComboMenu.comboMenuId,
             name: comboMenu.name,
-            price: comboMenu.isConstructor
-              ? products.reduce((acc, { price }) => {
-                  acc += price;
-                  return acc;
-                }, 0)
-              : comboMenu.price,
+            price: comboMenu.fixedPrice ? comboMenu.price : newPriceComboMenu,
             products: products
           });
         } else {
