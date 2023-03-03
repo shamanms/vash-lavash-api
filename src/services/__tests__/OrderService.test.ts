@@ -86,10 +86,16 @@ describe('Class OrderService', () => {
         }
       ],
       comboMenus: [
-        { comboMenuId: '555', isConstructor: false, products: ['111', '222'] },
+        {
+          comboMenuId: '555',
+          isConstructor: false,
+          fixedPrice: true,
+          products: ['111', '222']
+        },
         {
           comboMenuId: '666',
           isConstructor: true,
+          fixedPrice: false,
           products: ['idOne', 'idTwo']
         }
       ],
@@ -101,12 +107,14 @@ describe('Class OrderService', () => {
     const insertedComboMenuDocument1 = {
       name: 'comboMenuName',
       price: 100,
-      isConstructor: false
+      isConstructor: false,
+      fixedPrice: true
     };
     const insertedComboMenuDocument2 = {
       name: 'constructorPizza',
       price: 0,
-      isConstructor: true
+      isConstructor: true,
+      fixedPrice: false
     };
     const insertedProductDocument1 = {
       name: 'abc',
@@ -319,7 +327,12 @@ describe('Class OrderService', () => {
         }
       ],
       comboMenus: [
-        { comboMenuId: 'id', isConstructor: false, products: ['123'] }
+        {
+          comboMenuId: 'id',
+          isConstructor: false,
+          fixedPrice: true,
+          products: ['123']
+        }
       ],
       phone: 'abc',
       receivingTime: 123,
@@ -364,7 +377,12 @@ describe('Class OrderService', () => {
         }
       ],
       comboMenus: [
-        { comboMenuId: 'id', isConstructor: false, products: ['333'] }
+        {
+          comboMenuId: 'id',
+          isConstructor: false,
+          fixedPrice: true,
+          products: ['333']
+        }
       ],
       phone: 'abc',
       receivingTime: 123,
@@ -416,7 +434,12 @@ describe('Class OrderService', () => {
         }
       ],
       comboMenus: [
-        { comboMenuId: 'id', isConstructor: true, products: ['333'] }
+        {
+          comboMenuId: 'id',
+          isConstructor: true,
+          fixedPrice: false,
+          products: ['333']
+        }
       ],
       phone: 'abc',
       receivingTime: 123,

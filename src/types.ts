@@ -101,6 +101,8 @@ export interface AppConfigModel {
 interface ComboMenuSteps {
   stepName: string;
   multiProducts: boolean;
+  multiOneProduct: boolean;
+  maxProducts: number | null;
   products: string[];
 }
 
@@ -113,7 +115,8 @@ export interface ComboMenuModel {
   steps: ComboMenuSteps[];
   description: string;
   isAvailable: boolean;
-  isConstructor: boolean;
+  fixedPrice: boolean;
+  isConstructor: boolean; // products or additives
   update?: UpdateInfo;
 }
 
@@ -141,6 +144,7 @@ export interface OrderItem {
 export interface OrderComboMenu {
   comboMenuId: string;
   isConstructor: boolean;
+  fixedPrice: boolean;
   products: string[];
 }
 export interface OrderRequest

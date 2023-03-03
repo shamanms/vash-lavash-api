@@ -129,6 +129,8 @@ describe('comboMenusPost', () => {
           {
             stepName: 'one',
             multiProducts: false,
+            multiOneProduct: false,
+            maxProducts: null,
             products: ['bulka', 'soup']
           }
         ],
@@ -136,7 +138,8 @@ describe('comboMenusPost', () => {
         price: 10,
         img: 'img.jpg',
         description: '',
-        isConstructor: false
+        isConstructor: false,
+        fixedPrice: true
       }
     };
     // @ts-ignore for test purposes
