@@ -3,18 +3,15 @@ import {
   OrderRequest,
   OrderStatus,
   TypedRequestBody,
-  TypedRequestParams,
-  TypedRequestQuery
+  TypedRequest
 } from '../../types';
+import { SystemQuery } from '../auth/types';
 
 export type OrdersPost = Middleware<TypedRequestBody<OrderRequest>>;
 
 export type OrdersGet = Middleware<TypedRequestBody<{}>>;
 
-interface PutRequest<P, Q>
-  extends TypedRequestQuery<Q>,
-    TypedRequestParams<P> {}
-
-export type OrdersPut = Middleware<
-  PutRequest<{ id: string }, { status: OrderStatus }>
->;
+interface PutQuery extends SystemQuery {
+  status: OrderStatus;
+}
+export type OrdersPut = Middleware<TypedRequest<{ id: string }, PutQuery, {}>>;

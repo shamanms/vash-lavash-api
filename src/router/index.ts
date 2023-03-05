@@ -51,7 +51,12 @@ router.post('/orders', orders.validation.ordersPost, orders.routes.ordersPost);
 router.get('/orders', auth.middlewares.adminAuth, orders.routes.ordersGet);
 
 // To have an ability to call from TG
-router.get('/orders/:id', orders.validation.orderPut, orders.routes.orderPut);
+router.get(
+  '/orders/:id',
+  auth.middlewares.systemAuth,
+  orders.validation.orderPut,
+  orders.routes.orderPut
+);
 
 router.get(
   '/vacancies',

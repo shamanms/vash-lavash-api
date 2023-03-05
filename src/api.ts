@@ -11,9 +11,14 @@ export const app = express();
 const logger = audit({
   doubleAudit: true,
   request: {
-    maskBody: ['password', 'token']
+    maskBody: ['password', 'token'],
+    maskHeaders: ['Authorisation'],
+    maskQuery: ['auth']
   },
-  response: { maskBody: ['password', 'token'] }
+  response: {
+    maskBody: ['password', 'token'],
+    maskHeaders: ['Authorisation']
+  }
 });
 
 app.use(

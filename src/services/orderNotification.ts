@@ -3,6 +3,8 @@ import { Telegram } from 'telegraf';
 
 import db from '../models';
 import { OrderNotification } from './orderNotificationClass';
+import services from '../services/';
+import jwt from 'jsonwebtoken';
 
 interface Event {
   value: {
@@ -23,14 +25,20 @@ export const orderNotification = (
     }`
   );
   const documentId = event.value.name.split('/').at(-1);
-  const { TELEGRAM_TOKEN, GROUP_ID } = process.env;
+  const { TELEGRAM_TOKEN, GROUP_ID, JWT_SECRET } = process.env;
 
-  if (documentId && TELEGRAM_TOKEN && GROUP_ID) {
+  if (documentId && TELEGRAM_TOKEN && GROUP_ID && JWT_SECRET) {
     return db.orders.collection
       .doc(documentId)
       .get()
       .then(async (snapshot) => {
         const data = snapshot.data();
+
+        const user = await services.users.getUserByName('telegram');
+
+        if (!user) {
+          return new Error(`Unable to get telegram user data`);
+        }
 
         if (!data) {
           return new Error(`Unable to get data for ${documentId}`);
@@ -41,7 +49,17 @@ export const orderNotification = (
         await new OrderNotification(
           { ...data, id: documentId },
           tg,
-          GROUP_ID
+          GROUP_ID,
+          jwt.sign(
+            {
+              id: user.id,
+              role: user.role
+            },
+            JWT_SECRET,
+            {
+              expiresIn: 86400 // sec = 24 hours
+            }
+          )
         ).send();
       });
   } else {

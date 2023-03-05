@@ -165,6 +165,11 @@ export interface TypedRequestParams<T> extends Express.Request {
   params: T;
 }
 
+export interface TypedRequest<P, Q, B>
+  extends TypedRequestParams<P>,
+    TypedRequestQuery<Q>,
+    TypedRequestBody<B> {}
+
 export interface Middleware<R> {
   (req: R, res: Response, next: NextFunction): void;
 }
@@ -177,7 +182,8 @@ export type dbQuery = [
 
 export enum UserRole {
   ADMIN = 'admin',
-  CASHIER = 'cashier'
+  CASHIER = 'cashier',
+  SYSTEM = 'system'
 }
 
 export enum OrderStatus {

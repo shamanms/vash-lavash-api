@@ -11,7 +11,8 @@ export class OrderNotification {
   constructor(
     private order: OrderModel,
     private messenger: Telegram,
-    private groupId: string
+    private groupId: string,
+    private token: string
   ) {}
 
   private composeAdditives(additives: OrderedAdditive[]) {
@@ -42,8 +43,13 @@ export class OrderNotification {
     return '';
   }
 
-  private composeMessage() {
+  private composeUrl(status: OrderStatus, id?: string) {
     const { API_URL } = process.env;
+
+    return `${API_URL}/orders/${id}?status=${status}&auth=${this.token}`;
+  }
+
+  private composeMessage() {
     const {
       phone,
       totalPrice,
@@ -53,8 +59,8 @@ export class OrderNotification {
       delivery,
       comboMenus
     } = this.order;
-    const confirmedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.CONFIRMED}`;
-    const completedUrl = `${API_URL}/orders/${id}?status=${OrderStatus.COMPLETED}`;
+    const confirmedUrl = this.composeUrl(OrderStatus.CONFIRMED, id);
+    const completedUrl = this.composeUrl(OrderStatus.COMPLETED, id);
 
     return `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
