@@ -66,7 +66,8 @@ export const orderNotification = (
     Object.entries({
       documentId,
       TELEGRAM_TOKEN,
-      GROUP_ID
+      GROUP_ID,
+      JWT_SECRET
     }).forEach(([key, value]) => {
       if (!value) {
         console.error(`Parameter "${key}" is invalid`);

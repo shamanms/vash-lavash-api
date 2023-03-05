@@ -21,7 +21,8 @@ case $1 in
                   --trigger-event "providers/cloud.firestore/eventTypes/document.create" \
                   --trigger-resource "projects/vash-lavash/databases/(default)/documents/orders/{order}" \
                   --region "europe-central2" \
-                  --set-env-vars TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID,API_URL=$API_URL
+                  --set-env-vars TELEGRAM_TOKEN=$TELEGRAM_TOKEN,GROUP_ID=$GROUP_ID,API_URL=$API_URL \
+                  --set-secrets=JWT_SECRET=projects/$PROJECT_ID/secrets/$JWT_SECRET_NAME/versions/latest
                 ;;
         *)
                 echo "Passed incorrect parameter: '$1'"
