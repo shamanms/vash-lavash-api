@@ -18,7 +18,7 @@ export class OrderNotification {
   private composeAdditives(additives: OrderedAdditive[]) {
     if (additives?.length) {
       return `
-    Добавки:
+    Додатки:
       ${additives
         .map((additive) => `${additive.name}: ${additive.count}шт;`)
         .join('\n      ')}`;
@@ -30,12 +30,14 @@ export class OrderNotification {
   private composeComboMenus(comboMenus: OrderedComboMenu[]) {
     if (comboMenus?.length) {
       return `
+---
+
 <b>Комбо меню:</b>
   ${comboMenus
     .map(
       (comboMenu) =>
         `${comboMenu.name}: 
-    ${comboMenu.products.map((product) => product.name)};`
+    ${comboMenu.products.map((product) => product.name).join('\n    ')}`
     )
     .join('\n  ')}`;
     }
@@ -64,21 +66,24 @@ export class OrderNotification {
 
     return `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
-Tелефон: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
+Tелефон замовника: <a href="tel:+38${phone.replace('[^0-9]', '')}">${phone}</a>
 Сума: ${totalPrice}UAH
+Заказ оформлено на час:
+  ${dateTimeFormatter(receivingTime)}
+Спосіб отримання:
+  ${delivery ? `Доставка за адресою: ${delivery}` : 'Самовивіз'}
 ${
   items.length > 0
-    ? `<b>Товари:</b>
+    ? `
+---
+
+<b>Товари:</b>
   ${items
     .map((item) => `${item.name}${this.composeAdditives(item.additives)}`)
     .join('\n  ')}`
     : ''
 }
 ${comboMenus.length > 0 ? `${this.composeComboMenus(comboMenus)}` : ''}
-Заказ оформлено на час:
-  ${dateTimeFormatter(receivingTime)}
-Спосіб отримання:
-  ${delivery ? `Доставка за адресою: ${delivery}` : 'Самовивіз'}
 
 
 <a href="${confirmedUrl}">ПІДТВЕРДЖЕНО</a>

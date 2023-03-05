@@ -87,28 +87,35 @@ const token = 'testToken';
 // prettier-ignore
 let message = `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
-Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
+Tелефон замовника: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
-<b>Товари:</b>
-  ${order.items[0].name}
-  ${order.items[1].name}
-    Добавки:
-      ${order.items[1].additives[0].name}: ${order.items[1].additives[0].count}шт;
-      ${order.items[1].additives[1].name}: ${order.items[1].additives[1].count}шт;
-  ${order.items[2].name}
-    Добавки:
-      ${order.items[2].additives[0].name}: ${order.items[2].additives[0].count}шт;
-      ${order.items[2].additives[1].name}: ${order.items[2].additives[1].count}шт;
-
-<b>Комбо меню:</b>
-  ${order.comboMenus[0].name}: 
-    ${order.comboMenus[0].products[0].name},${order.comboMenus[0].products[1].name};
-  ${order.comboMenus[1].name}: 
-    ${order.comboMenus[1].products[0].name},${order.comboMenus[1].products[1].name};
 Заказ оформлено на час:
   ${dateTimeFormatter(order.receivingTime)}
 Спосіб отримання:
   ${order.delivery ? `Доставка за адресою: ${order.delivery}` : 'Самовивіз'}
+
+---
+
+<b>Товари:</b>
+  ${order.items[0].name}
+  ${order.items[1].name}
+    Додатки:
+      ${order.items[1].additives[0].name}: ${order.items[1].additives[0].count}шт;
+      ${order.items[1].additives[1].name}: ${order.items[1].additives[1].count}шт;
+  ${order.items[2].name}
+    Додатки:
+      ${order.items[2].additives[0].name}: ${order.items[2].additives[0].count}шт;
+      ${order.items[2].additives[1].name}: ${order.items[2].additives[1].count}шт;
+
+---
+
+<b>Комбо меню:</b>
+  ${order.comboMenus[0].name}: 
+    ${order.comboMenus[0].products[0].name}
+    ${order.comboMenus[0].products[1].name}
+  ${order.comboMenus[1].name}: 
+    ${order.comboMenus[1].products[0].name}
+    ${order.comboMenus[1].products[1].name}
 
 
 <a href="${API_URL}/orders/${order.id}?status=${
@@ -162,15 +169,18 @@ describe('Class orderNotification', () => {
     // prettier-ignore
     message = `
         <b>НОВЕ ЗАМОВЛЕННЯ!</b>
-Tелефон: <a href="tel:+38${order.phone}">${order.phone}</a>
+Tелефон замовника: <a href="tel:+38${order.phone}">${order.phone}</a>
 Сума: ${order.totalPrice}UAH
-<b>Товари:</b>
-  ${order.items[0].name}
-
 Заказ оформлено на час:
   ${dateTimeFormatter(order.receivingTime)}
 Спосіб отримання:
   ${order.delivery ? `Доставка за адресою: ${order.delivery}` : 'Самовивіз'}
+
+---
+
+<b>Товари:</b>
+  ${order.items[0].name}
+
 
 
 <a href="${API_URL}/orders/${order.id}?status=${
