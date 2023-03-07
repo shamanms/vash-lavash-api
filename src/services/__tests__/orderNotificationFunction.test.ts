@@ -2,6 +2,9 @@ import { Telegram } from 'telegraf';
 import db from '../../models';
 import { orderNotification } from '../orderNotification';
 import { OrderNotification } from '../orderNotificationClass';
+import services from '../index';
+import { UserRole } from '../../types';
+import jwt from 'jsonwebtoken';
 
 jest.mock('telegraf');
 jest.mock('../orderNotificationClass');
@@ -12,6 +15,12 @@ OrderNotification.mockImplementation(() => {
     send: sendMethod
   };
 });
+
+jest.mock('../index', () => ({
+  users: {
+    getUserByName: jest.fn()
+  }
+}));
 
 const snapshotData = jest.fn();
 jest.mock('../../models', () => ({
@@ -26,6 +35,9 @@ jest.mock('../../models', () => ({
       }))
     }
   }
+}));
+jest.mock('jsonwebtoken', () => ({
+  sign: jest.fn()
 }));
 jest.spyOn(console, 'log').mockImplementation();
 
@@ -46,6 +58,7 @@ describe('function orderNotification', () => {
     id: 'asya',
     name: 'aza'
   };
+  const userDb = { id: 'testId', role: UserRole.SYSTEM };
 
   beforeEach(() => {
     jest.resetModules();
@@ -53,17 +66,18 @@ describe('function orderNotification', () => {
 
   test('should send message', async () => {
     snapshotData.mockImplementation(() => modifiedDocument);
-
+    // @ts-ignore for test purposes
+    services.users.getUserByName.mockImplementation(() => userDb);
     process.env = {
       ...process.env,
       TELEGRAM_TOKEN: 'chat',
-      GROUP_ID: 'lavash'
+      GROUP_ID: 'lavash',
+      JWT_SECRET: 'testJWT'
     };
-
     await orderNotification(event, context);
-
     expect(db.orders.collection.doc).toHaveBeenCalledWith('asya');
     expect(snapshotData).toHaveBeenCalled();
+    expect(services.users.getUserByName).toHaveBeenCalledWith('telegram');
     expect(Telegram).toHaveBeenCalledWith(process.env.TELEGRAM_TOKEN as string);
 
     // @ts-ignore for test purposes
@@ -71,12 +85,35 @@ describe('function orderNotification', () => {
     expect(lastServiceCall.calls[0][0]).toEqual(modifiedDocument);
     expect(lastServiceCall.calls[0][1]).toBeInstanceOf(Telegram);
     expect(lastServiceCall.calls[0][2]).toEqual(process.env.GROUP_ID);
+    expect(jwt.sign).toHaveBeenCalledWith(
+      userDb,
+      process.env.JWT_SECRET as string,
+      { expiresIn: 86400 }
+    );
 
     expect(sendMethod).toHaveBeenCalled();
   });
 
+  test('should return error if user is not telegram', async () => {
+    snapshotData.mockImplementation(() => modifiedDocument);
+    // @ts-ignore for test purposes
+    services.users.getUserByName.mockImplementation(() => undefined);
+    jest.spyOn(console, 'error').mockImplementation();
+
+    try {
+      await orderNotification(event, context);
+    } catch (e: any) {
+      expect(e?.message).toMatch('Unable to get telegram user data');
+      expect(console.error).toHaveBeenCalledWith(
+        `Parameter "documentId" is invalid`
+      );
+    }
+  });
+
   test('should return error if data empty', async () => {
     snapshotData.mockImplementation(() => undefined);
+    // @ts-ignore for test purposes
+    services.users.getUserByName.mockImplementation(() => userDb);
     jest.spyOn(console, 'error').mockImplementation();
 
     try {

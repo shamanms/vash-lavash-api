@@ -147,7 +147,7 @@ describe('Class orderNotification', () => {
       `Message Send for the order: ${order.id}`
     );
   });
-  test('orderNotification should send message', async () => {
+  test('orderNotification should send message without comboMenu', async () => {
     order = {
       id: '123',
       delivery: null,
@@ -181,6 +181,79 @@ Tелефон замовника: <a href="tel:+38${order.phone}">${order.phone}
 <b>Товари:</b>
   ${order.items[0].name}
 
+
+
+<a href="${API_URL}/orders/${order.id}?status=${
+      OrderStatus.CONFIRMED
+    }&auth=${token}">ПІДТВЕРДЖЕНО</a>
+
+
+<a href="${API_URL}/orders/${order.id}?status=${
+      OrderStatus.COMPLETED
+    }&auth=${token}">ВИДАНО</a>`;
+
+    jest.spyOn(console, 'log').mockImplementation();
+    messenger.sendMessage.mockImplementation(() => Promise.resolve('Ok'));
+    // TODO FIX MESSENGER TYPE
+    // @ts-ignore for test purposes
+    await new OrderNotification(order, messenger, groupId, token).send();
+
+    expect(messenger.sendMessage).toHaveBeenCalledWith(groupId, message, mode);
+    expect(console.log).toHaveBeenCalledWith(
+      `Message Send for the order: ${order.id}`
+    );
+  });
+  test('orderNotification should send message without items', async () => {
+    order = {
+      id: '123',
+      delivery: null,
+      phone: '777777777',
+      totalPrice: 3038,
+      orderStatus: OrderStatus.NOT_CONFIRMED,
+      items: [],
+      comboMenus: [
+        {
+          name: 'comboMenuName1',
+          id: '111',
+          price: 100,
+          products: [
+            { id: '123', price: 10, name: 'comboMenuProduct1' },
+            { id: '321', price: 10, name: 'comboMenuProduct2' }
+          ]
+        },
+        {
+          name: 'comboMenuName2',
+          id: '222',
+          price: 100,
+          products: [
+            { id: '123', price: 10, name: 'comboMenuProduct12' },
+            { id: '321', price: 10, name: 'comboMenuProduct22' }
+          ]
+        }
+      ],
+      timestamp: Date.now(),
+      receivingTime: new Date().setHours(12, 10, 15)
+    };
+    // prettier-ignore
+    message = `
+        <b>НОВЕ ЗАМОВЛЕННЯ!</b>
+Tелефон замовника: <a href="tel:+38${order.phone}">${order.phone}</a>
+Сума: ${order.totalPrice}UAH
+Заказ оформлено на час:
+  ${dateTimeFormatter(order.receivingTime)}
+Спосіб отримання:
+  ${order.delivery ? `Доставка за адресою: ${order.delivery}` : 'Самовивіз'}
+
+
+---
+
+<b>Комбо меню:</b>
+  ${order.comboMenus[0].name}: 
+    ${order.comboMenus[0].products[0].name}
+    ${order.comboMenus[0].products[1].name}
+  ${order.comboMenus[1].name}: 
+    ${order.comboMenus[1].products[0].name}
+    ${order.comboMenus[1].products[1].name}
 
 
 <a href="${API_URL}/orders/${order.id}?status=${

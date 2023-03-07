@@ -41,8 +41,6 @@ export class OrderNotification {
     )
     .join('\n  ')}`;
     }
-
-    return '';
   }
 
   private composeUrl(status: OrderStatus, id?: string) {
