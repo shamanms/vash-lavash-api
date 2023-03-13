@@ -1,5 +1,5 @@
 import { response } from 'express';
-import { adminAuth } from '../middlewares';
+import { adminAuth, systemAuth } from '../middlewares';
 import jwt from 'jsonwebtoken';
 
 const sendFn = jest.fn();
@@ -133,5 +133,114 @@ describe('middlewares adminAuth ', () => {
 
     expect(response.status).toHaveBeenCalledWith(401);
     expect(sendFn).toHaveBeenCalledWith({ message: 'Invalid Token' });
+  });
+});
+
+describe('middlewares systemAuth ', () => {
+  beforeEach(() => {
+    jest.resetModules();
+    process.env = {
+      ...process.env,
+      JWT_SECRET
+    };
+  });
+  afterAll(() => {
+    delete process.env.JWT_SECRET;
+  });
+  test('when req is empty should return status 403 and message "A token is required for authentication"', async () => {
+    const req = undefined;
+    // @ts-ignore for test purposes
+    await systemAuth(req, response, next);
+
+    expect(response.status).toHaveBeenCalledWith(403);
+    expect(sendFn).toHaveBeenCalledWith({
+      message: 'A token is required for authentication'
+    });
+  });
+  test('when decoded token is not object should return status 403 and message "Not Allowed"', async () => {
+    const req = {
+      query: {
+        auth: '123'
+      }
+    };
+    // @ts-ignore for test purposes
+    jwt.verify.mockImplementation(() => 123);
+    // @ts-ignore for test purposes
+    await systemAuth(req, response, next);
+
+    expect(jwt.verify).toHaveBeenCalledWith('123', JWT_SECRET);
+    expect(response.status).toHaveBeenCalledWith(403);
+    expect(sendFn).toHaveBeenCalledWith({ message: 'Not Allowed' });
+  });
+  test('when decoded role not "UserRole.SYSTEM" or "UserRole.ADMIN" should return status 403 and message "Not Allowed"', async () => {
+    const req = {
+      query: {
+        auth: '123'
+      }
+    };
+    // @ts-ignore for test purposes
+    jwt.verify.mockImplementation(() => ({ role: 'USER' }));
+    // @ts-ignore for test purposes
+    await systemAuth(req, response, next);
+
+    expect(jwt.verify).toHaveBeenCalledWith('123', JWT_SECRET);
+    expect(response.status).toHaveBeenCalledWith(403);
+    expect(sendFn).toHaveBeenCalledWith({ message: 'Not Allowed' });
+  });
+  test('when token is correct but userid is undefined and role is admin should go next', async () => {
+    const req = {
+      query: {
+        auth: '123'
+      }
+    };
+    // @ts-ignore for test purposes
+    jwt.verify.mockImplementation(() => ({
+      id: undefined,
+      role: 'admin'
+    }));
+    // @ts-ignore for test purposes
+    await systemAuth(req, response, next);
+    const newReq = { ...req, user: { id: undefined, role: 'admin' } };
+
+    expect(jwt.verify).toHaveBeenCalledWith('123', JWT_SECRET);
+    expect(next).toHaveBeenCalled();
+    expect(req).toEqual(newReq);
+  });
+  test('when token is invalid should return status 403 and message "Invalid Token"', async () => {
+    const req = {
+      query: {
+        auth: '123'
+      }
+    };
+    // @ts-ignore for test purposes
+    jwt.verify.mockImplementation(() => {
+      throw new Error('');
+    });
+
+    // @ts-ignore for test purposes
+    await systemAuth(req, response, next);
+
+    expect(jwt.verify).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(401);
+    expect(sendFn).toHaveBeenCalledWith({ message: 'Invalid Token' });
+  });
+  test('when decoded is correct and role is admin should go next', async () => {
+    const req = {
+      query: {
+        auth: '123'
+      }
+    };
+    // @ts-ignore for test purposes
+    jwt.verify.mockImplementation(() => ({
+      id: 'userId',
+      role: 'admin'
+    }));
+    // @ts-ignore for test purposes
+    await systemAuth(req, response, next);
+    const newReq = { ...req, user: { id: 'userId', role: 'admin' } };
+
+    expect(jwt.verify).toHaveBeenCalledWith('123', JWT_SECRET);
+    expect(next).toHaveBeenCalled();
+    expect(req).toEqual(newReq);
   });
 });

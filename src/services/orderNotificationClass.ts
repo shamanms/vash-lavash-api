@@ -29,20 +29,33 @@ export class OrderNotification {
 
   private composeComboMenus(comboMenus: OrderedComboMenu[]) {
     if (comboMenus?.length) {
+      const mappedComboMenus = comboMenus.map(({ name, products }) => ({
+        name,
+        products: products.reduce((acc, { name }) => {
+          if (acc[name]) {
+            acc[name] += 1;
+          } else {
+            acc[name] = 1;
+          }
+
+          return acc;
+        }, {} as { [key: string]: number })
+      }));
+
       return `
 ---
 
 <b>Комбо меню:</b>
-  ${comboMenus
+  ${mappedComboMenus
     .map(
       (comboMenu) =>
         `${comboMenu.name}: 
-    ${comboMenu.products.map((product) => product.name).join('\n    ')}`
+    ${Object.entries(comboMenu.products)
+      .map(([productName, count]) => `${productName}: ${count}шт`)
+      .join('\n    ')}`
     )
     .join('\n  ')}`;
     }
-
-    return '';
   }
 
   private composeUrl(status: OrderStatus, id?: string) {
