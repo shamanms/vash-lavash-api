@@ -66,6 +66,7 @@ let order: OrderModel = {
       price: 100,
       products: [
         { id: '123', price: 10, name: 'comboMenuProduct1' },
+        { id: '123', price: 10, name: 'comboMenuProduct1' },
         { id: '321', price: 10, name: 'comboMenuProduct2' }
       ]
     },
@@ -74,6 +75,7 @@ let order: OrderModel = {
       id: '222',
       price: 100,
       products: [
+        { id: '123', price: 10, name: 'comboMenuProduct12' },
         { id: '123', price: 10, name: 'comboMenuProduct12' },
         { id: '321', price: 10, name: 'comboMenuProduct22' }
       ]
@@ -111,11 +113,11 @@ Tелефон замовника: <a href="tel:+38${order.phone}">${order.phone}
 
 <b>Комбо меню:</b>
   ${order.comboMenus[0].name}: 
-    ${order.comboMenus[0].products[0].name}
-    ${order.comboMenus[0].products[1].name}
+    ${order.comboMenus[0].products[0].name}: 2шт
+    ${order.comboMenus[0].products[2].name}: 1шт
   ${order.comboMenus[1].name}: 
-    ${order.comboMenus[1].products[0].name}
-    ${order.comboMenus[1].products[1].name}
+    ${order.comboMenus[1].products[0].name}: 2шт
+    ${order.comboMenus[1].products[2].name}: 1шт
 
 
 <a href="${API_URL}/orders/${order.id}?status=${
@@ -249,11 +251,11 @@ Tелефон замовника: <a href="tel:+38${order.phone}">${order.phone}
 
 <b>Комбо меню:</b>
   ${order.comboMenus[0].name}: 
-    ${order.comboMenus[0].products[0].name}
-    ${order.comboMenus[0].products[1].name}
+    ${order.comboMenus[0].products[0].name}: 1шт
+    ${order.comboMenus[0].products[1].name}: 1шт
   ${order.comboMenus[1].name}: 
-    ${order.comboMenus[1].products[0].name}
-    ${order.comboMenus[1].products[1].name}
+    ${order.comboMenus[1].products[0].name}: 1шт
+    ${order.comboMenus[1].products[1].name}: 1шт
 
 
 <a href="${API_URL}/orders/${order.id}?status=${
